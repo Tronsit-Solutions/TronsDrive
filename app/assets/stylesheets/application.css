@@ -497,3 +497,57 @@ html.dark input, html.dark select, html.dark textarea {
   color: #F1F5F9 !important;
   border-color: #334155 !important;
 }
+
+/* ---------- Admin panel dark mode ---------- */
+html.dark .admin-layout .bg-white,
+html.dark .admin-layout .rounded-lg.shadow,
+html.dark .admin-layout .rounded-xl.shadow {
+  background-color: var(--td-surface) !important;
+  color: var(--td-text) !important;
+}
+
+/* Override hardcoded #e8f0f0 teal-tinted rows/cards in admin views */
+html.dark .admin-layout [style*="#e8f0f0"] {
+  background-color: var(--td-surface2) !important;
+  color: var(--td-text) !important;
+}
+html.dark .admin-layout [style*="background-color: #e8f0f0"] {
+  background-color: var(--td-surface2) !important;
+}
+
+/* Table head and cell text in admin dark mode */
+html.dark .admin-layout table th,
+html.dark .admin-layout table td {
+  color: var(--td-text) !important;
+  border-color: var(--td-border) !important;
+}
+html.dark .admin-layout table thead th[style*="#e8f0f0"] {
+  background-color: var(--td-surface2) !important;
+}
+
+/* Stat / info cards */
+html.dark .admin-layout .border-t-4.bg-white,
+html.dark .admin-layout div.bg-white {
+  background-color: var(--td-surface) !important;
+}
+
+/* Dividers */
+html.dark .admin-layout .border-t,
+html.dark .admin-layout .border-b,
+html.dark .admin-layout .divide-y > * + * {
+  border-color: var(--td-border) !important;
+}
+
+/* Notification / dropdown panels */
+html.dark .admin-layout #notificationsDropdown,
+html.dark .admin-layout #profileDropdown {
+  background-color: var(--td-surface) !important;
+  border-color: var(--td-border) !important;
+  color: var(--td-text) !important;
+}
+html.dark .admin-layout #notificationsDropdown .bg-gray-50 {
+  background-color: var(--td-surface2) !important;
+}
+html.dark .admin-layout #notificationsDropdown .divide-gray-100 > * + * {
+  border-color: var(--td-border) !important;
+}
