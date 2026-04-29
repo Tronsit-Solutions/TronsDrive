@@ -39,6 +39,9 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# Provide a blank application.yml so Figaro doesn't crash during asset precompile
+RUN touch config/application.yml
+
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
