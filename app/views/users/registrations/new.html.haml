@@ -1,0 +1,329 @@
+.container.mx-auto.max-w-3xl.px-4.py-8
+  .rounded-xl.shadow-lg.overflow-hidden.p-8{ style: "background: var(--td-surface); border: 1px solid var(--td-border)" }
+    .text-center.mb-6
+      %i{ class: 'fas fa-car text-4xl mb-3 block', style: 'color: #F97316' }
+      %h2.text-3xl.font-bold.mb-1{ style: "color: var(--td-text)" } Sign Up
+      %p{ style: "color: var(--td-muted)" } Create an account to rent your next ride
+
+    - if alert
+      .mt-4.p-3.bg-red-50.text-red-700.rounded-lg.text-sm.border.border-red-200= alert
+    - if notice
+      .mt-4.p-3.rounded-lg.text-sm.border{ style: 'background-color: #FFF7ED; border-color: #F97316; color: #9A3412' }= notice
+
+    = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-4" }) do |f|
+      - if params[:car_id].present?
+        = hidden_field_tag :car_id, params[:car_id]
+      - if params[:start_date].present?
+        = hidden_field_tag :start_date, params[:start_date]
+      - if params[:end_date].present?
+        = hidden_field_tag :end_date, params[:end_date]
+
+      / Row 1: First name + Last name
+      .grid.grid-cols-2.gap-4
+        .field.space-y-1
+          = f.label :first_name, class: "block text-sm font-medium", style: "color: var(--td-text)"
+          = f.text_field :first_name,
+            autofocus: true,
+            class: "w-full px-4 py-2.5 rounded-lg border transition duration-200",
+            style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+            placeholder: "John",
+            onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+            onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+
+        .field.space-y-1
+          = f.label :last_name, class: "block text-sm font-medium", style: "color: var(--td-text)"
+          = f.text_field :last_name,
+            class: "w-full px-4 py-2.5 rounded-lg border transition duration-200",
+            style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+            placeholder: "Doe",
+            onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+            onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+
+      / Row 2: Email (full width)
+      .field.space-y-1
+        = f.label :email, class: "block text-sm font-medium", style: "color: var(--td-text)"
+        = f.email_field :email,
+          class: "w-full px-4 py-2.5 rounded-lg border transition duration-200",
+          style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+          placeholder: "your@email.com",
+          onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+          onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+
+      / Row 3: Phone + WhatsApp
+      .grid.grid-cols-2.gap-4
+        .field.space-y-1
+          = f.label :phone, class: "block text-sm font-medium", style: "color: var(--td-text)"
+          .relative
+            .absolute.inset-y-0.left-0.pl-4.flex.items-center.pointer-events-none
+              %i.fas.fa-phone.text-gray-400
+            = f.text_field :phone,
+              class: "w-full pl-12 pr-4 py-2.5 rounded-lg border transition duration-200",
+              style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+              placeholder: "+971 50 123 4567",
+              onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+              onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+
+        .field.space-y-1
+          = f.label :whatsapp_number, class: "block text-sm font-medium", style: "color: var(--td-text)" do
+            %span WhatsApp Number
+            %i.fab.fa-whatsapp.text-green-500.ml-1
+          .relative
+            .absolute.inset-y-0.left-0.pl-4.flex.items-center.pointer-events-none
+              %i.fab.fa-whatsapp.text-green-500.text-lg
+            = f.telephone_field :whatsapp_number,
+              class: "w-full pl-12 pr-4 py-2.5 rounded-lg border transition duration-200",
+              style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+              placeholder: "+971501234567",
+              pattern: '\+[0-9]{7,15}',
+              title: 'Enter phone number with country code (e.g., +971501234567)',
+              onfocus: "this.style.borderColor='#25D366'; this.style.boxShadow='0 0 0 3px rgba(37,211,102,0.1)'",
+              onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+          %small.text-xs.block.mt-1{ style: "color: var(--td-muted)" } Include country code (e.g., +971501234567)
+
+      / Row 4: Resident/Tourist (full width)
+      .field.space-y-1
+        = f.label :nationality, 'Are you a Resident or a Tourist?', class: "block text-sm font-medium", style: "color: var(--td-text)"
+        .flex.gap-6.items-center.mt-1
+          %label.flex.items-center.gap-2.cursor-pointer{ style: "color: var(--td-text)" }
+            = f.radio_button :nationality, 'resident', required: true, class: "form-radio h-4 w-4 border-gray-300 transition", style: "accent-color: #F97316"
+            %span Resident (UAE Resident)
+          %label.flex.items-center.gap-2.cursor-pointer{ style: "color: var(--td-text)" }
+            = f.radio_button :nationality, 'tourist', required: true, class: "form-radio h-4 w-4 border-gray-300 transition", style: "accent-color: #F97316"
+            %span Tourist (Foreign Tourist)
+
+      / Row 5: Password + Confirm Password
+      .grid.grid-cols-2.gap-4
+        .field.space-y-1
+          = f.label :password, class: "block text-sm font-medium", style: "color: var(--td-text)"
+          .relative
+            = f.password_field :password,
+              autocomplete: "new-password",
+              class: "w-full px-4 py-2.5 pr-12 rounded-lg border transition duration-200",
+              style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+              placeholder: "••••••••",
+              onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+              onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+            %button.absolute.right-3.top-3.transition{ type: "button", onclick: "togglePassword(this)", style: "color: var(--td-muted)" }
+              %i.fas.fa-eye
+
+        .field.space-y-1
+          = f.label :password_confirmation, class: "block text-sm font-medium", style: "color: var(--td-text)"
+          = f.password_field :password_confirmation,
+            class: "w-full px-4 py-2.5 rounded-lg border transition duration-200",
+            style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+            placeholder: "Confirm password",
+            onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+            onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+
+      / Row 6: Terms + Submit
+      .flex.items-center.justify-between.flex-wrap.gap-4
+        .field.flex.items-center
+          = f.check_box :terms_accepted, required: true, id: "user_agree_terms", class: "h-4 w-4 border-gray-300 rounded transition", style: "accent-color: #F97316"
+          = f.label :terms_accepted, class: "ml-2 block text-sm", style: "color: var(--td-text)" do
+            | I agree to the
+            %a.font-medium.transition-colors.hover:underline{ href: "#", onclick: "openTermsModal(); return false;", tabindex: 0, role: "button", style: "color: #F97316" } Terms & Conditions
+
+        .actions
+          = f.submit "Create Account",
+            class: "flex justify-center py-2.5 px-8 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white transition duration-200 hover:shadow-md",
+            style: "background: linear-gradient(135deg, #F97316, #EA580C);"
+
+    .relative.my-6
+      .absolute.inset-0.flex.items-center
+        .w-full{ style: 'border-top: 1px solid var(--td-border)' }
+      .relative.flex.justify-center.text-sm
+        %span.px-3.text-sm{ style: "background: var(--td-surface); color: var(--td-muted)" } Or continue with
+
+    .field.space-y-2.mt-6.mb-4
+      %label.block.text-sm.font-medium{ style: "color: var(--td-text)" } Are you a Resident or a Tourist?
+      .flex.gap-6.items-center.mt-2
+        %label.flex.items-center.gap-2.cursor-pointer{ style: "color: var(--td-text)" }
+          = radio_button_tag 'user[nationality]', 'resident', false, required: true, class: "form-radio h-4 w-4 border-gray-300 transition google-nationality-radio", style: "accent-color: #F97316;"
+          %span Resident (UAE Resident)
+        %label.flex.items-center.gap-2.cursor-pointer{ style: "color: var(--td-text)" }
+          = radio_button_tag 'user[nationality]', 'tourist', false, required: true, class: "form-radio h-4 w-4 border-gray-300 transition google-nationality-radio", style: "accent-color: #F97316;"
+          %span Tourist (Foreign Tourist)
+
+    .field.flex.items-center.mb-6
+      = check_box_tag 'google_terms_accepted', '1', false, id: "google_terms_accepted", class: "h-4 w-4 border-gray-300 rounded transition", style: "accent-color: #F97316"
+      %label.ml-2.block.text-sm{ for: "google_terms_accepted", style: "color: var(--td-text)" }
+        | I agree to the
+        %a.font-medium.transition-colors.hover:underline{ href: "#", onclick: "openTermsModal(); return false;", tabindex: 0, role: "button", style: "color: #F97316" } Terms & Conditions
+
+    = button_to user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: false },
+        params: { action_type: 'signup' },
+        id: "google-signup-btn",
+        disabled: true,
+        class: "w-full flex items-center justify-center px-4 py-3 border shadow-sm text-sm font-medium rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+        style: "background: var(--td-surface); color: var(--td-text); border-color: var(--td-border);",
+        onmouseover: "if(!this.disabled) { this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.1)' }",
+        onmouseout: "this.style.borderColor=''; this.style.boxShadow='none'" do
+      %svg.w-5.h-5.mr-3{ viewBox: "0 0 24 24" }
+        %path{ fill: "#4285F4", d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" }
+        %path{ fill: "#34A853", d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" }
+        %path{ fill: "#FBBC05", d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" }
+        %path{ fill: "#EA4335", d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" }
+      Sign up with Google
+
+    %small.text-xs.block.mt-2.text-center#google-button-helper{ style: "color: var(--td-muted)" }
+      Please select your residency type and accept terms to continue with Google
+
+    .mt-6.text-center
+      %span{ style: "color: var(--td-muted); font-size: 0.875rem;" } Already have an account?
+      - login_url = new_session_path(resource_name)
+      - if params[:car_id].present? || params[:start_date].present? || params[:end_date].present?
+        - login_url += "?#{request.query_string}"
+      = link_to "Log in", login_url, class: "ml-1 font-medium hover:underline transition-colors", style: "color: #F97316"
+
+  / Terms and Conditions Modal
+  #terms-modal.fixed.inset-0.z-50.flex.items-center.justify-center.bg-black.bg-opacity-50{ style: "display:none" }
+    .rounded-xl.shadow-2xl{ class: "w-11/12 max-w-4xl h-5/6 p-4 relative flex flex-col", style: "background: var(--td-surface); border: 1px solid var(--td-border)" }
+      .flex.items-center.justify-between.pb-4.border-b{ style: "border-color: var(--td-border)" }
+        %h3.text-2xl.font-bold{ style: "color: var(--td-text)" } Terms & Conditions
+        %button.text-3xl.font-bold.bg-transparent.border-0.transition{ type: "button", onclick: "closeTermsModal()", title: "Close", style: "color: var(--td-muted)" } ×
+      .flex-1.overflow-y-auto.px-2.py-4.custom-scrollbar
+        = render 'shared/terms_and_conditions_content'
+      .pt-4.border-t{ style: "border-color: var(--td-border)" }
+        .flex.justify-end.space-x-3
+          %button.font-semibold.py-2.px-4.rounded-lg.border.transition{ type: "button", onclick: "closeTermsModal()", style: "color: var(--td-text); border-color: var(--td-border); background: var(--td-surface2)" } Cancel
+          %button.text-white.font-semibold.py-2.px-6.rounded-lg.shadow-md.transition.duration-200.hover:shadow-lg{ type: "button", onclick: "acceptTerms()", style: "background: linear-gradient(135deg, #F97316, #EA580C)" } I Accept Terms
+
+:css
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #F97316 #f1f5f9;
+  }
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #F97316; border-radius: 3px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #EA580C; }
+  #terms-modal .text-gray-700 ul, #terms-modal ul.text-gray-700 {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+    margin-left: 0.5rem !important;
+    list-style-position: outside !important;
+  }
+  #terms-modal li { display: list-item !important; margin-bottom: 0.5rem !important; padding-left: 0.25rem !important; }
+  #terms-modal ul[class*="text-gray"] { list-style-type: disc !important; }
+
+:javascript
+  function togglePassword(button) {
+    const input = button.previousElementSibling
+    const icon = button.querySelector('i')
+    if (input.type === 'password') {
+      input.type = 'text'
+      icon.classList.replace('fa-eye', 'fa-eye-slash')
+    } else {
+      input.type = 'password'
+      icon.classList.replace('fa-eye-slash', 'fa-eye')
+    }
+  }
+
+  function openTermsModal() {
+    console.log('Opening terms modal...');
+    document.getElementById('terms-modal').style.display = 'flex';
+  }
+
+  function closeTermsModal() {
+    document.getElementById('terms-modal').style.display = 'none';
+  }
+
+  function acceptTerms() {
+    const regularCheckbox = document.getElementById('user_agree_terms');
+    const googleCheckbox = document.getElementById('google_terms_accepted');
+    if (regularCheckbox) regularCheckbox.checked = true;
+    if (googleCheckbox) {
+      googleCheckbox.checked = true;
+      googleCheckbox.dispatchEvent(new Event('change'));
+    }
+    closeTermsModal();
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const nationalityRadios = document.querySelectorAll('.google-nationality-radio');
+    const termsCheckbox = document.getElementById('google_terms_accepted');
+    const googleButton = document.getElementById('google-signup-btn');
+    const helperText = document.getElementById('google-button-helper');
+
+    function updateGoogleButtonState() {
+      const nationalitySelected = document.querySelector('.google-nationality-radio:checked');
+      const termsAccepted = termsCheckbox && termsCheckbox.checked;
+
+      if (nationalitySelected && termsAccepted) {
+        googleButton.disabled = false;
+        googleButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        helperText.textContent = 'Ready to sign up with Google';
+        helperText.style.color = '#F97316';
+      } else {
+        googleButton.disabled = true;
+        googleButton.classList.add('opacity-50', 'cursor-not-allowed');
+        if (!nationalitySelected && !termsAccepted) {
+          helperText.textContent = 'Please select your residency type and accept terms to continue';
+        } else if (!nationalitySelected) {
+          helperText.textContent = 'Please select your residency type to continue';
+        } else if (!termsAccepted) {
+          helperText.textContent = 'Please accept terms & conditions to continue';
+        }
+        helperText.style.color = '';
+      }
+    }
+
+    nationalityRadios.forEach(radio => {
+      radio.style.accentColor = '#F97316';
+      radio.addEventListener('change', updateGoogleButtonState);
+    });
+
+    if (termsCheckbox) {
+      termsCheckbox.style.accentColor = '#F97316';
+      termsCheckbox.addEventListener('change', updateGoogleButtonState);
+    }
+
+    if (googleButton) {
+      googleButton.addEventListener('click', function(e) {
+        const selectedNationality = document.querySelector('.google-nationality-radio:checked');
+        const termsAccepted = termsCheckbox && termsCheckbox.checked;
+
+        if (!selectedNationality || !termsAccepted) {
+          e.preventDefault();
+          let message = 'Please ';
+          if (!selectedNationality && !termsAccepted) {
+            message += 'select your residency type and accept the terms & conditions';
+          } else if (!selectedNationality) {
+            message += 'select whether you are a Resident or Tourist';
+          } else {
+            message += 'accept the terms & conditions';
+          }
+          alert(message + ' before continuing with Google signup.');
+          return false;
+        }
+
+        sessionStorage.setItem('oauth_nationality', selectedNationality.value);
+        sessionStorage.setItem('oauth_terms_accepted', 'true');
+
+        const form = this.closest('form');
+        let nationalityInput = form.querySelector('input[name="nationality"]');
+        if (!nationalityInput) {
+          nationalityInput = document.createElement('input');
+          nationalityInput.type = 'hidden';
+          nationalityInput.name = 'nationality';
+          form.appendChild(nationalityInput);
+        }
+        nationalityInput.value = selectedNationality.value;
+
+        let termsInput = form.querySelector('input[name="terms_accepted"]');
+        if (!termsInput) {
+          termsInput = document.createElement('input');
+          termsInput.type = 'hidden';
+          termsInput.name = 'terms_accepted';
+          form.appendChild(termsInput);
+        }
+        termsInput.value = '1';
+        console.log('Google OAuth - Nationality:', selectedNationality.value, 'Terms:', termsAccepted);
+      });
+    }
+
+    const regularCheckbox = document.getElementById('user_agree_terms');
+    if (regularCheckbox) regularCheckbox.style.accentColor = '#F97316';
+
+    updateGoogleButtonState();
+  });

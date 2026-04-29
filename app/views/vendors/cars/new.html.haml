@@ -1,0 +1,735 @@
+.container.mx-auto.max-w-7xl.p-3.sm:p-4.md:p-6.lg:p-8.pt-5
+  .bg-white.rounded-xl.sm:rounded-2xl.shadow-xl.p-4.sm:p-6.md:p-8.lg:p-12
+    %h1.text-2xl.sm:text-3xl.md:text-4xl.font-extrabold.mb-4.sm:mb-6{style: 'color: #F97316'} Add New Car
+    %p.text-sm.sm:text-base.md:text-lg.text-gray-700.mb-4.sm:mb-6.md:mb-8 Fill in the details below to add a new car to your fleet.
+
+    / Car Information Notice Section
+    .mb-6.sm:mb-8.md:mb-10
+      .bg-gradient-to-r.from-blue-50.to-indigo-50.border-l-4.border-blue-400.rounded-lg.p-4.sm:p-5.md:p-6.shadow-sm
+        .flex.items-start
+          .flex-shrink-0
+            %i.fas.fa-info-circle.text-blue-500.text-lg.sm:text-xl.md:text-2xl.mt-1
+          .ml-2.sm:ml-3
+            %h3.text-base.sm:text-lg.font-semibold.mb-2{style: 'color: #F97316'} Car Information Required
+            %p.text-xs.sm:text-sm.md:text-base.mb-3.sm:mb-4{style: 'color: #F97316'} Please provide comprehensive details about your vehicle to help customers make informed decisions. Fields marked with * are required.
+
+            .grid.grid-cols-1.md:grid-cols-2.gap-3.sm:gap-4.mt-3.sm:mt-4
+              .bg-white.rounded-lg.p-3.sm:p-4.shadow-sm
+                %h4.text-xs.sm:text-sm.font-semibold.text-blue-800.mb-1.sm:mb-2 Basic Information
+                %ul.text-xs.sm:text-sm.text-blue-700.space-y-1
+                  %li • Model, Brand, Year, Color
+                  %li • Daily Price and Status
+                  %li • Category
+              .bg-white.rounded-lg.p-3.sm:p-4.shadow-sm
+                %h4.text-xs.sm:text-sm.font-semibold.text-blue-800.mb-1.sm:mb-2 Specifications
+                %ul.text-xs.sm:text-sm.text-blue-700.space-y-1
+                  %li • Transmission and Fuel Type
+                  %li • Seats, Mileage, Engine Size
+                  %li • USB Ports and Features
+              .bg-white.rounded-lg.p-3.sm:p-4.shadow-sm
+                %h4.text-xs.sm:text-sm.font-semibold.text-blue-800.mb-1.sm:mb-2 Premium Features
+                %ul.text-xs.sm:text-sm.text-blue-700.space-y-1
+                  %li • Select premium features
+                  %li • Common features auto-included
+                  %li • Featured Car Option
+              .bg-white.rounded-lg.p-3.sm:p-4.shadow-sm
+                %h4.text-xs.sm:text-sm.font-semibold.text-blue-800.mb-1.sm:mb-2 Images & Documents
+                %ul.text-xs.sm:text-sm.text-blue-700.space-y-1
+                  %li • Up to 5 high-quality photos
+                  %li • Mulkiya document required
+                  %li • First image becomes primary
+
+    = form_with model: @car, url: vendors_cars_path, html: { multipart: true, class: 'space-y-6 sm:space-y-8', id: 'car-creation-form', data: { show_loader: true } } do |f|
+      = render 'shared/form_errors', object: @car
+      / With Driver Toggle at the top
+      .field.space-y-1.sm:space-y-2.mb-6
+        .flex.items-center.p-4.bg-blue-50.rounded-xl.border-2.border-blue-200.shadow-sm
+          = f.check_box :with_driver, id: 'with_driver_toggle', class: 'h-6 w-6 border-gray-300 rounded focus:ring-2 transition-all duration-200', style: 'accent-color:#F97316'
+          = f.label :with_driver, class: 'ml-3 block text-base sm:text-lg font-bold text-gray-800 cursor-pointer' do
+            .flex.items-center.gap-2
+              %i.fas.fa-user-tie.text-blue-600
+              %span Is this a "Car with Driver" service?
+              %span.text-xs.font-normal.text-gray-500.italic (Selecting this will show only driver-specific fields)
+
+      .field.space-y-1.sm:space-y-2.mb-6
+        = f.label :category, 'Category', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+        = f.select :category, options_for_select(AppConstants::CAR_CATEGORIES, @car.category), { prompt: 'Select category' }, { class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', id: 'car_category_select' }
+
+      / Basic Information Section
+      %h2.text-base.sm:text-lg.font-bold.mb-3.sm:mb-4{style: 'color: #F97316'} Basic Information
+      .grid.grid-cols-1.md:grid-cols-2.gap-4.sm:gap-6
+        .field.space-y-1.sm:space-y-2
+          = f.label :brand, 'Brand *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.text_field :brand, required: true, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., Toyota'
+
+        .field.space-y-1.sm:space-y-2.hide-for-limousine
+          = f.label :model, 'Model *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.text_field :model, required: true, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., Camry', id: 'car_model_field'
+
+        .field.space-y-1.sm:space-y-2
+          = f.label :slug, 'Slug (URL Handle)', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.text_field :slug, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., toyota-camry-2023', id: 'car_slug_field'
+
+        .field.space-y-1.sm:space-y-2.hide-for-limousine
+          = f.label :color, 'Color *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.text_field :color, required: true, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., White', id: 'car_color_field'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field.hide-for-limousine
+          = f.label :year, 'Year *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :year, required: true, min: 1900, max: Date.current.year + 1, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 2023', id: 'car_year_field'
+
+        / With Driver Specific Charges
+        .field.space-y-1.sm:space-y-2.with-driver-only-field.hidden
+          = f.label :five_hours_charge, '5 Hours Charge (AED) *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :five_hours_charge, step: 1, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 250'
+
+        .field.space-y-1.sm:space-y-2.with-driver-only-field.hidden
+          = f.label :ten_hours_charge, '10 Hours Charge (AED) *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :ten_hours_charge, step: 1, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 450'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field.hide-for-limousine
+          = f.label :daily_price, 'Daily Price (AED) *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :daily_price, required: true, step: 1, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 50.00'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :weekly_price, 'Weekly Price (AED)', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :weekly_price, step: 1, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 300.00'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :monthly_price, 'Monthly Price (AED)', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :monthly_price, step: 1, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 1200.00'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :additional_mileage_charge, 'Additional Mileage Charge (AED)', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :additional_mileage_charge, step: 0.01, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 1.00'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field.hide-for-limousine
+          = f.label :status, 'Status *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.select :status, options_for_select([['Available', 'available'], ['Rented', 'rented'], ['Maintenance', 'maintenance']], @car.status), { prompt: 'Select status' }, { required: true, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', id: 'car_status_field' }
+
+        / Limousine Hourly Price
+        .field.space-y-1.sm:space-y-2.limousine-only-field.hidden
+          = f.label :hourly_price, 'Per Hour Price for Dubai (AED) *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :hourly_price, step: 1, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 150', id: 'car_hourly_price_field'
+
+
+
+      / Specifications Section
+      %h2.text-base.sm:text-lg.font-bold.mb-3.sm:mb-4.mt-6.sm:mt-8.hide-for-limousine{style: 'color: #F97316'} Specifications
+      .grid.grid-cols-1.md:grid-cols-2.gap-4.sm:gap-6
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :transmission, 'Transmission', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.select :transmission, options_for_select([['Automatic', 'Automatic'], ['Manual', 'Manual'], ['CVT', 'CVT']], @car.transmission), { prompt: 'Select transmission' }, { class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition' }
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :fuel_type, 'Fuel Type', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.select :fuel_type, options_for_select([['Petrol', 'Petrol'], ['Diesel', 'Diesel'], ['Electric', 'Electric'], ['Hybrid', 'Hybrid'], ['Plug-in Hybrid', 'Plug-in Hybrid']], @car.fuel_type), { prompt: 'Select fuel type' }, { class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition' }
+
+        .field.space-y-1.sm:space-y-2.hide-for-limousine
+          = f.label :seats, 'Number of Seats', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :seats, min: 1, max: 15, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 5'
+
+        .field.space-y-1.sm:space-y-2.with-driver-only-field.hidden
+          = f.label :luggage_capacity, 'Luggage Capacity (Bags) *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :luggage_capacity, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 3'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :daily_milleage, 'Daily Mileage (km)', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :daily_milleage, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 100'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :weekly_milleage, 'Weekly Mileage (km)', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :weekly_milleage, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 500'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :monthly_milleage, 'Monthly Mileage (km)', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.number_field :monthly_milleage, min: 0, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 1500'
+
+        .field.space-y-1.sm:space-y-2.standard-only-field
+          = f.label :engine_size, 'Engine Size', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+          = f.text_field :engine_size, class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition', placeholder: 'e.g., 2.0L'
+
+      / Premium Features Section
+      #premium-features-section.standard-only-field
+        %h2.text-base.sm:text-lg.font-bold.mb-3.sm:mb-4.mt-6.sm:mt-8.flex.items-center.gap-2{style: 'color:#EA580C'}
+          %i.fas.fa-gem.text-purple-500.text-sm.sm:text-base
+          Premium Features (Optional)
+        .mb-3.sm:mb-4
+          .flex.items-start.gap-2.bg-blue-50.rounded-lg.p-2.sm:p-3
+            %i.fas.fa-info-circle.text-blue-500.mt-0.5.text-sm.sm:text-base
+            %p.text-xs.sm:text-sm.text-blue-700 Common features (like Air Conditioning, Bluetooth, etc.) are automatically included with all cars. Select any additional premium features available in this vehicle.
+
+        - if @premium_features.any?
+          .bg-gray-50.rounded-xl.p-4.sm:p-6.border-2.border-gray-200
+            #premiumFeaturesGrid.grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-3.gap-3.sm:gap-4.relative
+              - @premium_features.each_with_index do |feature, index|
+                .field.space-y-1.sm:space-y-2.premium-feature-item{class: index >= 9 ? 'hidden' : '', 'data-feature-index': index}
+                  .flex.items-center.p-2.sm:p-3.rounded-lg.hover:bg-white.transition-colors.duration-200
+                    = check_box_tag 'car[feature_ids][]', feature.id, false, class: 'h-4 w-4 sm:h-5 sm:w-5 border-gray-300 rounded focus:ring-2', style: 'accent-color:#F97316', id: "car_feature_#{feature.id}"
+                    = label_tag "car_feature_#{feature.id}", class: 'ml-2 sm:ml-3 block text-xs sm:text-sm font-medium text-gray-700 cursor-pointer flex-1' do
+                      .flex.items-center.gap-1.sm:gap-2
+                        %span.text-purple-600 ⭐
+                        %span= feature.name
+
+            - if @premium_features.count > 9
+              .mt-3.sm:mt-4.text-center
+                %button#showMorePremiumFeaturesBtn.px-4.sm:px-6.py-2.text-sm.sm:text-base.text-white.rounded-lg.font-medium.transition-all.duration-200.shadow-md.hover:shadow-lg.flex.items-center.justify-center.mx-auto.gap-2{type: 'button', style: 'background-color: #F97316'}
+                  %span#premiumBtnText Show More Features
+                  %i.fas.fa-chevron-down#premiumBtnIcon
+
+            / Hidden field to ensure empty array is sent when no features are selected
+            = hidden_field_tag 'car[feature_ids][]', '', id: 'hidden_feature_field'
+        - else
+          .text-center.py-6.sm:py-8.text-gray-500.bg-gray-50.rounded-xl
+            %i.fas.fa-info-circle.text-2xl.sm:text-3xl.mb-2.sm:mb-3
+            %p.text-sm.sm:text-base No premium features available. Contact admin to add features.
+
+      / Insurance Section
+      #insurance-section.standard-only-field.hide-for-limousine
+        %h2.text-base.sm:text-lg.font-bold.mb-3.sm:mb-4.mt-6.sm:mt-8{style: 'color: #F97316'} Insurance
+        .field.space-y-1.sm:space-y-2
+          %div.flex.items-center.justify-between.mb-1.sm:mb-2
+            = f.label :insurance_policy, 'Insurance Policy *', class: 'block text-xs sm:text-sm font-medium text-gray-700'
+            %span#wordCount.text-xs.sm:text-sm.text-gray-500 0/80 words
+
+          = f.text_area :insurance_policy,
+            required: true,
+            rows: 4,
+            class: 'w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition',
+            placeholder: 'Enter insurance policy details (max 80 words)',
+            id: 'insurance_policy',
+            data: { max_words: 80 },
+            maxlength: 500
+
+          %p.text-xs.text-gray-500.mt-1
+            %i.fas.fa-info-circle.mr-1
+            Maximum 80 words allowed
+
+        - if @car.errors[:insurance_policy].any?
+          %div.mt-2.p-2.sm:p-3.bg-red-50.border.border-red-200.rounded-lg
+            %p.text-red-600.text-xs.sm:text-sm.font-medium
+              %i.fas.fa-exclamation-circle.mr-1
+              = @car.errors[:insurance_policy].first
+
+      / Images Section
+      %h2.text-base.sm:text-lg.font-bold.mb-3.sm:mb-4.mt-6.sm:mt-8{style: 'color: #F97316'} Car Images *
+      - if @car.errors[:images].any?
+        .mb-3.sm:mb-4.p-3.sm:p-4.bg-red-50.border.border-red-200.rounded-lg
+          %p.text-red-600.text-xs.sm:text-sm.font-medium= @car.errors[:images].join(', ')
+
+      .flex.flex-wrap.gap-3.sm:gap-4.md:gap-6.mb-3.sm:mb-4
+        - 5.times do |i|
+          .relative.group
+            %div.flex.items-center.justify-center.w-24.h-20.sm:w-28.sm:h-22.md:w-32.md:h-24.bg-blue-50.rounded-lg.sm:rounded-xl.shadow.border-2.border-dashed.border-blue-300.group-hover:border-blue-500.transition-all.duration-200{ id: "plus-card-#{i}", class: i == 0 ? 'border-red-400 bg-red-50' : '' }
+              %i.fas.fa-plus.text-xl.sm:text-2xl.md:text-3xl.text-blue-400{ id: "plus-icon-#{i}" }
+              %img.hidden.absolute.inset-0.w-full.h-full.object-cover.rounded-lg.sm:rounded-xl{ id: "preview-img-#{i}" }
+              - if i == 0
+                .absolute.-top-1.sm:-top-2.-right-1.sm:-right-2.bg-red-500.text-white.text-xs.px-1.sm:px-2.py-0.5.sm:py-1.rounded-full.font-bold Required
+            = f.file_field :images, name: "car[images][]", id: "car_image_#{i}", accept: 'image/*', class: 'hidden', data: { image_index: i, required: i == 0 }
+
+      .text-xs.sm:text-sm.text-gray-600.mb-6.sm:mb-8
+        %p.text-red-600.font-medium At least one image is required. Upload up to 5 high-quality images of your car. First image will be used as the main display image.
+
+      / Mulkiya Section
+      %h2.text-base.sm:text-lg.font-bold.text-blue-800.mb-3.sm:mb-4.mt-6.sm:mt-8.standard-only-field.hide-for-limousine Mulkiya (PDF or Image) *
+      - if @car.errors[:mulkiya].any?
+        .mb-3.sm:mb-4.p-3.sm:p-4.bg-red-50.border.border-red-200.rounded-lg
+          %p.text-red-600.text-xs.sm:text-sm.font-medium= @car.errors[:mulkiya].join(', ')
+
+      .mb-2.text-xs.sm:text-sm.text-gray-600.standard-only-field
+        %p Upload the vehicle ownership card or PDF. Only one file is required.
+
+      .flex.flex-wrap.gap-3.sm:gap-4.md:gap-6.mb-4.sm:mb-6.standard-only-field
+        .relative.group
+          %div.flex.items-center.justify-center.w-24.h-20.sm:w-28.sm:h-22.md:w-32.md:h-24.bg-red-50.rounded-lg.sm:rounded-xl.shadow.border-2.border-dashed.border-red-400.group-hover:border-blue-500.transition-all.duration-200{id: 'plus-card-mulkiya'}
+            %i.fas.fa-plus.text-xl.sm:text-2xl.md:text-3xl.text-blue-400{id: 'plus-icon-mulkiya'}
+            %img.hidden.absolute.inset-0.w-full.h-full.object-cover.rounded-lg.sm:rounded-xl{id: 'preview-img-mulkiya'}
+            %div.hidden.absolute.inset-0.w-full.h-full.flex.items-center.justify-center.rounded-lg.sm:rounded-xl{id: 'preview-file-mulkiya'}
+              %i.fas.fa-file-pdf.text-2xl.sm:text-3xl.text-red-500
+            .absolute.-top-1.sm:-top-2.-right-1.sm:-right-2.bg-red-500.text-white.text-xs.px-1.sm:px-2.py-0.5.sm:py-1.rounded-full.font-bold Required
+          = f.file_field :mulkiya, id: 'car_mulkiya', accept: 'application/pdf,image/*,.heic,.heif', required: true, class: 'hidden'
+        .flex.flex-col.justify-center
+          %span.text-xs.sm:text-sm.text-gray-700.font-medium Selected:
+          %span#mulkiya-filename.text-xs.sm:text-sm.text-gray-500 None
+
+      / Submit Button
+      .flex.justify-center.sm:justify-end.pt-4.sm:pt-6
+        = f.submit 'Add Car', class: 'w-full sm:w-auto text-white font-bold py-2.5 sm:py-3 px-6 sm:px-8 text-sm sm:text-base rounded-lg shadow-lg hover:shadow-xl transition-all duration-200', style: 'background-color: #F97316; hover:background-color: #EA580C'
+
+:javascript
+  // Insurance Policy Word Counter and Limiter
+  function initializeInsurancePolicyCounter() {
+    const insuranceField = document.getElementById('insurance_policy');
+    const wordCountEl = document.getElementById('wordCount');
+    
+    if (!insuranceField || !wordCountEl) return;
+    
+    const maxWords = parseInt(insuranceField.dataset.maxWords) || 80;
+    
+    // Helper function to count words accurately
+    function countWords(text) {
+      if (!text || text.trim().length === 0) return 0;
+      return text.trim().split(/\s+/).length;
+    }
+    
+    // Helper function to get first N words
+    function getFirstNWords(text, n) {
+      if (n <= 0) return '';
+      const words = text.trim().split(/\s+/);
+      return words.slice(0, n).join(' ');
+    }
+    
+    // Update word count display
+    function updateWordCount() {
+      const currentWords = countWords(insuranceField.value);
+      
+      wordCountEl.textContent = `${currentWords}/${maxWords} words`;
+      
+      // Change color based on word count
+      if (currentWords > maxWords) {
+        wordCountEl.classList.remove('text-gray-500', 'text-yellow-600', 'font-medium');
+        wordCountEl.classList.add('text-red-500', 'font-bold');
+        insuranceField.classList.add('border-red-500', 'border-2');
+      } else if (currentWords > maxWords - 10) {
+        wordCountEl.classList.remove('text-gray-500', 'text-red-500', 'font-bold');
+        wordCountEl.classList.add('text-yellow-600', 'font-medium');
+        insuranceField.classList.remove('border-red-500', 'border-2');
+      } else {
+        wordCountEl.classList.remove('text-red-500', 'text-yellow-600', 'font-bold', 'font-medium');
+        wordCountEl.classList.add('text-gray-500');
+        insuranceField.classList.remove('border-red-500', 'border-2');
+      }
+    }
+    
+    // Prevent exceeding word limit on regular input
+    insuranceField.addEventListener('input', function() {
+      const currentWords = countWords(this.value);
+      
+      if (currentWords > maxWords) {
+        this.value = getFirstNWords(this.value, maxWords);
+      }
+      
+      updateWordCount();
+    });
+    
+    // Prevent paste exceeding limit - IMPROVED VERSION
+    insuranceField.addEventListener('paste', function(e) {
+      e.preventDefault();
+      
+      try {
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        const currentText = this.value;
+        
+        const currentWords = countWords(currentText);
+        const remainingSlots = maxWords - currentWords;
+        
+        if (remainingSlots <= 0) {
+          // Field is already at max capacity
+          updateWordCount();
+          return;
+        }
+        
+        // Get only as many words as we have room for
+        const allowedPastedText = getFirstNWords(pastedText, remainingSlots);
+        
+        // Combine with proper spacing
+        if (currentText && !currentText.endsWith(' ') && allowedPastedText) {
+          this.value = currentText + ' ' + allowedPastedText;
+        } else {
+          this.value = currentText + allowedPastedText;
+        }
+        
+        updateWordCount();
+      } catch (error) {
+        console.error('Error handling paste:', error);
+        updateWordCount();
+      }
+    });
+    
+    // Initial count
+    updateWordCount();
+  }
+
+  // Show More Premium Features functionality
+  function initializePremiumFeaturesToggle() {
+    const showMoreBtn = document.getElementById('showMorePremiumFeaturesBtn');
+    
+    if (!showMoreBtn) return; // Exit if button doesn't exist
+    
+    const btnText = showMoreBtn.querySelector('#premiumBtnText');
+    const btnIcon = showMoreBtn.querySelector('#premiumBtnIcon');
+    let isExpanded = false;
+    
+    // Remove any existing event listeners to avoid duplicates
+    const newBtn = showMoreBtn.cloneNode(true);
+    showMoreBtn.parentNode.replaceChild(newBtn, showMoreBtn);
+    
+    const newBtnText = newBtn.querySelector('#premiumBtnText');
+    const newBtnIcon = newBtn.querySelector('#premiumBtnIcon');
+    
+    newBtn.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent form submission
+      
+      const allFeatures = document.querySelectorAll('.premium-feature-item');
+      
+      if (!isExpanded) {
+        // Show all features
+        allFeatures.forEach(function(feature) {
+          feature.classList.remove('hidden');
+        });
+        if (newBtnText) newBtnText.textContent = 'Show Less Features';
+        if (newBtnIcon) {
+          newBtnIcon.classList.remove('fa-chevron-down');
+          newBtnIcon.classList.add('fa-chevron-up');
+        }
+        isExpanded = true;
+      } else {
+        // Hide features after index 8 (show only first 9 features = 3 rows)
+        allFeatures.forEach(function(feature) {
+          const index = parseInt(feature.getAttribute('data-feature-index'));
+          if (index >= 9) {
+            feature.classList.add('hidden');
+          }
+        });
+        if (newBtnText) newBtnText.textContent = 'Show More Features';
+        if (newBtnIcon) {
+          newBtnIcon.classList.remove('fa-chevron-up');
+          newBtnIcon.classList.add('fa-chevron-down');
+        }
+        isExpanded = false;
+        
+        // Scroll back to features section
+        const featuresGrid = document.querySelector('#premiumFeaturesGrid');
+        if (featuresGrid) {
+          featuresGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    });
+  }
+
+  // Initialize image upload functionality
+  function initializeImageUploads() {
+    const form = document.getElementById('car-creation-form');
+    let hasImage = false;
+    
+    // Track if any image is selected
+    function checkImageSelection() {
+      hasImage = false;
+      for (let i = 0; i < 5; i++) {
+        const fileInput = document.getElementById('car_image_' + i);
+        if (fileInput && fileInput.files && fileInput.files[0]) {
+          hasImage = true;
+          break;
+        }
+      }
+    }
+    
+    // Form validation - only apply to car creation form
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        // FAILSAFE: Remove 'required' from any hidden element before submission
+        const allRequired = form.querySelectorAll('[required]');
+        allRequired.forEach(input => {
+          if (input.offsetWidth === 0 && input.offsetHeight === 0) {
+            input.removeAttribute('required');
+            input.required = false;
+          }
+        });
+
+        checkImageSelection();
+        if (!hasImage) {
+          e.preventDefault();
+          alert('Please upload at least one image for the car.');
+          return false;
+        }
+      });
+    }
+    
+    // Initialize file inputs
+    for (let i = 0; i < 5; i++) {
+      const fileInput = document.getElementById('car_image_' + i);
+      const previewImg = document.getElementById('preview-img-' + i);
+      const plusIcon = document.getElementById('plus-icon-' + i);
+      const plusCard = document.getElementById('plus-card-' + i);
+      
+      if (fileInput && previewImg && plusIcon && plusCard) {
+        // Remove existing event listeners to prevent duplicates
+        const newFileInput = fileInput.cloneNode(true);
+        fileInput.parentNode.replaceChild(newFileInput, fileInput);
+        
+        const newPlusCard = plusCard.cloneNode(true);
+        plusCard.parentNode.replaceChild(newPlusCard, plusCard);
+        
+        // Re-get elements after cloning
+        const newFileInputElement = document.getElementById('car_image_' + i);
+        const newPlusCardElement = document.getElementById('plus-card-' + i);
+        const newPreviewImg = document.getElementById('preview-img-' + i);
+        const newPlusIcon = document.getElementById('plus-icon-' + i);
+        
+        if (newFileInputElement && newPreviewImg && newPlusIcon && newPlusCardElement) {
+          newFileInputElement.addEventListener('change', function(e) {
+            if (newFileInputElement.files && newFileInputElement.files[0]) {
+              const reader = new FileReader();
+              reader.onload = function(ev) {
+                newPreviewImg.src = ev.target.result;
+                newPreviewImg.classList.remove('hidden');
+                newPlusIcon.classList.add('hidden');
+              };
+              reader.readAsDataURL(newFileInputElement.files[0]);
+              checkImageSelection();
+            } else {
+              newPreviewImg.src = '';
+              newPreviewImg.classList.add('hidden');
+              newPlusIcon.classList.remove('hidden');
+              checkImageSelection();
+            }
+          });
+          
+          newPlusCardElement.addEventListener('click', function() {
+            newFileInputElement.click();
+          });
+          
+          newPreviewImg.addEventListener('click', function(e) {
+            e.stopPropagation();
+          });
+        }
+      }
+    }
+  }
+
+  // Mulkiya upload placeholder behavior
+  function initializeMulkiyaUpload() {
+    const fileInput = document.getElementById('car_mulkiya');
+    const previewImg = document.getElementById('preview-img-mulkiya');
+    const plusIcon = document.getElementById('plus-icon-mulkiya');
+    const plusCard = document.getElementById('plus-card-mulkiya');
+    const previewFile = document.getElementById('preview-file-mulkiya');
+    const fileNameEl = document.getElementById('mulkiya-filename');
+
+    if (!(fileInput && previewImg && plusIcon && plusCard && previewFile && fileNameEl)) return;
+
+    // Prevent duplicate bindings across Turbo renders
+    if (plusCard.dataset.initialized === 'true') return;
+    plusCard.dataset.initialized = 'true';
+
+    const resetPreview = () => {
+      previewImg.classList.add('hidden');
+      previewFile.classList.add('hidden');
+      plusIcon.classList.remove('hidden');
+      fileNameEl.textContent = 'None';
+      previewImg.src = '';
+    };
+
+    plusCard.addEventListener('click', function() {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        fileNameEl.textContent = file.name;
+        const type = (file.type || '').toLowerCase();
+
+        // If it's an image, try to preview; otherwise show file icon
+        if (type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            previewImg.src = ev.target.result;
+            previewImg.classList.remove('hidden');
+            previewFile.classList.add('hidden');
+            plusIcon.classList.add('hidden');
+          };
+          reader.onerror = function() {
+            // Fall back to file icon
+            previewImg.classList.add('hidden');
+            previewFile.classList.remove('hidden');
+            plusIcon.classList.add('hidden');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          previewImg.classList.add('hidden');
+          previewFile.classList.remove('hidden');
+          plusIcon.classList.add('hidden');
+        }
+      } else {
+        resetPreview();
+      }
+    });
+  }
+
+  // Form toggle logic based on with_driver checkbox
+  function initializeFormToggle() {
+    const toggle = document.getElementById('with_driver_toggle');
+    const categorySelect = document.getElementById('car_category_select');
+    if (!toggle) return;
+
+    function updateFormVisibility() {
+      const isLimousine = categorySelect && categorySelect.value === 'Limousine';
+      const isWithDriver = toggle.checked || isLimousine;
+
+      // If Limousine is selected, force with_driver toggle to be checked
+      if (isLimousine) {
+        toggle.checked = true;
+      }
+
+      const standardOnlyFields = document.querySelectorAll('.standard-only-field');
+      const withDriverOnlyFields = document.querySelectorAll('.with-driver-only-field');
+      const limousineOnlyFields = document.querySelectorAll('.limousine-only-field');
+      const hideForLimousineFields = document.querySelectorAll('.hide-for-limousine');
+
+      // Reset all visibility
+      standardOnlyFields.forEach(f => f.classList.remove('hidden'));
+      withDriverOnlyFields.forEach(f => f.classList.add('hidden'));
+      limousineOnlyFields.forEach(f => f.classList.add('hidden'));
+      hideForLimousineFields.forEach(f => f.classList.remove('hidden'));
+
+      if (isLimousine) {
+        // Limousine logic
+        hideForLimousineFields.forEach(field => {
+          field.classList.add('hidden');
+          const inputs = field.querySelectorAll('input, select, textarea');
+          inputs.forEach(input => {
+            if (input.required || input.hasAttribute('required')) input.dataset.wasRequired = 'true';
+            input.required = false;
+            input.removeAttribute('required');
+          });
+          
+          // Set default values for hidden required fields
+          const yearInput = field.querySelector('input[name="car[year]"]');
+          if (yearInput && !yearInput.value) yearInput.value = new Date().getFullYear();
+          
+          const modelInput = field.querySelector('input[name="car[model]"]');
+          if (modelInput && !modelInput.value) modelInput.value = 'Limousine';
+          
+          const colorInput = field.querySelector('input[name="car[color]"]');
+          if (colorInput && !colorInput.value) colorInput.value = 'N/A';
+          
+          const statusSelect = field.querySelector('select[name="car[status]"]');
+          if (statusSelect && !statusSelect.value) statusSelect.value = 'available';
+          
+          const insuranceTextarea = field.querySelector('textarea[name="car[insurance_policy]"]');
+          if (insuranceTextarea && !insuranceTextarea.value) insuranceTextarea.value = 'Included for Limousine';
+          
+          const dailyPriceInput = field.querySelector('input[name="car[daily_price]"]');
+          if (dailyPriceInput && !dailyPriceInput.value) dailyPriceInput.value = '0';
+        });
+
+        // Also clean up required for standardOnlyFields that are hidden for Limousine
+        standardOnlyFields.forEach(field => {
+          if (!field.classList.contains('limousine-only-field')) {
+            field.classList.add('hidden');
+            const inputs = field.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+              if (input.required || input.hasAttribute('required')) input.dataset.wasRequired = 'true';
+              input.required = false;
+              input.removeAttribute('required');
+            });
+          }
+        });
+        
+        limousineOnlyFields.forEach(field => {
+          field.classList.remove('hidden');
+          const inputs = field.querySelectorAll('input');
+          inputs.forEach(input => {
+            if (input.dataset.wasRequired === 'true') {
+              input.required = true;
+              input.setAttribute('required', 'required');
+            } else if (input.id === 'car_hourly_price_field') {
+              input.required = true;
+              input.setAttribute('required', 'required');
+            }
+          });
+        });
+
+        withDriverOnlyFields.forEach(f => {
+          f.classList.add('hidden');
+          f.querySelectorAll('input').forEach(i => {
+            i.required = false;
+            i.removeAttribute('required');
+          });
+        });
+
+      } else if (isWithDriver) {
+        // Standard With Driver logic
+        standardOnlyFields.forEach(field => {
+          field.classList.add('hidden');
+          const inputs = field.querySelectorAll('input, select, textarea');
+          inputs.forEach(input => {
+            if (input.required || input.hasAttribute('required') || input.dataset.wasRequired === 'true') {
+              input.dataset.wasRequired = 'true';
+              input.required = false;
+              input.removeAttribute('required');
+            }
+          });
+        });
+
+        withDriverOnlyFields.forEach(field => {
+          field.classList.remove('hidden');
+          const inputs = field.querySelectorAll('input');
+          inputs.forEach(input => {
+            input.required = true;
+            input.setAttribute('required', 'required');
+          });
+        });
+        
+        limousineOnlyFields.forEach(f => {
+          f.classList.add('hidden');
+          f.querySelectorAll('input').forEach(i => {
+            i.required = false;
+            i.removeAttribute('required');
+          });
+        });
+      } else {
+        // Standard No Driver logic
+        standardOnlyFields.forEach(field => {
+          field.classList.remove('hidden');
+          const inputs = field.querySelectorAll('input, select, textarea');
+          inputs.forEach(input => {
+            if (input.dataset.wasRequired === 'true') {
+              input.required = true;
+              input.setAttribute('required', 'required');
+            }
+          });
+        });
+        withDriverOnlyFields.forEach(field => {
+          field.classList.add('hidden');
+          field.querySelectorAll('input').forEach(i => {
+            i.required = false;
+            i.removeAttribute('required');
+          });
+        });
+        limousineOnlyFields.forEach(field => {
+          field.classList.add('hidden');
+          field.querySelectorAll('input').forEach(i => {
+            i.required = false;
+            i.removeAttribute('required');
+          });
+        });
+      }
+    }
+
+    toggle.addEventListener('change', updateFormVisibility);
+    if (categorySelect) {
+      categorySelect.addEventListener('change', updateFormVisibility);
+    }
+    updateFormVisibility(); // Initial state
+  }
+
+  // Initialize all functionality
+  function initializeAll() {
+    initializeImageUploads();
+    initializeMulkiyaUpload();
+    initializePremiumFeaturesToggle();
+    initializeInsurancePolicyCounter();
+    initializeFormToggle();
+  }
+
+  // Initialize on multiple events to ensure it works
+  document.addEventListener('DOMContentLoaded', initializeAll);
+  document.addEventListener('turbo:load', initializeAll);
+  document.addEventListener('turbo:render', initializeAll);
+  
+  // Also initialize immediately if DOM is already ready
+  if (document.readyState !== 'loading') {
+    setTimeout(initializeAll, 100);
+  }

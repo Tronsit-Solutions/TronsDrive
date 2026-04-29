@@ -1,0 +1,58 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+en:
+  hello: "Hello world"
+  number:
+    currency:
+      format:
+        unit: "AED "
+        format: "%u%n" # e.g., AED 1,234.56
+        delimiter: ","
+        separator: "."
+        precision: 2
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            whatsapp_number:
+              invalid_phone: "is not a valid phone number"
+              invalid_format: "must be in international format (e.g., +1234567890)"
+              must_be_mobile: "must be a mobile number"
+              invalid_length: "is too short or too long"
+              taken: "is already registered"
+        vendor:
+          attributes:
+            whatsapp_number:
+              invalid_phone: "is not a valid phone number"
+              invalid_format: "must be in international format (e.g., +1234567890)"
+              must_be_mobile: "must be a mobile number"
+              invalid_length: "is too short or too long"
+              taken: "is already registered"

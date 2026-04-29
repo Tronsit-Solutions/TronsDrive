@@ -1,0 +1,289 @@
+/ Filter/Search Bar
+%section.-mt-14.py-4.relative.z-40
+  .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
+    %div{ style: "background: var(--td-surface); border: 1px solid var(--td-border); border-radius: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,0.18); padding: 1.25rem 1.5rem; backdrop-filter: blur(16px);" }
+      = form_with url: (@cars_path || cars_path), method: :get, local: true, class: "grid grid-cols-1 md:grid-cols-6 gap-4 items-end", id: "car_filters" do |f|
+
+        / Search field
+        .flex.flex-col.relative
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Search
+          = f.text_field :search, placeholder: "Brand, model, year...", style: "display: block; width: 100%; padding: 0.5rem 1rem; border: 1px solid var(--td-border); border-radius: 0.5rem; background: var(--td-surface2); color: var(--td-text); font-size: 0.875rem; outline: none;", id: "search_input", autocomplete: "off"
+          %div{ id: "search_results", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; max-height:16rem; overflow-y:auto; overflow-x:hidden;" }
+
+        / Category custom dropdown
+        .flex.flex-col.relative{ data: { dropdown: "category" } }
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Category
+          = f.hidden_field :category, id: "category_hidden", value: params[:category]
+          %button.filter-custom-btn{ type: "button", id: "category_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "category" }
+            %span{ id: "category_label" }= params[:category].present? ? params[:category] : "All Categories"
+            %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
+          %div.filter-dropdown{ id: "category_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden;" }
+            .py-1
+              %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "category", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                All Categories
+              - @car_categories.each do |cat|
+                %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => cat, "data-filter" => "category", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                  %i.fas.fa-car.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                  = cat
+
+        / Brand custom dropdown
+        .flex.flex-col.relative{ data: { dropdown: "brand" } }
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Brand
+          = f.hidden_field :brand, id: "brand_hidden", value: params[:brand]
+          %button.filter-custom-btn{ type: "button", id: "brand_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "brand" }
+            %span{ id: "brand_label" }= params[:brand].present? ? params[:brand] : "All Brands"
+            %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
+          %div.filter-dropdown{ id: "brand_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden; max-height:14rem; overflow-y:auto;" }
+            .py-1
+              %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "brand", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                All Brands
+              - (@car_brands || []).each do |brand|
+                %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => brand, "data-filter" => "brand", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                  %i.fas.fa-tag.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                  = brand
+
+        / Model custom dropdown
+        .flex.flex-col.relative{ data: { dropdown: "model" } }
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Model
+          = f.hidden_field :model, id: "model_hidden", value: params[:model]
+          %button.filter-custom-btn{ type: "button", id: "model_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "model" }
+            %span{ id: "model_label" }= params[:model].present? ? params[:model] : "All Models"
+            %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
+          %div.filter-dropdown{ id: "model_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden; max-height:14rem; overflow-y:auto;" }
+            .py-1
+              %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "model", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                All Models
+              - (@car_models || []).each do |model|
+                %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => model, "data-filter" => "model", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                  %i.fas.fa-car-side.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                  = model
+
+        / Monthly Price custom dropdown
+        .flex.flex-col.relative{ data: { dropdown: "monthly_price" } }
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Price / Month
+          = f.hidden_field :monthly_price, id: "monthly_price_hidden", value: params[:monthly_price]
+          %button.filter-custom-btn{ type: "button", id: "monthly_price_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "monthly_price" }
+            %span{ id: "monthly_price_label" }= params[:monthly_price].present? ? params[:monthly_price] : "All Prices"
+            %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
+          %div.filter-dropdown{ id: "monthly_price_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden; max-height:14rem; overflow-y:auto;" }
+            .py-1
+              %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "monthly_price", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                All Prices
+              - (@monthly_price_slabs || []).each do |slab|
+                - slab_value = slab.is_a?(Array) ? slab[1] : slab
+                - slab_label = slab.is_a?(Array) ? slab[0] : slab
+                %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => slab_value, "data-filter" => "monthly_price", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
+                  %i.fas.fa-money-bill-wave.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
+                  = slab_label
+
+        = f.submit "Search", style: "background: linear-gradient(135deg, #F97316, #EA580C); color: white; font-weight: 700; padding: 0.5rem 1.5rem; border-radius: 0.5rem; border: none; cursor: pointer; width: 100%; box-shadow: 0 4px 14px rgba(249,115,22,0.35); transition: transform 0.1s ease;", class: "hover:scale-105"
+
+:javascript
+  (function initializeFilters() {
+    if (!initFiltersNow()) setTimeout(initFiltersNow, 500);
+
+    function initFiltersNow() {
+      try {
+        const filterForm    = document.getElementById('car_filters');
+        const searchInput   = document.getElementById('search_input');
+        const searchResults = document.getElementById('search_results');
+        if (!filterForm || !searchInput || !searchResults) return false;
+
+        const filterEndpoint = '#{filter_options_path}';
+        const searchEndpoint = '#{search_cars_path}';
+
+        const allDropNames = ['category', 'brand', 'model', 'monthly_price'];
+
+        // ── Custom dropdown toggle ──────────────────────────────
+        function openDrop(name) {
+          allDropNames.forEach(n => {
+            const d = document.getElementById(n + '_dropdown');
+            const i = document.querySelector('#' + n + '_btn .fa-chevron-down');
+            if (n === name) {
+              const isOpen = d && d.style.display === 'block';
+              if (d) d.style.display = isOpen ? 'none' : 'block';
+              if (i) i.style.transform = isOpen ? '' : 'rotate(180deg)';
+            } else {
+              if (d) d.style.display = 'none';
+              if (i) i.style.transform = '';
+            }
+          });
+        }
+
+        allDropNames.forEach(name => {
+          const btn = document.getElementById(name + '_btn');
+          if (btn) btn.addEventListener('click', function(e) { e.stopPropagation(); openDrop(name); });
+        });
+
+        // ── Option click → set hidden field + label + update ───
+        document.querySelectorAll('.filter-option').forEach(opt => {
+          opt.addEventListener('click', function(e) {
+            e.preventDefault();
+            const name  = this.dataset.filter;
+            const value = this.dataset.value;
+            const label = this.textContent.trim();
+            document.getElementById(name + '_hidden').value = value;
+            const labelEl = document.getElementById(name + '_label');
+            if (labelEl) {
+              if (value) {
+                labelEl.textContent = label;
+              } else {
+                const defaults = { category: 'All Categories', brand: 'All Brands', model: 'All Models', monthly_price: 'All Prices' };
+                labelEl.textContent = defaults[name] || ('All ' + name);
+              }
+            }
+            const drop = document.getElementById(name + '_dropdown');
+            const icon = document.querySelector('#' + name + '_btn .fa-chevron-down');
+            if (drop) drop.style.display = 'none';
+            if (icon) icon.style.transform = '';
+            updateFilters();
+          });
+        });
+
+        // ── Close all on outside click ──────────────────────────
+        document.addEventListener('click', function(e) {
+          allDropNames.forEach(name => {
+            const btn  = document.getElementById(name + '_btn');
+            const drop = document.getElementById(name + '_dropdown');
+            const icon = document.querySelector('#' + name + '_btn .fa-chevron-down');
+            if (drop && btn && !btn.contains(e.target) && !drop.contains(e.target)) {
+              drop.style.display = 'none';
+              if (icon) icon.style.transform = '';
+            }
+          });
+          if (e.target !== searchInput && !searchResults.contains(e.target)) {
+            searchResults.style.display = 'none';
+          }
+        });
+
+        // ── Search autocomplete ─────────────────────────────────
+        let searchTimeout;
+        searchInput.addEventListener('input', function(e) {
+          const query = e.target.value.trim();
+          clearTimeout(searchTimeout);
+          if (query.length < 2) { searchResults.style.display = 'none'; searchResults.innerHTML = ''; return; }
+          searchTimeout = setTimeout(() => {
+            fetch(`${searchEndpoint}?query=${encodeURIComponent(query)}`)
+              .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+              .then(data => displaySearchResults(data.results, query))
+              .catch(err => console.error('Search error:', err));
+          }, 300);
+        });
+
+        searchInput.addEventListener('focus', function() {
+          if (this.value.length >= 2 && searchResults.innerHTML) searchResults.style.display = 'block';
+        });
+
+        function displaySearchResults(results, query) {
+          if (!results.length) {
+            searchResults.innerHTML = '<div style="padding:0.75rem 1rem; font-size:0.875rem; color:var(--td-muted);">No results found</div>';
+            searchResults.style.display = 'block';
+            return;
+          }
+          searchResults.innerHTML = results.map(r => `
+            <div class="search-result-item" style="display:flex;align-items:center;padding:0.625rem 1rem;cursor:pointer;border-bottom:1px solid var(--td-border);transition:background 0.15s;"
+                 onmouseover="this.style.background='rgba(249,115,22,0.08)'" onmouseout="this.style.background=''"
+                 data-brand="${r.brand}" data-model="${r.model}" data-category="${r.category}">
+              <i class="fas fa-car-side" style="color:#F97316;font-size:0.75rem;margin-right:0.75rem;flex-shrink:0;"></i>
+              <div>
+                <div style="font-size:0.875rem;color:var(--td-text);font-weight:600;">${highlightMatch(r.display_text, query)} <span style="color:var(--td-muted);font-weight:400;">(${r.year})</span></div>
+                <div style="font-size:0.75rem;color:var(--td-muted);">${r.category}</div>
+              </div>
+            </div>`).join('');
+          searchResults.style.display = 'block';
+          document.querySelectorAll('.search-result-item').forEach(item => {
+            item.addEventListener('click', function() {
+              ['brand','model','category'].forEach(n => {
+                const hiddenEl = document.getElementById(n + '_hidden');
+                const labelEl  = document.getElementById(n + '_label');
+                if (hiddenEl) hiddenEl.value = this.dataset[n] || '';
+                if (labelEl) {
+                  const defaults = { category: 'All Categories', brand: 'All Brands', model: 'All Models' };
+                  labelEl.textContent = this.dataset[n] || defaults[n];
+                }
+              });
+              searchInput.value = '';
+              searchResults.style.display = 'none';
+              filterForm.submit();
+            });
+          });
+        }
+
+        function highlightMatch(text, query) {
+          return text.replace(new RegExp(`(${query})`, 'gi'), '<mark style="background:#FED7AA;border-radius:2px;padding:0 2px;">$1</mark>');
+        }
+
+        // ── Cascade filter options via API ──────────────────────
+        function getVal(name) { return document.getElementById(name + '_hidden')?.value || ''; }
+
+        function updateFilters() {
+          const params = new URLSearchParams();
+          const cat = getVal('category'), brand = getVal('brand'), model = getVal('model'), price = getVal('monthly_price');
+          if (cat)   params.append('category', cat);
+          if (brand) params.append('brand', brand);
+          if (model) params.append('model', model);
+          if (price) params.append('monthly_price', price);
+          fetch(`${filterEndpoint}?${params.toString()}`)
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(data => {
+              updateDropOptions('brand',    data.filtered_brands    || []);
+              updateDropOptions('model',    data.filtered_models    || []);
+              updateDropOptions('category', data.filtered_categories || []);
+            })
+            .catch(err => console.error('Filter error:', err));
+        }
+
+        const icons = { category: 'fa-car', brand: 'fa-tag', model: 'fa-car-side', monthly_price: 'fa-money-bill-wave' };
+        const defaults = { category: 'All Categories', brand: 'All Brands', model: 'All Models', monthly_price: 'All Prices' };
+
+        function updateDropOptions(name, available) {
+          const drop = document.getElementById(name + '_dropdown');
+          if (!drop) return;
+          const list = drop.querySelector('.py-1');
+          if (!list) return;
+          const currentVal = getVal(name);
+
+          const allItem = list.querySelector('.filter-option[data-value=""]');
+          list.innerHTML = '';
+          if (allItem) list.appendChild(allItem);
+
+          available.forEach(val => {
+            const a = document.createElement('a');
+            a.href = '#';
+            a.className = 'filter-option';
+            a.dataset.value = val;
+            a.dataset.filter = name;
+            a.style.cssText = 'display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;';
+            a.innerHTML = `<i class="fas ${icons[name] || 'fa-circle'} mr-3 w-4" style="color:#F97316; font-size:0.75rem;"></i>${val}`;
+            a.addEventListener('mouseover', () => a.style.background = 'rgba(249,115,22,0.08)');
+            a.addEventListener('mouseout',  () => a.style.background = '');
+            a.addEventListener('click', function(e) {
+              e.preventDefault();
+              document.getElementById(name + '_hidden').value = val;
+              const labelEl = document.getElementById(name + '_label');
+              if (labelEl) labelEl.textContent = val;
+              drop.style.display = 'none';
+              const icon = document.querySelector('#' + name + '_btn .fa-chevron-down');
+              if (icon) icon.style.transform = '';
+              updateFilters();
+            });
+            list.appendChild(a);
+          });
+
+          if (currentVal && !available.includes(currentVal)) {
+            const hiddenEl = document.getElementById(name + '_hidden');
+            const labelEl  = document.getElementById(name + '_label');
+            if (hiddenEl) hiddenEl.value = '';
+            if (labelEl)  labelEl.textContent = defaults[name] || ('All ' + name);
+          }
+        }
+
+        updateFilters();
+        return true;
+      } catch(e) { console.error('Filter init error:', e); return false; }
+    }
+  })();

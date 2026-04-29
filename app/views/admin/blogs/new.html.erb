@@ -1,0 +1,12 @@
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <div class="mb-6">
+    <%= link_to admin_blogs_path, class: "inline-flex items-center text-sm mb-4 transition-colors", style: "color: #F97316;", onmouseover: "this.style.color='#EA580C'", onmouseout: "this.style.color='#F97316'" do %>
+      <i class="fas fa-arrow-left mr-2"></i> Back to Blogs
+    <% end %>
+    <h1 class="text-2xl sm:text-3xl font-bold" style="color: #F97316;">Add New Blog</h1>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6 sm:p-8">
+    <%= render "form", blog: @blog %>
+  </div>
+</div>

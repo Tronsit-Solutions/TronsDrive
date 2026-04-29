@@ -1,0 +1,268 @@
+.w-full.min-h-screen{style: 'background: linear-gradient(to bottom right, var(--td-surface2), var(--td-surface2))'}
+  .px-4.md:px-12.lg:px-32
+    = render 'shared/user_header'
+
+    .mx-auto
+      / Back Button
+      .mb-6
+        = link_to user_home_path, class: 'inline-flex items-center font-semibold transition-all hover:opacity-80', style: 'color: #F97316' do
+          %i.fas.fa-arrow-left.mr-2
+          Back to Dashboard
+    
+  .bg-white.rounded-2xl.shadow-xl.p-8
+    .w-full
+    / Header
+    .flex.items-center.justify-between.mb-8
+      %h1.text-3xl.font-bold.text-gray-900.flex.items-center
+        %i.fas.fa-edit.mr-4.text-2xl{style: 'color: #F97316'}
+        Edit Profile
+ 
+
+    / Flash Messages
+    - if flash[:notice]
+      .mb-6.p-4.border.rounded-lg{style: 'background-color: var(--td-surface2); border-color: #F97316'}
+        .flex.items-center
+          %i.fas.fa-check-circle.mr-2{style: 'color: #F97316'}
+          %span{style: 'color: #EA580C'}= flash[:notice]
+    - if flash[:alert]
+      .mb-6.p-4.bg-red-50.border.border-red-200.rounded-lg
+        .flex.items-center
+          %i.fas.fa-exclamation-circle.text-red-600.mr-2
+          %span.text-red-800= flash[:alert]
+
+    / Edit Form
+    = form_with model: @user, url: user_path(@user), method: :patch, class: 'bg-white rounded-lg shadow-md overflow-hidden' do |f|
+      = render 'shared/form_errors', object: @user
+      / Personal Information Section
+      .border-b.border-gray-200
+        .px-6.py-4{style: 'background-color: var(--td-surface2)'}
+          %h3.text-lg.font-semibold.text-gray-900.flex.items-center
+            %i.fas.fa-user-circle.mr-2{style: 'color: #F97316'}
+            Personal Information
+        .px-6.py-6
+          .grid.grid-cols-1.md:grid-cols-2.gap-6
+            .space-y-4
+              .field
+                = f.label :first_name, class: 'block text-sm font-medium text-gray-700 mb-1'
+                = f.text_field :first_name, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent', style: 'focus:ring-color: #F97316', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"
+                - if @user.errors[:first_name].any?
+                  %p.text-red-600.text-sm.mt-1= @user.errors[:first_name].join(', ')
+              
+              .field
+                = f.label :last_name, class: 'block text-sm font-medium text-gray-700 mb-1'
+                = f.text_field :last_name, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"
+                - if @user.errors[:last_name].any?
+                  %p.text-red-600.text-sm.mt-1= @user.errors[:last_name].join(', ')
+              
+              .field
+                = f.label :email, class: 'block text-sm font-medium text-gray-700 mb-1'
+                = f.email_field :email, class: 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"
+                - if @user.errors[:email].any?
+                  %p.text-red-600.text-sm.mt-1= @user.errors[:email].join(', ')
+            
+            .space-y-4
+              .field
+                = f.label :phone, 'Phone Number', class: 'block text-sm font-medium text-gray-700 mb-1'
+                .relative
+                  .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
+                    %i.fas.fa-phone.text-gray-400
+                  = f.telephone_field :phone, class: 'w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent', placeholder: '+971 50 123 4567', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"
+                - if @user.errors[:phone].any?
+                  %p.text-red-600.text-sm.mt-1= @user.errors[:phone].join(', ')
+              
+              .field
+                = f.label :whatsapp_number, class: 'block text-sm font-medium text-gray-700 mb-1' do
+                  %span WhatsApp Number
+                  %i.fab.fa-whatsapp.text-green-500.ml-1
+                .relative
+                  .absolute.inset-y-0.left-0.pl-3.flex.items-center.pointer-events-none
+                    %i.fab.fa-whatsapp.text-green-500.text-lg
+                  = f.telephone_field :whatsapp_number, class: 'w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent', placeholder: '+971501234567', pattern: '\+[0-9]{7,15}', title: 'Enter phone number with country code', onfocus: "this.style.borderColor='#25D366'; this.style.boxShadow='0 0 0 3px rgba(37, 211, 102, 0.1)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"
+                %small.text-gray-500.text-xs.block.mt-1 Include country code (e.g., +971501234567)
+                - if @user.errors[:whatsapp_number].any?
+                  %p.text-red-600.text-sm.mt-1= @user.errors[:whatsapp_number].join(', ')
+
+      / Form Actions
+      .px-6.py-6{style: 'background-color: var(--td-surface2)'}
+        .flex.flex-col.sm:flex-row.gap-4
+          = f.submit 'Update Profile', class: 'flex-1 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-200 hover:opacity-90 hover:shadow-xl cursor-pointer', style: 'background-color: #F97316'
+          = link_to 'Cancel', user_path(@user), class: 'flex-1 bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold text-center transition-colors text-lg'
+
+    / Additional Actions Section
+    .mt-8.bg-white.rounded-lg.shadow-md.overflow-hidden
+      .px-6.py-4{style: 'background-color: var(--td-surface2)'}
+        %h3.text-lg.font-bold.text-gray-900.flex.items-center
+          %i.fas.fa-cog.mr-2{style: 'color: #F97316'}
+          Account Actions
+      .px-6.py-6
+        .space-y-4
+          .flex.items-center.justify-between.p-4.border.border-gray-200.rounded-lg.transition-all.hover:shadow-md
+            .flex.items-center
+              %i.fas.fa-key.text-gray-600.mr-3
+              .flex-1
+                %p.font-medium.text-gray-900 Change Password
+                %p.text-sm.text-gray-500 Update your account password
+            = link_to '#', class: 'font-medium transition-colors hover:opacity-80', style: 'color: #F97316' do
+              Change
+          
+          .flex.items-center.justify-between.p-4.border.border-gray-200.rounded-lg.transition-all.hover:shadow-md
+            .flex.items-center
+              %i.fas.fa-calendar-alt.text-gray-600.mr-3
+              .flex-1
+                %p.font-medium.text-gray-900 View Bookings
+                %p.text-sm.text-gray-500 Check your booking history and status
+            = link_to users_bookings_path, class: 'font-medium transition-colors hover:opacity-80', style: 'color: #F97316' do
+              View
+
+:javascript
+  document.addEventListener('DOMContentLoaded', function() {
+    // Form validation enhancement
+    const form = document.querySelector('form');
+    const submitButton = form.querySelector('input[type="submit"]');
+    
+    // Real-time validation feedback
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(function(input) {
+      input.addEventListener('blur', function() {
+        validateField(this);
+      });
+      
+      input.addEventListener('input', function() {
+        clearFieldError(this);
+      });
+    });
+    
+    // Form submission enhancement
+    form.addEventListener('submit', function(e) {
+      let isValid = true;
+      
+      // Validate all fields
+      inputs.forEach(function(input) {
+        if (!validateField(input)) {
+          isValid = false;
+        }
+      });
+      
+      if (!isValid) {
+        e.preventDefault();
+        showFormError('Please fix the errors above before submitting.');
+      } else {
+        // Show loading state
+        submitButton.disabled = true;
+        submitButton.value = 'Updating...';
+        submitButton.style.opacity = '0.7';
+      }
+    });
+    
+    function validateField(field) {
+      const value = field.value.trim();
+      const fieldName = field.name.replace('user[', '').replace(']', '');
+      
+      // Clear previous error
+      clearFieldError(field);
+      
+      // Skip validation for empty optional fields
+      if (!value && fieldName !== 'first_name' && fieldName !== 'last_name' && fieldName !== 'email') {
+        return true;
+      }
+      
+      // Validation rules
+      switch(fieldName) {
+        case 'first_name':
+        case 'last_name':
+          if (value.length < 2) {
+            showFieldError(field, 'Must be at least 2 characters long');
+            return false;
+          }
+          break;
+        case 'email':
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            showFieldError(field, 'Please enter a valid email address');
+            return false;
+          }
+          break;
+        case 'phone':
+          if (value) {
+            const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
+            if (!phoneRegex.test(value)) {
+              showFieldError(field, 'Please enter a valid phone number');
+              return false;
+            }
+          }
+          break;
+        case 'whatsapp_number':
+          if (value) {
+            // WhatsApp number validation - must start with + and be 8-16 characters
+            const whatsappRegex = /^\+[1-9]\d{6,14}$/;
+            if (!whatsappRegex.test(value.replace(/[\s\-\(\)]/g, ''))) {
+              showFieldError(field, 'Please enter a valid WhatsApp number with country code (e.g., +971501234567)');
+              return false;
+            }
+          }
+          break;
+      }
+      
+      return true;
+    }
+    
+    function showFieldError(field, message) {
+      field.classList.add('border-red-500');
+      field.style.borderColor = '#ef4444';
+      field.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+      
+      const errorDiv = document.createElement('p');
+      errorDiv.className = 'text-red-600 text-sm mt-1';
+      errorDiv.textContent = message;
+      errorDiv.id = field.name + '_error';
+      
+      field.parentNode.appendChild(errorDiv);
+    }
+    
+    function clearFieldError(field) {
+      field.classList.remove('border-red-500');
+      
+      const errorDiv = field.parentNode.querySelector('#' + field.name + '_error');
+      if (errorDiv) {
+        errorDiv.remove();
+      }
+    }
+    
+    function showFormError(message) {
+      // Remove existing form error
+      const existingError = document.querySelector('.form-error');
+      if (existingError) {
+        existingError.remove();
+      }
+      
+      // Add new form error
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'form-error mb-6 p-4 bg-red-50 border border-red-200 rounded-lg';
+      errorDiv.innerHTML = `
+        <div class="flex items-center">
+          <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
+          <span class="text-red-800">${message}</span>
+        </div>
+      `;
+      
+      form.parentNode.insertBefore(errorDiv, form);
+      
+      // Scroll to error
+      errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    // Auto-format WhatsApp number
+    const whatsappInput = document.querySelector('input[name="user[whatsapp_number]"]');
+    if (whatsappInput) {
+      whatsappInput.addEventListener('input', function(e) {
+        let value = e.target.value;
+        // Remove all non-digit characters except leading +
+        value = value.replace(/[^\d+]/g, '');
+        // Ensure it starts with +
+        if (value && !value.startsWith('+')) {
+          value = '+' + value;
+        }
+        e.target.value = value;
+      });
+    }
+  });

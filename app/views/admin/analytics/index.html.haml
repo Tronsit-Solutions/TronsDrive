@@ -1,0 +1,132 @@
+-# Admin Analytics Dashboard
+.container.mx-auto.px-3.sm:px-4.lg:px-8.py-4.sm:py-6.lg:py-8
+  %h1.text-xl.sm:text-2xl.lg:text-3xl.font-bold.mb-4.sm:mb-6.lg:mb-8{style: "color: #F97316;"} Analytics Dashboard
+
+  / Summary Cards
+  .grid.grid-cols-1.sm:grid-cols-2.lg:grid-cols-4.gap-3.sm:gap-4.lg:gap-6.mb-4.sm:mb-6.lg:mb-8
+    .bg-white.rounded-lg.sm:rounded-xl.shadow-md.p-4.sm:p-5.lg:p-6.flex.flex-col.items-center.text-center.transition-transform.hover:scale-105
+      .w-12.h-12.sm:w-14.sm:h-14.rounded-full.flex.items-center.justify-center.mb-2.sm:mb-3{style: "background-color: #e8f0f0;"}
+        %i.fas.fa-calendar-check.text-xl.sm:text-2xl{style: "color: #F97316;"}
+      %div.text-2xl.sm:text-3xl.lg:text-4xl.font-bold.mb-1{style: "color: #F97316;"}= @total_bookings
+      %div.text-sm.sm:text-base.text-gray-600.font-semibold Total Bookings
+
+    .bg-white.rounded-lg.sm:rounded-xl.shadow-md.p-4.sm:p-5.lg:p-6.flex.flex-col.items-center.text-center.transition-transform.hover:scale-105
+      .w-12.h-12.sm:w-14.sm:h-14.rounded-full.flex.items-center.justify-center.mb-2.sm:mb-3{style: "background-color: #d4edda;"}
+        %i.fas.fa-dollar-sign.text-xl.sm:text-2xl{style: "color: #28a745;"}
+      %div.text-2xl.sm:text-3xl.lg:text-4xl.font-bold.mb-1{style: "color: #28a745;"}= number_to_currency(@monthly_revenue)
+      %div.text-sm.sm:text-base.text-gray-600.font-semibold Revenue This Month
+
+    .bg-white.rounded-lg.sm:rounded-xl.shadow-md.p-4.sm:p-5.lg:p-6.flex.flex-col.items-center.text-center.transition-transform.hover:scale-105
+      .w-12.h-12.sm:w-14.sm:h-14.rounded-full.flex.items-center.justify-center.mb-2.sm:mb-3{style: "background-color: #cfe2ff;"}
+        %i.fas.fa-car.text-xl.sm:text-2xl{style: "color: #0d6efd;"}
+      %div.text-2xl.sm:text-3xl.lg:text-4xl.font-bold.mb-1{style: "color: #0d6efd;"}= "#{@available_cars_count}/#{@total_cars_count}"
+      %div.text-sm.sm:text-base.text-gray-600.font-semibold Available Cars
+
+    .bg-white.rounded-lg.sm:rounded-xl.shadow-md.p-4.sm:p-5.lg:p-6.flex.flex-col.items-center.text-center.transition-transform.hover:scale-105
+      .w-12.h-12.sm:w-14.sm:h-14.rounded-full.flex.items-center.justify-center.mb-2.sm:mb-3{style: "background-color: #e8f0f0;"}
+        %i.fas.fa-users.text-xl.sm:text-2xl{style: "color: #F97316;"}
+      %div.text-2xl.sm:text-3xl.lg:text-4xl.font-bold.mb-1{style: "color: #F97316;"}= @new_customers_count
+      %div.text-sm.sm:text-base.text-gray-600.font-semibold New Customers This Week
+  
+  / Top Booked Cars Section
+  .bg-white.rounded-lg.sm:rounded-xl.shadow-md.p-4.sm:p-5.lg:p-8.mb-4.sm:mb-6.lg:mb-8
+    %h2.text-lg.sm:text-xl.lg:text-2xl.font-bold.mb-4.sm:mb-5.lg:mb-6{style: "color: #F97316;"} Top Booked Cars
+
+    - if @top_cars.any?
+      / Mobile Card View - Hidden on Desktop
+      .block.lg:hidden.space-y-3
+        - @top_cars.each do |car|
+          .bg-white.rounded-lg.shadow.p-4.border-l-4{style: "border-color: #F97316;"}
+            .flex.justify-between.items-start.mb-3
+              %div.flex-1.min-w-0
+                %h3.text-base.font-bold{style: "color: #F97316;"}= "#{car.brand} #{car.model}"
+                %p.text-sm.text-gray-600= car.year
+
+            .space-y-2
+              .flex.justify-between.items-center.py-2.border-b.border-gray-100
+                %span.text-sm.font-medium.text-gray-600 Bookings
+                %span.text-base.font-bold{style: "color: #F97316;"}= car.bookings_count
+
+              .flex.justify-between.items-center.py-2.border-b.border-gray-100
+                %span.text-sm.font-medium.text-gray-600 Revenue
+                %span.text-base.font-bold{style: "color: #28a745;"}= number_to_currency(car.total_revenue || 0)
+
+              .flex.justify-between.items-center.py-2
+                %span.text-sm.font-medium.text-gray-600 Status
+                %span.inline-flex.items-center.px-2.5.py-1.rounded-full.text-xs.font-semibold{class: car.status == 'available' ? 'text-green-800' : 'text-gray-800', style: car.status == 'available' ? 'background-color: #d4edda;' : 'background-color: #e8f0f0;'}
+                  - if car.status == 'available'
+                    %i.fas.fa-check-circle.mr-1
+                  = car.status&.capitalize
+
+      / Desktop Table View - Hidden on Mobile
+      .hidden.lg:block.overflow-x-auto
+        %table.min-w-full.border-separate{ style: "border-spacing: 0 0.5rem;" }
+          %thead
+            %tr
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase.rounded-l-lg{style: "color: #F97316; background-color: #e8f0f0;"} Car
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase{style: "color: #F97316; background-color: #e8f0f0;"} Bookings
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase{style: "color: #F97316; background-color: #e8f0f0;"} Revenue
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase.rounded-r-lg{style: "color: #F97316; background-color: #e8f0f0;"} Status
+          %tbody
+            - @top_cars.each do |car|
+              %tr.rounded-lg.shadow.transition-colors{style: "background-color: #f9fafa;", onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='#f9fafa'"}
+                %td.px-6.py-4.font-medium.text-gray-900.rounded-l-lg
+                  %div.font-semibold= "#{car.brand} #{car.model}"
+                  %div.text-xs.text-gray-500= car.year
+                %td.px-6.py-4.font-semibold{style: "color: #F97316;"}= car.bookings_count
+                %td.px-6.py-4.font-bold{style: "color: #28a745;"}= number_to_currency(car.total_revenue || 0)
+                %td.px-6.py-4.rounded-r-lg
+                  %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium{class: car.status == 'available' ? 'text-green-800' : 'text-gray-800', style: car.status == 'available' ? 'background-color: #d4edda;' : 'background-color: #e8f0f0;'}
+                    - if car.status == 'available'
+                      %i.fas.fa-check-circle.mr-1
+                    = car.status&.capitalize
+    - else
+      .text-center.py-8.text-gray-500 No booking data available
+
+  / Top Vendors Section
+  .bg-white.rounded-lg.sm:rounded-xl.shadow-md.p-4.sm:p-5.lg:p-8
+    %h2.text-lg.sm:text-xl.lg:text-2xl.font-bold.mb-4.sm:mb-5.lg:mb-6{style: "color: #F97316;"} Top Vendors
+
+    / Mobile Card View - Hidden on Desktop
+    - if @top_vendors.any?
+      .block.lg:hidden.space-y-3
+        - @top_vendors.each do |vendor|
+          .bg-white.rounded-lg.shadow.p-4.border-l-4{style: "border-color: #F97316;"}
+            .flex.justify-between.items-start.mb-3
+              %div.flex-1.min-w-0
+                %h3.text-base.font-bold{style: "color: #F97316;"}= vendor.display_name
+                %p.text-xs.text-gray-500= vendor.email
+
+            .space-y-2
+              .flex.justify-between.items-center.py-2.border-b.border-gray-100
+                %span.text-sm.font-medium.text-gray-600 Cars Listed
+                %span.text-base.font-bold{style: "color: #F97316;"}= vendor.cars_count
+
+              .flex.justify-between.items-center.py-2.border-b.border-gray-100
+                %span.text-sm.font-medium.text-gray-600 Total Revenue
+                %span.text-base.font-bold{style: "color: #28a745;"}= number_to_currency(vendor.total_revenue || 0)
+
+              .flex.justify-between.items-center.py-2
+                %span.text-sm.font-medium.text-gray-600 Last Booking
+                %span.text-sm.text-gray-700= vendor.last_booking_date ? vendor.last_booking_date.strftime('%b %d, %Y') : 'N/A'
+
+      / Desktop Table View - Hidden on Mobile
+      .hidden.lg:block.overflow-x-auto
+        %table.min-w-full.border-separate{ style: "border-spacing: 0 0.5rem;" }
+          %thead
+            %tr
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase.rounded-l-lg{style: "color: #F97316; background-color: #e8f0f0;"} Vendor
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase{style: "color: #F97316; background-color: #e8f0f0;"} Cars Listed
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase{style: "color: #F97316; background-color: #e8f0f0;"} Total Revenue
+              %th.px-6.py-3.text-left.text-xs.font-bold.uppercase.rounded-r-lg{style: "color: #F97316; background-color: #e8f0f0;"} Last Booking
+          %tbody
+            - @top_vendors.each do |vendor|
+              %tr.rounded-lg.shadow.transition-colors{style: "background-color: #f9fafa;", onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='#f9fafa'"}
+                %td.px-6.py-4.font-medium.text-gray-900.rounded-l-lg
+                  %div.font-semibold= vendor.display_name
+                  %div.text-xs.text-gray-500= vendor.email
+                %td.px-6.py-4.font-semibold{style: "color: #F97316;"}= vendor.cars_count
+                %td.px-6.py-4.font-bold{style: "color: #28a745;"}= number_to_currency(vendor.total_revenue || 0)
+                %td.px-6.py-4.text-gray-700.rounded-r-lg= vendor.last_booking_date ? vendor.last_booking_date.strftime('%b %d, %Y') : 'N/A'
+    - else
+      .text-center.py-8.text-gray-500 No vendor data available 

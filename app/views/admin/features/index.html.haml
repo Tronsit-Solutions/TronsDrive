@@ -1,0 +1,368 @@
+-# app/views/admin/features/index.html.haml
+.container.mx-auto.px-3.sm:px-4.lg:px-6.py-4.sm:py-6.lg:py-8
+  .flex.flex-col.sm:flex-row.justify-between.items-start.sm:items-center.gap-3.sm:gap-4.mb-4.sm:mb-6
+    %h1.text-xl.sm:text-2xl.lg:text-3xl.font-bold{style: "color: #F97316;"} Car Features
+    %button#addFeatureBtn.text-white.px-4.sm:px-6.py-2.sm:py-2.5.rounded-lg.flex.items-center.gap-2.w-full.sm:w-auto.justify-center.transition-colors{type: "button", style: "background-color: #F97316;", onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'"}
+      %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+        %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M12 4v16m8-8H4"}
+      %span Add New Feature
+
+  -# Search Bar
+  .mb-4.sm:mb-6
+    .relative
+      %input#searchInput.w-full.px-4.py-2.sm:py-3.pl-10.border.border-gray-300.rounded-lg.focus:outline-none.focus:ring-2{type: "text", placeholder: "Search features...", style: "focus:ring-color: #F97316;"}
+      %svg.absolute.left-3.top-2.5.sm:top-3.5.w-5.h-5.text-gray-400{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+        %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"}
+
+  -# Common Features Section
+  .mb-6.sm:mb-8
+    .border-l-4.p-3.sm:p-4.mb-3.sm:mb-4.rounded-r-lg{style: "background-color: #d4edda; border-color: #28a745;"}
+      %h2.text-lg.sm:text-xl.lg:text-2xl.font-semibold{style: "color: #28a745;"}
+        Common Features
+        %span#commonCount.ml-2 (#{@common_features.count})
+      %p.text-sm.sm:text-base{style: "color: #1e7e34;"} Standard features available in most vehicles
+
+    / Mobile Card View - Hidden on Desktop
+    .block.lg:hidden.space-y-3#commonFeaturesMobile
+      - @common_features.each do |feature|
+        .bg-white.rounded-lg.shadow.p-4.border-l-4.feature-row{"data-feature-name": feature.name.downcase, style: "border-color: #28a745;"}
+          .flex.justify-between.items-start.mb-3
+            .flex-1
+              .text-xs.text-gray-500.mb-1 ID: #{feature.id}
+              %h3.text-base.font-bold{style: "color: #F97316;"}= feature.name
+              %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-semibold.mt-2{style: "background-color: #d4edda; color: #28a745;"}
+                ✓ Common
+            .flex.flex-col.gap-2.ml-2
+              %button.edit-feature-btn.p-2.rounded.transition-colors{type: "button", "data-feature-id": feature.id, "data-feature-name": feature.name, "data-feature-common": feature.common.to_s, title: "Edit", style: "color: #F97316;", onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='transparent'"}
+                %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                  %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"}
+              = button_to admin_feature_path(feature), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-600 hover:bg-red-50 p-2 rounded transition-colors", title: "Delete" do
+                %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                  %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"}
+      #commonEmptyStateMobile.text-center.py-8.text-gray-500.hidden No common features found
+
+    / Desktop Table View - Hidden on Mobile
+    .bg-white.rounded-lg.shadow.overflow-hidden.hidden.lg:block
+      .overflow-y-auto{style: "max-height: 400px;"}
+        %table.min-w-full.divide-y.divide-gray-200
+          %thead.sticky.top-0.z-10{style: "background-color: #e8f0f0;"}
+            %tr
+              %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} ID
+              %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Name
+              %th.px-6.py-3.text-center.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Common
+              %th.px-6.py-3.text-center.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Actions
+          %tbody#commonFeaturesBody.bg-white.divide-y.divide-gray-200
+            - @common_features.each do |feature|
+              %tr.feature-row.transition-colors{"data-feature-name": feature.name.downcase, onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='white'"}
+                %td.px-6.py-4.whitespace-nowrap
+                  .text-sm.text-gray-500= feature.id
+                %td.px-6.py-4.whitespace-nowrap
+                  .text-sm.font-medium.text-gray-900= feature.name
+                %td.px-6.py-4.whitespace-nowrap.text-center
+                  %span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full{style: "background-color: #d4edda; color: #28a745;"}
+                    ✓ Yes
+                %td.px-6.py-4.whitespace-nowrap.text-center
+                  .flex.items-center.justify-center.gap-2
+                    %button.edit-feature-btn.p-1.transition-colors{type: "button", "data-feature-id": feature.id, "data-feature-name": feature.name, "data-feature-common": feature.common.to_s, title: "Edit", style: "color: #F97316;", onmouseover: "this.style.color='#EA580C'", onmouseout: "this.style.color='#F97316'"}
+                      %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                        %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"}
+                    = button_to admin_feature_path(feature), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-600 hover:text-red-800 p-1", title: "Delete" do
+                      %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                        %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"}
+      #commonEmptyState.text-center.py-8.text-gray-500.hidden No common features found
+
+  -# Premium Features Section
+  .mb-6.sm:mb-8
+    .border-l-4.p-3.sm:p-4.mb-3.sm:mb-4.rounded-r-lg{style: "background-color: #e8f0f0; border-color: #F97316;"}
+      %h2.text-lg.sm:text-xl.lg:text-2xl.font-semibold{style: "color: #F97316;"}
+        Premium Features
+        %span#premiumCount.ml-2 (#{@premium_features.count})
+      %p.text-sm.sm:text-base{style: "color: #EA580C;"} Luxury features for high-end vehicles
+
+    / Mobile Card View - Hidden on Desktop
+    .block.lg:hidden.space-y-3#premiumFeaturesMobile
+      - @premium_features.each do |feature|
+        .bg-white.rounded-lg.shadow.p-4.border-l-4.feature-row{"data-feature-name": feature.name.downcase, style: "border-color: #F97316;"}
+          .flex.justify-between.items-start.mb-3
+            .flex-1
+              .text-xs.text-gray-500.mb-1 ID: #{feature.id}
+              .flex.items-center
+                %span.text-yellow-500.mr-2 ⭐
+                %h3.text-base.font-bold{style: "color: #F97316;"}= feature.name
+              %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-semibold.mt-2{style: "background-color: #e8f0f0; color: #F97316;"}
+                Premium
+            .flex.flex-col.gap-2.ml-2
+              %button.edit-feature-btn.p-2.rounded.transition-colors{type: "button", "data-feature-id": feature.id, "data-feature-name": feature.name, "data-feature-common": feature.common.to_s, title: "Edit", style: "color: #F97316;", onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='transparent'"}
+                %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                  %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"}
+              = button_to admin_feature_path(feature), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-600 hover:bg-red-50 p-2 rounded transition-colors", title: "Delete" do
+                %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                  %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"}
+      #premiumEmptyStateMobile.text-center.py-8.text-gray-500.hidden No premium features found
+
+    / Desktop Table View - Hidden on Mobile
+    .bg-white.rounded-lg.shadow.overflow-hidden.hidden.lg:block
+      .overflow-y-auto{style: "max-height: 400px;"}
+        %table.min-w-full.divide-y.divide-gray-200
+          %thead.sticky.top-0.z-10{style: "background-color: #e8f0f0;"}
+            %tr
+              %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} ID
+              %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Name
+              %th.px-6.py-3.text-center.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Common
+              %th.px-6.py-3.text-center.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Actions
+          %tbody#premiumFeaturesBody.bg-white.divide-y.divide-gray-200
+            - @premium_features.each do |feature|
+              %tr.feature-row.transition-colors{"data-feature-name": feature.name.downcase, onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='white'"}
+                %td.px-6.py-4.whitespace-nowrap
+                  .text-sm.text-gray-500= feature.id
+                %td.px-6.py-4.whitespace-nowrap
+                  .flex.items-center
+                    %span.text-yellow-500.mr-2 ⭐
+                    .text-sm.font-medium.text-gray-900= feature.name
+                %td.px-6.py-4.whitespace-nowrap.text-center
+                  %span.px-2.inline-flex.text-xs.leading-5.font-semibold.rounded-full{style: "background-color: #e8f0f0; color: #F97316;"}
+                    No
+                %td.px-6.py-4.whitespace-nowrap.text-center
+                  .flex.items-center.justify-center.gap-2
+                    %button.edit-feature-btn.p-1.transition-colors{type: "button", "data-feature-id": feature.id, "data-feature-name": feature.name, "data-feature-common": feature.common.to_s, title: "Edit", style: "color: #F97316;", onmouseover: "this.style.color='#EA580C'", onmouseout: "this.style.color='#F97316'"}
+                      %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                        %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"}
+                    = button_to admin_feature_path(feature), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-600 hover:text-red-800 p-1", title: "Delete" do
+                      %svg.w-5.h-5{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+                        %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"}
+      #premiumEmptyState.text-center.py-8.text-gray-500.hidden No premium features found
+
+-# Tailwind Modal
+#featureModal.fixed.inset-0.bg-gray-600.bg-opacity-50.overflow-y-auto.h-full.w-full.z-50.hidden
+  .relative.top-10.sm:top-20.mx-3.sm:mx-auto.p-4.sm:p-5.border.w-auto.sm:w-96.shadow-lg.rounded-md.bg-white
+    .flex.justify-between.items-center.mb-4
+      %h3#featureModalLabel.text-base.sm:text-lg.font-semibold{style: "color: #F97316;"} Add New Feature
+      %button#closeModalBtn.text-gray-400.hover:text-gray-600{type: "button"}
+        %svg.w-6.h-6{fill: "none", stroke: "currentColor", viewBox: "0 0 24 24"}
+          %path{"stroke-linecap": "round", "stroke-linejoin": "round", "stroke-width": "2", d: "M6 18L18 6M6 6l12 12"}
+
+    = form_with(model: [:admin, @feature], html: { id: "featureForm" }) do |f|
+      = render 'shared/form_errors', object: @feature
+
+      .mb-4
+        = f.label :name, class: "block text-sm font-medium mb-2", style: "color: #F97316;"
+        = f.text_field :name, class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2", placeholder: "e.g., Bluetooth Connectivity", required: true, style: "focus:ring-color: #F97316;"
+
+      .mb-4
+        .flex.items-center
+          = f.check_box :common, class: "h-4 w-4 border-gray-300 rounded", style: "color: #F97316; focus:ring-color: #F97316;"
+          = f.label :common, "Common Feature", class: "ml-2 block text-sm text-gray-900"
+        %p.text-xs.text-gray-500.mt-1 Check if this is a common/standard feature
+
+      .flex.flex-col.sm:flex-row.justify-end.gap-2.sm:gap-3.mt-6
+        %button#cancelModalBtn.px-4.py-2.bg-gray-200.text-gray-800.rounded-md.hover:bg-gray-300.transition-colors{type: "button"} Cancel
+        = f.submit "Save Feature", class: "px-4 py-2 text-white rounded-md transition-colors", style: "background-color: #F97316;", onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'"
+
+= javascript_tag do
+  :plain
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('featureModal');
+      const modalTitle = document.getElementById('featureModalLabel');
+      const featureForm = document.getElementById('featureForm');
+      const addFeatureBtn = document.getElementById('addFeatureBtn');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const cancelModalBtn = document.getElementById('cancelModalBtn');
+      const searchInput = document.getElementById('searchInput');
+      
+      // Get the checkbox specifically (not the hidden field)
+      function getCommonCheckbox() {
+        return document.querySelector('input[name="feature[common]"][type="checkbox"]');
+      }
+      
+      // Show modal
+      function showModal() {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      // Hide modal
+      function hideModal() {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+      
+      // Reset form
+      function resetForm() {
+        featureForm.action = '#{admin_features_path}';
+        modalTitle.textContent = 'Add New Feature';
+        featureForm.reset();
+        
+        // Explicitly uncheck the checkbox
+        const commonCheckbox = getCommonCheckbox();
+        if (commonCheckbox) {
+          commonCheckbox.checked = false;
+        }
+        
+        const methodInput = document.querySelector('input[name="_method"]');
+        if (methodInput) methodInput.remove();
+      }
+      
+      // Edit feature
+      function editFeature(id, name, isCommon) {
+        featureForm.action = `/admin/features/${id}`;
+        modalTitle.textContent = 'Edit Feature';
+        
+        let methodInput = document.querySelector('input[name="_method"]');
+        if (!methodInput) {
+          methodInput = document.createElement('input');
+          methodInput.type = 'hidden';
+          methodInput.name = '_method';
+          featureForm.appendChild(methodInput);
+        }
+        methodInput.value = 'patch';
+        
+        // Set form values
+        const nameInput = document.querySelector('input[name="feature[name]"]');
+        if (nameInput) {
+          nameInput.value = name;
+        }
+        
+        // Set checkbox state
+        const commonCheckbox = getCommonCheckbox();
+        if (commonCheckbox) {
+          // Convert string to boolean and set
+          commonCheckbox.checked = (isCommon === 'true' || isCommon === true);
+          console.log('Feature ID:', id, 'Name:', name, 'isCommon value:', isCommon, 'Checkbox checked:', commonCheckbox.checked);
+        } else {
+          console.error('Checkbox not found!');
+        }
+      }
+      
+      // Search functionality
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+
+        // Search in common features (desktop table)
+        const commonRows = document.querySelectorAll('#commonFeaturesBody .feature-row');
+        let commonVisibleCount = 0;
+        commonRows.forEach(function(row) {
+          const featureName = row.getAttribute('data-feature-name');
+          if (featureName.includes(searchTerm)) {
+            row.style.display = '';
+            commonVisibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Search in common features (mobile cards)
+        const commonMobileRows = document.querySelectorAll('#commonFeaturesMobile .feature-row');
+        let commonMobileVisibleCount = 0;
+        commonMobileRows.forEach(function(row) {
+          const featureName = row.getAttribute('data-feature-name');
+          if (featureName.includes(searchTerm)) {
+            row.style.display = '';
+            commonMobileVisibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Update common count and show/hide empty state
+        const totalCommonVisible = Math.max(commonVisibleCount, commonMobileVisibleCount);
+        document.getElementById('commonCount').textContent = `(${totalCommonVisible})`;
+
+        if (commonVisibleCount === 0) {
+          document.getElementById('commonEmptyState').classList.remove('hidden');
+        } else {
+          document.getElementById('commonEmptyState').classList.add('hidden');
+        }
+
+        if (commonMobileVisibleCount === 0) {
+          const mobileEmpty = document.getElementById('commonEmptyStateMobile');
+          if (mobileEmpty) mobileEmpty.classList.remove('hidden');
+        } else {
+          const mobileEmpty = document.getElementById('commonEmptyStateMobile');
+          if (mobileEmpty) mobileEmpty.classList.add('hidden');
+        }
+
+        // Search in premium features (desktop table)
+        const premiumRows = document.querySelectorAll('#premiumFeaturesBody .feature-row');
+        let premiumVisibleCount = 0;
+        premiumRows.forEach(function(row) {
+          const featureName = row.getAttribute('data-feature-name');
+          if (featureName.includes(searchTerm)) {
+            row.style.display = '';
+            premiumVisibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Search in premium features (mobile cards)
+        const premiumMobileRows = document.querySelectorAll('#premiumFeaturesMobile .feature-row');
+        let premiumMobileVisibleCount = 0;
+        premiumMobileRows.forEach(function(row) {
+          const featureName = row.getAttribute('data-feature-name');
+          if (featureName.includes(searchTerm)) {
+            row.style.display = '';
+            premiumMobileVisibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Update premium count and show/hide empty state
+        const totalPremiumVisible = Math.max(premiumVisibleCount, premiumMobileVisibleCount);
+        document.getElementById('premiumCount').textContent = `(${totalPremiumVisible})`;
+
+        if (premiumVisibleCount === 0) {
+          document.getElementById('premiumEmptyState').classList.remove('hidden');
+        } else {
+          document.getElementById('premiumEmptyState').classList.add('hidden');
+        }
+
+        if (premiumMobileVisibleCount === 0) {
+          const mobileEmpty = document.getElementById('premiumEmptyStateMobile');
+          if (mobileEmpty) mobileEmpty.classList.remove('hidden');
+        } else {
+          const mobileEmpty = document.getElementById('premiumEmptyStateMobile');
+          if (mobileEmpty) mobileEmpty.classList.add('hidden');
+        }
+      });
+      
+      // Add feature button
+      addFeatureBtn.addEventListener('click', function() {
+        resetForm();
+        showModal();
+      });
+      
+      // Edit buttons
+      document.querySelectorAll('.edit-feature-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-feature-id');
+          const name = this.getAttribute('data-feature-name');
+          const isCommon = this.getAttribute('data-feature-common');
+          
+          console.log('Edit button clicked - ID:', id, 'Name:', name, 'isCommon:', isCommon);
+          editFeature(id, name, isCommon);
+          showModal();
+        });
+      });
+      
+      // Close modal buttons
+      closeModalBtn.addEventListener('click', hideModal);
+      cancelModalBtn.addEventListener('click', hideModal);
+      
+      // Close modal when clicking outside
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          hideModal();
+        }
+      });
+      
+      // Close modal on successful save
+      #{if @feature.persisted? && @feature.errors.empty?
+        "hideModal();"
+      end}
+      
+      // Show modal if there are errors
+      #{if @feature.errors.any?
+        "showModal();"
+      end}
+    });

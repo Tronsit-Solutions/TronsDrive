@@ -1,0 +1,872 @@
+.container.mx-auto.px-4.py-16
+  .max-w-4xl.mx-auto
+    .bg-white.shadow-lg.rounded-xl.overflow-hidden
+      / Header
+      .px-8.py-6.text-white{style: "background: linear-gradient(to right, #F97316, #EA580C);"}
+        .flex.justify-between.items-start
+          %div
+            %h1.text-2xl.font-bold Invoice Details
+            %p.mt-1{style: "color: #d1e0e0;"}
+              Invoice #
+              %span.font-mono= @invoice.id
+          / Status Badge
+          - case @invoice.payment_status
+          - when 'paid'
+            %span.inline-flex.items-center.px-4.py-2.rounded-full.text-sm.font-semibold.bg-green-500.text-white
+              %i.fas.fa-check-circle.mr-2
+              Paid
+          - when 'pending'
+            %span.inline-flex.items-center.px-4.py-2.rounded-full.text-sm.font-semibold.bg-yellow-500.text-white
+              %i.fas.fa-clock.mr-2
+              Pending Payment
+          - when 'overdue'
+            %span.inline-flex.items-center.px-4.py-2.rounded-full.text-sm.font-semibold.bg-red-500.text-white
+              %i.fas.fa-exclamation-circle.mr-2
+              Overdue
+
+      / Content
+      .p-8
+        / Invoice Details
+        .mb-8
+          %h2.text-lg.font-semibold.text-gray-900.mb-4 Invoice Information
+          
+          / Invoice Amount Card
+          .bg-emerald-50.rounded-lg.p-6.border.border-emerald-200.mb-6
+            .flex.items-center.justify-between.flex-wrap.gap-4
+              %div
+                %p.text-sm.font-medium.text-emerald-900.mb-1
+                  Invoice Amount
+                %p.text-4xl.font-bold.text-gray-900= number_to_currency(@invoice.invoice_items.sum(:amount))
+              %div
+                %p.text-sm.text-gray-600.mb-2 Payment Status
+                - case @invoice.payment_status
+                - when 'paid'
+                  .inline-flex.items-center.px-4.py-2.bg-green-100.rounded-lg
+                    %i.fas.fa-check-circle.text-green-700.mr-2
+                    %span.text-lg.font-semibold.text-green-700 Payment Received
+                - when 'pending'
+                  .inline-flex.items-center.px-4.py-2.bg-yellow-100.rounded-lg
+                    %i.fas.fa-clock.text-yellow-700.mr-2
+                    %span.text-lg.font-semibold.text-yellow-700 Awaiting Payment
+                - when 'overdue'
+                  .inline-flex.items-center.px-4.py-2.bg-red-100.rounded-lg
+                    %i.fas.fa-exclamation-triangle.text-red-700.mr-2
+                    %span.text-lg.font-semibold.text-red-700 Payment Overdue
+
+          / Invoice Items/Line Items
+          - if @invoice.invoice_items.present?
+            .bg-gray-50.rounded-lg.p-6.border.border-gray-200.mb-6
+              %h3.text-md.font-semibold.text-gray-900.mb-4
+                %i.fas.fa-list-ul.mr-2
+                Invoice Items
+              .overflow-x-auto
+                %table.min-w-full.divide-y.divide-gray-300
+                  %thead
+                    %tr.bg-gray-100
+                      %th.px-4.py-3.text-left.text-xs.font-medium.text-gray-700.uppercase.tracking-wider Description
+                      %th.px-4.py-3.text-right.text-xs.font-medium.text-gray-700.uppercase.tracking-wider Amount
+                  %tbody.bg-white.divide-y.divide-gray-200
+                    - @invoice.invoice_items.each do |item|
+                      %tr.hover:bg-gray-50
+                        %td.px-4.py-3.text-sm.text-gray-900= item.description
+                        %td.px-4.py-3.text-sm.text-gray-900.text-right.font-medium= number_to_currency(item.amount)
+                    %tr.bg-gray-50.font-semibold
+                      %td.px-4.py-3.text-sm.text-gray-900.text-right Total:
+                      %td.px-4.py-3.text-sm.text-gray-900.text-right.text-lg= number_to_currency(@invoice.invoice_items.sum(:amount))
+
+          / Payment Status Messages
+          - if @invoice.payment_status == 'paid'
+            .bg-green-50.rounded-lg.p-4.border.border-green-200.mb-6
+              .flex.items-start
+                %i.fas.fa-check-circle.text-green-600.mt-1.mr-3.text-xl
+                %div
+                  %p.text-sm.font-semibold.text-green-900.mb-1 Payment Received
+                  %p.text-sm.text-green-800
+                    This invoice has been paid. Thank you for your payment!
+                  - if @invoice.paid_at.present?
+                    %p.text-xs.text-green-700.mt-2
+                      %i.fas.fa-calendar-check.mr-1
+                      Paid on
+                      = @invoice.paid_at.strftime('%B %d, %Y at %I:%M %p')
+
+            / Payment Method Confirmed Badge - Show when paid
+            .rounded-lg.p-6.border.mb-6{style: "background-color: #e8f0f0; border-color: #F97316;"}
+              .flex.items-center.justify-between.gap-3
+                .flex.items-center.gap-3.flex-1
+                  %i.fas.fa-check-circle.text-2xl{style: "color: #F97316;"}
+                  .flex-1
+                    %h3.text-xl.font-semibold.text-gray-800
+                      Payment Method:
+                      %span{style: "color: #F97316;"}
+                        Online Payment
+                    %p.text-sm.text-gray-600
+                      Payment has been processed securely
+                %i.fas.fa-lock.text-2xl.text-green-600
+
+          - elsif @invoice.payment_status == 'pending' || @invoice.payment_status == 'overdue'
+            - if @invoice.payment_status == 'overdue'
+              .bg-red-50.rounded-lg.p-4.border.border-red-200.mb-4
+                .flex.items-start
+                  %i.fas.fa-exclamation-triangle.text-red-600.mt-1.mr-3.text-xl
+                  %div
+                    %p.text-sm.font-semibold.text-red-900.mb-1 Payment Overdue
+                    %p.text-sm.text-red-800
+                      This invoice is overdue. Please make payment immediately to avoid any service interruption.
+            
+            .bg-yellow-50.rounded-lg.p-4.border.border-yellow-200.mb-6
+              .flex.items-start
+                %i.fas.fa-info-circle.text-yellow-600.mt-1.mr-3.text-xl
+                %div
+                  %p.text-sm.font-semibold.text-yellow-900.mb-1 Payment Required
+                  %p.text-sm.text-yellow-800
+                    You can pay this invoice securely using your credit card below.
+
+          / Payment Section - Only show for pending or overdue invoices
+          - if @invoice.payment_status == 'pending' || @invoice.payment_status == 'overdue'
+            .rounded-lg.p-6.border.mb-6{style: "background: linear-gradient(to right, #e8f0f0, #f0f5f5); border-color: #F97316;"}
+              .flex.items-center.justify-between.flex-wrap.gap-4
+                %div
+                  %h3.text-lg.font-semibold.text-gray-900.mb-2
+                    %i.fas.fa-credit-card.mr-2{style: "color: #F97316;"}
+                    Pay Invoice Online
+                  %p.text-sm.text-gray-600.mb-1
+                    Secure payment powered by
+                    %span.font-semibold{style: "color: #F97316;"} Stripe
+                  %p.text-xs.text-gray-500
+                    %i.fas.fa-lock.mr-1
+                    Your payment information is encrypted and secure
+                %div
+                  %button#openPaymentBtn.inline-flex.items-center.px-8.py-4.text-white.font-bold.rounded-lg.transition-all.duration-200.shadow-lg.transform{style: "background: linear-gradient(to right, #F97316, #EA580C);", onmouseover: "this.style.background='linear-gradient(to right, #EA580C, #1f3535)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'; this.style.transform='scale(1.05)'", onmouseout: "this.style.background='linear-gradient(to right, #F97316, #EA580C)'; this.style.boxShadow='0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'; this.style.transform='scale(1)'"}
+                    %i.fas.fa-lock.mr-2
+                    %span.text-lg Pay #{number_to_currency(@invoice.invoice_items.sum(:amount))}
+                    %i.fas.fa-arrow-right.ml-2
+
+              / Accepted Payment Methods
+              .mt-4.pt-4.border-t{style: "border-color: #F97316;"}
+                %p.text-xs.text-gray-600.mb-2 We accept:
+                .flex.items-center.gap-3.flex-wrap
+                  .flex.items-center.gap-1.px-3.py-1.bg-white.rounded.border.border-gray-200
+                    %i.fab.fa-cc-visa.text-blue-600.text-xl
+                    %span.text-xs.text-gray-700 Visa
+                  .flex.items-center.gap-1.px-3.py-1.bg-white.rounded.border.border-gray-200
+                    %i.fab.fa-cc-mastercard.text-red-600.text-xl
+                    %span.text-xs.text-gray-700 Mastercard
+                  .flex.items-center.gap-1.px-3.py-1.bg-white.rounded.border.border-gray-200
+                    %i.fab.fa-cc-amex.text-blue-500.text-xl
+                    %span.text-xs.text-gray-700 Amex
+                  .flex.items-center.gap-1.px-3.py-1.bg-white.rounded.border.border-gray-200
+                    %i.fas.fa-credit-card.text-gray-600.text-xl
+                    %span.text-xs.text-gray-700 Debit Card
+
+          / Created Date
+          .text-sm.text-gray-500.mt-4
+            %i.fas.fa-calendar-plus.mr-2
+            Invoice created on
+            = @invoice.created_at.strftime('%B %d, %Y at %I:%M %p')
+
+        %hr.my-6
+
+        / Action Buttons
+        .flex.flex-wrap.gap-3
+          = link_to vendors_invoices_path, class: 'inline-flex items-center px-6 py-3 text-white font-medium rounded-lg transition-colors duration-200 shadow-md gap-2', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'; this.style.boxShadow='0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'", onmouseout: "this.style.backgroundColor='#F97316'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'" do
+            %i.fas.fa-list
+            %span View All Invoices
+
+          = link_to vendors_dashboard_path, class: 'inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200 gap-2' do
+            %i.fas.fa-arrow-left
+            %span Back to Dashboard
+
+          %button.inline-flex.items-center.px-4.py-2.text-white.font-medium.rounded-lg.transition-colors.duration-200.shadow-md.gap-2{type: 'button', onclick: 'window.print()', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'; this.style.boxShadow='0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'", onmouseout: "this.style.backgroundColor='#F97316'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'"}
+            %i.fas.fa-print
+            %span Print Invoice
+
+/ PAYMENT MODAL
+#paymentModal.hidden.fixed.inset-0.bg-gray-900.bg-opacity-50.z-50.flex.items-center.justify-center.p-4
+  %div{class: "bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-y-auto max-h-[90vh]"}
+    / Modal Header
+    .px-6.py-4.text-white.rounded-t-2xl{style: "background: linear-gradient(to right, #F97316, #EA580C);"}
+      .flex.justify-between.items-center
+        .text-left
+          %h3.text-xl.font-bold Secure Payment
+          %p.text-sm.mt-1{style: "color: #d1e0e0;"} Powered by Stripe
+        %button#closePaymentBtn.text-white.hover:text-gray-200.transition-colors
+          %i.fas.fa-times.text-2xl
+
+    / Modal Body
+    .p-6
+      / Status
+      %div#paymentStatus.mb-4.p-3.rounded-lg.border{style: "background-color: #e8f0f0; border-color: #F97316;"}
+        %p.text-sm{style: "color: #F97316;"}
+          %i.fas.fa-spinner.fa-spin.mr-2
+          Loading payment form...
+
+      / Summary
+      .bg-gray-50.rounded-lg.p-4.mb-6
+        .flex.justify-between.items-center.mb-2
+          %span.text-sm.text-gray-600 Invoice Number:
+          %span.text-sm.font-mono.font-semibold.text-gray-900= @invoice.id
+        .flex.justify-between.items-center
+          %span.text-sm.text-gray-600 Amount to Pay:
+          %span.text-2xl.font-bold.text-gray-900= number_to_currency(@invoice.invoice_items.sum(:amount))
+
+      / Payment Form
+      %form#paymentForm.space-y-4
+        / Card Element
+        %div
+          %label.block.text-sm.font-medium.text-gray-700.mb-2
+            %i.fas.fa-credit-card.mr-2
+            Card Information
+          #card-element.p-4.border-2.border-gray-300.rounded-lg.bg-white{style: 'min-height: 60px; display: flex; align-items: center; color: #999;'}
+            %span Loading...
+
+        #card-errors.mt-2.text-sm.text-red-600.hidden
+
+        / Cardholder Name
+        %div
+          %label.block.text-sm.font-medium.text-gray-700.mb-2 Cardholder Name
+          %input#cardholderName.w-full.px-4.py-3.border.border-gray-300.rounded-lg.focus:ring-2.focus:border-transparent{type: 'text', placeholder: 'John Doe', required: true, value: current_vendor.full_name, style: 'transition: all 0.2s;', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"}
+
+        / Email
+        %div
+          %label.block.text-sm.font-medium.text-gray-700.mb-2 Email
+          %input#email.w-full.px-4.py-3.border.border-gray-300.rounded-lg.focus:ring-2.focus:border-transparent{type: 'email', placeholder: 'john@example.com', required: true, value: current_vendor.email, style: 'transition: all 0.2s;', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'"}
+
+        / Submit
+        %button#submitPayment.w-full.px-6.py-3.text-white.font-bold.rounded-lg.transition-all.duration-200.shadow-lg.disabled:opacity-50.disabled:cursor-not-allowed{type: 'submit', disabled: true, style: 'background: linear-gradient(to right, #F97316, #EA580C);', onmouseover: "if(!this.disabled) { this.style.background='linear-gradient(to right, #EA580C, #1f3535)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'; }", onmouseout: "this.style.background='linear-gradient(to right, #F97316, #EA580C)'; this.style.boxShadow='0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';"}
+          %span#buttonText
+            %i.fas.fa-lock.mr-2
+            Pay
+          %span#loadingText.hidden
+            %i.fas.fa-spinner.fa-spin.mr-2
+            Processing...
+
+/ Print-Only Invoice Layout
+#printable-invoice.print-only
+  / Logo and Company Name
+  .invoice-header-section
+    .company-logo
+      = image_tag 'new_logo.png', alt: 'TronsDrive Logo', class: 'h-20 w-auto'
+    %h1.main-company-name WHEELSONRENT
+
+  / Company Info Row
+  .info-row
+    .company-info-left
+      %p.company-name-bold Wheelsonrent-FZCO
+      %p
+        %strong Email:
+        info@tronsitsolutions.com
+      %p
+        %strong Contact Info:
+        971502770780/971502770780
+      %p
+        %strong Website:
+        www.wheelsonrent.ae
+      %p
+        %strong Licensed & Registered by Dubai Govt 36188
+
+    .date-info-right
+      %p
+        %strong Date:
+        = @invoice.created_at.strftime('%B %d')
+        = ", #{@invoice.created_at.strftime('%Y')}"
+
+  / Payment and Bank Details Row
+  .payment-bank-row
+    .payment-info
+      %p.section-heading Payment Receipt:
+      %p
+        %strong Bill to:
+        = @invoice.vendor.company_name
+      %p
+        %strong Contact No:
+        = @invoice.vendor.phone || 'N/A'
+
+    .bank-info
+      %p
+        %strong Account Holder Name:
+        wheelsonrent-FZCO
+      %p
+        %strong Bank Name:
+        Rak Bank
+      %p
+        %strong Swift Code:
+        NRAKAEAXXX
+      %p
+        %strong Account No:
+        0323281319001
+      %p
+        %strong IBAN:
+        AE54 0400 0003 2328 1319 001
+
+  / Heavy Divider Line
+  .heavy-divider
+
+  / Invoice Items Table
+  .invoice-items-table
+    .table-header-row
+      .description-header Description
+      .amount-header Amount
+
+    - @invoice.invoice_items.each do |item|
+      .table-row
+        .description-cell= item.description
+        .amount-cell= "AED #{number_with_precision(item.amount, precision: 0)}"
+
+    .table-total-row
+      .total-label Total
+      .total-amount= "AED #{number_with_precision(@invoice.invoice_items.sum(:amount), precision: 0)}"
+
+  / Terms & Conditions
+  .terms-conditions-section
+    %h3 Terms & Conditions
+    %ul
+      %li All payments made to "Wheelsonrent-FZCO" are final and non refundable.
+      %li We are dedicated to providing high quality service on time.
+      %li Monthly charges are applicable at the start of every month.
+      %li Payments must be made as per agreed schedule to ensure smooth service delivery. Any delays in payment may affect the continuation of the service provided.
+      %li By submitting payment to "wheelsonrent-FZCO" you agree to these terms and conditions.
+      %li We are committed to delivering exceptional value and appreciate your partnership.
+
+  / Company Stamp
+  .company-stamp-section
+    = image_tag 'company-stamp.png', alt: 'stamp', class: 'h-22 w-auto pl-20 pt-5'
+
+/ STRIPE SCRIPT
+%script{src: 'https://js.stripe.com/v3/'}
+
+/ DATA ATTRIBUTES FOR JAVASCRIPT
+%div{id: 'payment-data', data: {publishable_key: @publishable_key, invoice_id: @invoice.id}, style: 'display: none;'}
+
+/ MODAL AND PAYMENT HANDLER - INLINE
+:javascript
+  (function() {
+    console.log('💳 Payment script initializing...');
+
+    let stripe = null;
+    let elements = null;
+    let cardElement = null;
+    let publishableKey = null;
+    let invoiceId = null;
+    let modal = null;
+    let openBtn = null;
+    let closeBtn = null;
+    let escapeHandler = null;
+
+    function initializePaymentModal() {
+      console.log('🔧 Initializing payment modal...');
+
+      // Get data
+      const paymentData = document.getElementById('payment-data');
+      publishableKey = paymentData?.dataset.publishableKey;
+      invoiceId = paymentData?.dataset.invoiceId;
+
+      console.log('Invoice ID:', invoiceId);
+      console.log('Key configured:', !!publishableKey);
+
+      // Modal references
+      modal = document.getElementById('paymentModal');
+      openBtn = document.getElementById('openPaymentBtn');
+      closeBtn = document.getElementById('closePaymentBtn');
+
+      if (!modal || !openBtn || !closeBtn) {
+        console.log('⚠️ Modal elements not found');
+        return;
+      }
+
+      console.log('✅ Modal elements found');
+
+      // Remove old event listeners by cloning
+      const newOpenBtn = openBtn.cloneNode(true);
+      openBtn.parentNode.replaceChild(newOpenBtn, openBtn);
+      openBtn = newOpenBtn;
+
+      const newCloseBtn = closeBtn.cloneNode(true);
+      closeBtn.parentNode.replaceChild(newCloseBtn, closeBtn);
+      closeBtn = newCloseBtn;
+
+      // Open modal
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('🔓 Opening payment modal');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        // Initialize Stripe if not done yet
+        if (!stripe) {
+          initializeStripe();
+        }
+      });
+
+      // Close modal
+      closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('🔒 Closing payment modal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      });
+
+      // Close on background click
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeBtn.click();
+        }
+      });
+
+      // Remove old escape handler
+      if (escapeHandler) {
+        document.removeEventListener('keydown', escapeHandler);
+      }
+
+      // Close on Escape
+      escapeHandler = function(e) {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          closeBtn.click();
+        }
+      };
+      document.addEventListener('keydown', escapeHandler);
+
+      console.log('✅ Payment modal initialized');
+    }
+
+  // Initialize Stripe
+  function initializeStripe() {
+    console.log('Initializing Stripe...');
+
+    if (!window.Stripe) {
+      console.error('❌ Stripe not loaded');
+      showStatus('Stripe not loaded', 'error');
+      return;
+    }
+
+    if (!publishableKey) {
+      console.error('❌ No publishable key');
+      showStatus('Payment system not configured', 'error');
+      return;
+    }
+
+    try {
+      console.log('Creating Stripe instance...');
+      stripe = Stripe(publishableKey);
+      
+      console.log('Creating elements...');
+      elements = stripe.elements();
+      
+      console.log('Creating card element...');
+      cardElement = elements.create('card', {
+        hidePostalCode: false,
+        style: {
+          base: {
+            fontSize: '16px',
+            color: '#424770',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            '::placeholder': { color: '#aab7c4' }
+          },
+          invalid: { color: '#fa755a', iconColor: '#fa755a' }
+        }
+      });
+
+      // Get the card element container
+      const cardElementDiv = document.getElementById('card-element');
+      console.log('Card element div found:', !!cardElementDiv);
+      
+      if (!cardElementDiv) {
+        console.error('❌ card-element div not found');
+        showStatus('Card element container not found', 'error');
+        return;
+      }
+
+      // Clear and prepare container
+      console.log('Clearing card element container...');
+      cardElementDiv.innerHTML = '';
+      cardElementDiv.style.display = 'block';
+      cardElementDiv.style.visibility = 'visible';
+      cardElementDiv.style.height = '50px';
+
+      // Mount the card element
+      console.log('Mounting card element...');
+      cardElement.mount('#card-element');
+      console.log('✅ Card element mounted');
+
+      // Handle card changes
+      cardElement.on('change', function(event) {
+        const errorDiv = document.getElementById('card-errors');
+        if (event.error) {
+          console.log('Card error:', event.error.message);
+          errorDiv.textContent = event.error.message;
+          errorDiv.classList.remove('hidden');
+        } else {
+          errorDiv.textContent = '';
+          errorDiv.classList.add('hidden');
+        }
+      });
+
+      showStatus('Payment form ready', 'success');
+      document.getElementById('submitPayment').disabled = false;
+
+      // Setup form submission handler
+      setupFormSubmission();
+
+      console.log('✅✅✅ Stripe initialized successfully');
+    } catch (e) {
+      console.error('❌ Error initializing Stripe:', e);
+      showStatus(e.message, 'error');
+    }
+  }
+
+  // Form submission
+  let formSubmitHandler = null;
+
+  function setupFormSubmission() {
+    const paymentForm = document.getElementById('paymentForm');
+    if (!paymentForm) {
+      console.log('⚠️ Payment form not found');
+      return;
+    }
+
+    // Remove old listener if exists
+    if (formSubmitHandler) {
+      paymentForm.removeEventListener('submit', formSubmitHandler);
+    }
+
+    formSubmitHandler = async function(e) {
+      e.preventDefault();
+
+      if (!stripe || !cardElement) {
+        showError('Payment form not ready');
+        return;
+      }
+
+      const name = document.getElementById('cardholderName').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      if (!name || !email) {
+        showError('Name and email are required');
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+          billing_details: { name, email }
+        });
+
+        if (error) {
+          showError(error.message);
+          setLoading(false);
+          return;
+        }
+
+        // Send to server
+        const response = await fetch(`/vendors/invoices/${invoiceId}/confirm_payment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+          },
+          body: JSON.stringify({ payment_method_id: paymentMethod.id })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          showError(data.error || 'Payment failed');
+          setLoading(false);
+          return;
+        }
+
+        if (data.success) {
+          showSuccess('Payment successful! Redirecting...');
+          setTimeout(() => {
+            window.location.href = data.redirect_url;
+          }, 2000);
+        } else {
+          showError(data.message || 'Payment failed');
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Payment error:', err);
+        showError('An error occurred during payment');
+        setLoading(false);
+      }
+    };
+
+    paymentForm.addEventListener('submit', formSubmitHandler);
+  }
+
+  function showError(message) {
+    const errorDiv = document.getElementById('card-errors');
+    errorDiv.textContent = message;
+    errorDiv.classList.remove('hidden');
+  }
+
+  function showStatus(message, type) {
+    const statusDiv = document.getElementById('paymentStatus');
+    const icon = type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
+    const colorClass = type === 'error' ? 'text-red-700' : 'text-green-700';
+    statusDiv.innerHTML = `<p class="text-sm ${colorClass}"><i class="fas ${icon} mr-2"></i>${message}</p>`;
+  }
+
+  function showSuccess(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  function setLoading(isLoading) {
+    const submitBtn = document.getElementById('submitPayment');
+    if (submitBtn) {
+      submitBtn.disabled = isLoading;
+      const buttonText = document.getElementById('buttonText');
+      const loadingText = document.getElementById('loadingText');
+      if (buttonText) buttonText.classList.toggle('hidden', isLoading);
+      if (loadingText) loadingText.classList.toggle('hidden', !isLoading);
+    }
+  }
+
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializePaymentModal);
+    } else {
+      initializePaymentModal();
+    }
+
+    // Reinitialize on Turbo navigation
+    document.addEventListener('turbo:load', initializePaymentModal);
+
+    console.log('✅ Payment script ready');
+  })();
+
+
+:css
+  /* Hide print layout on screen */
+  .print-only {
+    display: none;
+  }
+
+  @media print {
+    /* Hide everything except print layout */
+    body * {
+      visibility: hidden;
+    }
+
+    #printable-invoice, #printable-invoice * {
+      visibility: visible;
+    }
+
+    .no-print {
+      display: none !important;
+    }
+
+    .print-only {
+      display: block !important;
+    }
+
+    body {
+      background: white !important;
+      margin: 0;
+      padding: 0;
+    }
+
+    #printable-invoice {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      padding: 0px 50px;
+      font-family: Arial, sans-serif;
+      color: #2c5353;
+      font-size: 9pt;
+      line-height: 1.5;
+    }
+
+    /* Decorative Lines */
+    .decorative-lines-top, .decorative-lines-bottom {
+      position: absolute;
+      width: 220px;
+    }
+
+    .decorative-lines-right {
+      right: 30px;
+    }
+
+    .decorative-lines-top {
+      top: 0px;
+    }
+
+    .decorative-lines-bottom {
+      bottom: 0px;
+    }
+
+    .decorative-lines-top .line,
+    .decorative-lines-bottom .line {
+      height: 4px;
+      background-color: #2c5353;
+      margin-bottom: 5px;
+    }
+
+    /* Header Section */
+    .invoice-header-section {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .company-logo {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .main-company-name {
+      font-size: 22pt;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #2c5353;
+    }
+
+    /* Info Row */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      font-size: 10pt;
+    }
+
+    .company-info-left {
+      text-align: left;
+      line-height: 1.8;
+    }
+
+    .company-name-bold {
+      font-weight: bold;
+      font-size: 11pt;
+      margin-bottom: 3px;
+    }
+
+    .date-info-right {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    /* Payment and Bank Row */
+    .payment-bank-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      font-size: 10pt;
+      line-height: 1.8;
+    }
+
+    .payment-info {
+      flex: 1;
+    }
+
+    .bank-info {
+      flex: 1;
+      text-align: right;
+    }
+
+    .section-heading {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    /* Heavy Divider */
+    .heavy-divider {
+      height: 4px;
+      background-color: #2c5353;
+    }
+
+    .table-header-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+      font-size: 11pt;
+      text-transform: uppercase;
+    }
+
+    .description-header {
+      flex: 1;
+      text-align: left;
+    }
+
+    .amount-header {
+      width: 150px;
+      text-align: right;
+    }
+
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 11pt;
+    }
+
+    .description-cell {
+      flex: 1;
+      text-align: left;
+      line-height: 1.6;
+    }
+
+    .amount-cell {
+      width: 150px;
+      text-align: right;
+      font-weight: 500;
+    }
+
+    .table-total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      border-top: 3px solid #2c5353;
+      font-weight: bold;
+      font-size: 14pt;
+    }
+
+    .total-label {
+      flex: 1;
+      text-align: right;
+    }
+
+    .total-amount {
+      width: 150px;
+      text-align: right;
+    }
+
+    /* Terms Section */
+    .terms-conditions-section {
+      margin: 10px 0 0;
+      font-size: 9.5pt;
+    }
+
+    .terms-conditions-section h3 {
+      font-size: 12pt;
+      font-weight: bold;
+    }
+
+    .terms-conditions-section ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      line-height: 1.5;
+    }
+
+    /* Company Stamp */
+    .company-stamp-section {
+      text-align: center;
+      margin: 0 0 40px;
+    }
+
+    /* Ensure page doesn't break in the middle */
+    #printable-invoice {
+      page-break-inside: avoid;
+    }
+  }

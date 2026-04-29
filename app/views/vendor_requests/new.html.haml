@@ -1,0 +1,21 @@
+- content_for :head do
+  %link{ rel: "preload", href: asset_path('hero.jpg'), as: "image" }
+  %link{ rel: "preload", href: asset_path('economy-car.png'), as: "image" }
+  %link{ rel: "preload", href: asset_path('luxury-car.png'), as: "image" }
+  %link{ rel: "preload", href: asset_path('custom.png'), as: "image" }
+
+%div.min-h-screen.bg-white
+  = render 'vendor_requests/hero'
+  = render 'vendor_requests/why_partner'
+  = render 'vendor_requests/benefits'
+  = render 'vendor_requests/zero_commission'
+  = render 'vendor_requests/market_visibility'
+  = render 'vendor_requests/control_center'
+  = render 'vendor_requests/why_join'
+  = render 'vendor_requests/pricing'
+  = render 'vendor_requests/advertising'
+  = render 'vendor_requests/onboarding'
+  = render 'vendor_requests/business_types'
+  = render 'vendor_requests/faqs'
+
+= render 'vendor_requests/footer'

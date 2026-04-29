@@ -1,0 +1,314 @@
+-# Admin Booking Show Page
+.container.mx-auto.px-4.sm:px-6.lg:px-8.py-6.sm:py-8
+  %h1.text-2xl.sm:text-3xl.font-bold.mb-4.sm:mb-6{style: "color: #F97316;"} Booking Details
+
+  .bg-white.shadow-lg.rounded-xl.overflow-hidden.p-4.sm:p-6.lg:p-8.mb-6.sm:mb-8
+    %h2.text-lg.sm:text-xl.font-bold.mb-3.sm:mb-4{style: "color: #F97316;"} Booking Info
+    %div.grid.grid-cols-1.sm:grid-cols-2.gap-4.sm:gap-6
+      %div
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-hashtag.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Booking ID
+            %p.text-base.sm:text-lg.font-bold{style: "color: #F97316;"}= @booking.id
+
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-info-circle.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Booking Status
+            - status_class = case @booking.status
+            - when 'confirmed' then 'bg-green-100 text-green-800'
+            - when 'pending' then 'bg-yellow-100 text-yellow-800'
+            - when 'cancelled' then 'bg-red-100 text-red-800'
+            - else 'bg-gray-100 text-gray-800'
+            %span.inline-flex.items-center.px-2.sm:px-3.py-1.rounded-full.text-xs.font-semibold{class: status_class}
+              - if @booking.status == 'confirmed'
+                %i.fas.fa-check-circle.mr-1
+              - elsif @booking.status == 'pending'
+                %i.fas.fa-clock.mr-1
+              - elsif @booking.status == 'cancelled'
+                %i.fas.fa-times-circle.mr-1
+              = @booking.status&.titleize
+
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-credit-card.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Payment Status
+            - payment_status_class = case @booking.payment_status
+            - when 'paid' then 'bg-green-100 text-green-800'
+            - when 'pending' then 'bg-yellow-100 text-yellow-800'
+            - when 'unpaid' then 'bg-red-100 text-red-800'
+            - when 'refunded' then 'bg-purple-100 text-purple-800'
+            - when 'refund_pending' then 'bg-orange-100 text-orange-800'
+            - else 'bg-gray-100 text-gray-800'
+            %span.inline-flex.items-center.px-2.sm:px-3.py-1.rounded-full.text-xs.font-semibold{class: payment_status_class}
+              - if @booking.payment_status == 'paid'
+                %i.fas.fa-check-circle.mr-1
+              - elsif @booking.payment_status == 'pending'
+                %i.fas.fa-clock.mr-1
+              - elsif @booking.payment_status == 'unpaid'
+                %i.fas.fa-times-circle.mr-1
+              - elsif @booking.payment_status == 'refunded'
+                %i.fas.fa-undo.mr-1
+              - elsif @booking.payment_status == 'refund_pending'
+                %i.fas.fa-hourglass-half.mr-1
+              = @booking.payment_status&.titleize
+
+      %div
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-wallet.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Payment Mode
+            - payment_mode_classes = {'Cash' => 'bg-yellow-100 text-yellow-700', 'Online' => 'bg-green-100 text-green-700'}
+            %span.inline-flex.items-center.rounded-full.px-2.sm:px-3.py-1.text-xs.font-semibold{class: payment_mode_classes[@booking.payment_mode] || 'bg-gray-100 text-gray-700'}
+              - if @booking.payment_mode == 'Cash'
+                %i.fas.fa-money-bill.mr-1
+              - elsif @booking.payment_mode == 'Online'
+                %i.fas.fa-credit-card.mr-1
+              = @booking.payment_mode
+
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-calendar-alt.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Start Date
+            %p.text-base.sm:text-lg.font-bold.text-gray-800= @booking.start_date&.strftime('%b %d, %Y')
+
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-calendar-check.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase End Date
+            %p.text-base.sm:text-lg.font-bold.text-gray-800= @booking.end_date&.strftime('%b %d, %Y')
+
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-tag.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Selected Price
+            %p.text-base.sm:text-lg.font-bold{style: "color: #F97316;"}= @booking.selected_price.present? ? number_to_currency(@booking.selected_price) : 'Not set'
+
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-clock.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Selected Period
+            %p.text-base.sm:text-lg.font-bold.text-gray-800= @booking.selected_period || 'Not set'
+
+        .flex.items-start.mb-3.sm:mb-4
+          %i.fas.fa-receipt.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Total Amount
+            %p.text-base.sm:text-lg.font-bold{style: "color: #F97316;"}= @booking.total_amount.present? ? number_to_currency(@booking.total_amount) : 'Not calculated'
+
+    / Vendor Assignment Section - Under Booking Info
+    .mt-4.sm:mt-6.pt-4.sm:pt-6.border-t{style: "border-color: #d1e0e0;"}
+      %h3.text-base.sm:text-lg.font-semibold.mb-3.sm:mb-4{style: "color: #F97316;"} Change Vendor Assignment
+      = form_with model: [:admin, @booking], method: :patch, class: 'space-y-3 sm:space-y-0 sm:flex sm:items-center sm:gap-4' do |f|
+        = render 'shared/form_errors', object: @booking
+        .flex.flex-col.sm:flex-row.sm:items-center.gap-2.flex-1
+          = f.label :vendor_id, 'Assign to Vendor:', class: 'text-xs sm:text-sm font-medium text-gray-700'
+          = f.select :vendor_id,
+              options_from_collection_for_select(@vendors, :id, :company_name, @booking.vendor_id),
+              { prompt: 'Select a vendor...' },
+              { class: 'w-full sm:flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md transition-all', style: 'transition: all 0.2s;', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'" }
+        = f.submit 'Update Vendor', class: 'w-full sm:w-auto px-4 py-2 text-white rounded-md transition text-sm font-medium shadow-md', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'"
+
+      - if @booking.vendor.present?
+        .mt-3.sm:mt-4.p-3.sm:p-4.bg-green-50.border.border-green-200.rounded-lg
+          %p.text-green-700.font-medium.text-sm.sm:text-base
+            %i.fas.fa-check-circle.mr-2
+            %span Currently assigned to: #{@booking.vendor.company_name}
+      - else
+        .mt-3.sm:mt-4.p-3.sm:p-4.bg-yellow-50.border.border-yellow-200.rounded-lg
+          %p.text-yellow-700.font-medium.text-sm.sm:text-base
+            %i.fas.fa-exclamation-triangle.mr-2
+            %span No vendor assigned to this booking
+
+    / Booking Status Management Section
+    .mt-4.sm:mt-6.pt-4.sm:pt-6.border-t{style: "border-color: #d1e0e0;"}
+      %h3.text-base.sm:text-lg.font-semibold.mb-3.sm:mb-4{style: "color: #F97316;"} Manage Booking Status
+
+      / Booking Status Update Form
+      = form_with url: update_status_admin_booking_path(@booking), method: :patch, class: 'space-y-3 sm:space-y-0 sm:flex sm:items-center sm:gap-4 mb-4' do |f|
+        .flex.flex-col.sm:flex-row.sm:items-center.gap-2.flex-1
+          = f.label :status, 'Update Booking Status:', class: 'text-xs sm:text-sm font-medium text-gray-700'
+          = f.select :status,
+              options_for_select(Booking::STATUSES.map { |s| [s.titleize, s] }, @booking.status),
+              {},
+              { class: 'w-full sm:flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md transition-all', style: 'transition: all 0.2s;', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'" }
+        = f.submit 'Update Booking Status', class: 'w-full sm:w-auto px-4 py-2 text-white rounded-md transition text-sm font-medium shadow-md', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'"
+
+      / Cancel Booking Button (only show if booking is not already cancelled)
+      - unless @booking.cancelled?
+        = form_with url: cancel_admin_booking_path(@booking), method: :patch, class: 'mt-3', data: { confirm: 'Are you sure? This action will set the payment status to Refund Pending and notify the customer.' } do
+          = submit_tag 'Cancel Booking', class: 'w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition text-sm font-medium shadow-md'
+
+      / Status Information Box
+      .mt-3.sm:mt-4.p-3.sm:p-4.rounded-lg{class: @booking.cancelled? ? 'bg-red-50 border border-red-200' : 'bg-blue-50 border border-blue-200'}
+        - if @booking.cancelled?
+          %p.font-medium.text-sm.sm:text-base{class: 'text-red-700'}
+            %i.fas.fa-ban.mr-2
+            %span This booking has been cancelled
+          %p.text-xs.sm:text-sm.mt-2{class: 'text-red-600'} The customer has been notified and can contact support for refund assistance.
+        - else
+          %p.font-medium.text-sm.sm:text-base{style: "color: #F97316;"}
+            %i.fas.fa-info-circle.mr-2
+            %span Current Booking Status: #{@booking.status.titleize}
+
+    / Payment Status Management Section
+    .mt-4.sm:mt-6.pt-4.sm:pt-6.border-t{style: "border-color: #d1e0e0;"}
+      %h3.text-base.sm:text-lg.font-semibold.mb-3.sm:mb-4{style: "color: #F97316;"} Manage Payment Status
+
+      / Payment Status Update Form
+      = form_with url: update_payment_status_admin_booking_path(@booking), method: :patch, class: 'space-y-3 sm:space-y-0 sm:flex sm:items-center sm:gap-4 mb-4' do |f|
+        .flex.flex-col.sm:flex-row.sm:items-center.gap-2.flex-1
+          = f.label :payment_status, 'Update Payment Status:', class: 'text-xs sm:text-sm font-medium text-gray-700'
+          = f.select :payment_status,
+              options_for_select(Booking::PAYMENT_STATUSES.map { |s| [s.titleize, s] }, @booking.payment_status),
+              {},
+              { class: 'w-full sm:flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md transition-all', style: 'transition: all 0.2s;', onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'", onblur: "this.style.borderColor='#d1d5db'; this.style.boxShadow='none'" }
+        = f.submit 'Update Payment Status', class: 'w-full sm:w-auto px-4 py-2 text-white rounded-md transition text-sm font-medium shadow-md', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'"
+
+      / Payment Status Information Box
+      .mt-3.sm:mt-4.p-3.sm:p-4.rounded-lg{class: @booking.needs_refund? ? 'bg-purple-50 border border-purple-200' : 'bg-blue-50 border border-blue-200'}
+        - if @booking.needs_refund?
+          %p.font-medium.text-sm.sm:text-base{class: 'text-purple-700'}
+            %i.fas.fa-undo.mr-2
+            %span Payment Status: #{@booking.payment_status.titleize}
+          %p.text-xs.sm:text-sm.mt-2{class: 'text-purple-600'} Customer is expecting a refund for this booking.
+        - else
+          %p.font-medium.text-sm.sm:text-base{style: "color: #F97316;"}
+            %i.fas.fa-info-circle.mr-2
+            %span Current Payment Status: #{@booking.payment_status.titleize}
+
+  .grid.grid-cols-1.md:grid-cols-2.gap-4.sm:gap-6.lg:gap-8
+    / Car Info
+    .bg-white.shadow-lg.rounded-xl.overflow-hidden.p-4.sm:p-6.lg:p-8
+      %h2.text-lg.sm:text-xl.font-bold.mb-3.sm:mb-4{style: "color: #F97316;"} Car Info
+      - car = @booking.car
+      - if car
+        .mb-3.sm:mb-4
+          .flex.items-center.gap-3.mb-2
+            %i.fas.fa-car.text-lg.sm:text-xl{style: "color: #F97316;"}
+            %div.font-semibold.text-base.sm:text-lg.text-gray-900= car.brand + ' ' + car.model
+          %div.text-sm.text-gray-500.ml-8= car.year
+
+        .space-y-3
+          .flex.items-start
+            %i.fas.fa-building.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+            .ml-3.flex-1.min-w-0
+              %p.text-xs.font-semibold.text-gray-500.uppercase Car Vendor
+              %p.text-sm.sm:text-base.font-semibold{style: "color: #F97316;"}
+                = car.vendor&.company_name || 'No vendor'
+
+          .flex.items-start
+            %i.fas.fa-tag.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+            .ml-3.flex-1.min-w-0
+              %p.text-xs.font-semibold.text-gray-500.uppercase Category
+              %p.text-sm.sm:text-base.text-gray-700= car.category
+
+          .flex.items-start
+            %i.fas.fa-palette.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+            .ml-3.flex-1.min-w-0
+              %p.text-xs.font-semibold.text-gray-500.uppercase Color
+              %p.text-sm.sm:text-base.text-gray-700= car.color
+
+          .flex.items-start
+            %i.fas.fa-dollar-sign.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+            .ml-3.flex-1.min-w-0
+              %p.text-xs.font-semibold.text-gray-500.uppercase Price per day
+              %p.text-sm.sm:text-base.font-bold{style: "color: #F97316;"}= number_to_currency(car.daily_price)
+
+          .mt-4.pt-4.border-t{style: "border-color: #d1e0e0;"}
+            = link_to admin_car_path(car), class: 'inline-flex items-center gap-2 text-sm font-medium transition-colors', style: 'color: #F97316;', onmouseover: "this.style.color='#EA580C'", onmouseout: "this.style.color='#F97316'" do
+              %i.fas.fa-eye
+              %span View Car Details
+      - else
+        .text-center.py-6.sm:py-8
+          %i.fas.fa-car-crash.text-3xl.sm:text-4xl.text-red-400.mb-3
+          %p.text-base.sm:text-lg.font-bold.text-red-500 Deleted Car
+          %p.text-xs.sm:text-sm.text-gray-500.mt-1 The car associated with this booking has been removed by the vendor
+
+    / Vendor Info - Shows assigned vendor, not car owner
+    .bg-white.shadow-lg.rounded-xl.overflow-hidden.p-4.sm:p-6.lg:p-8
+      %h2.text-lg.sm:text-xl.font-bold.mb-3.sm:mb-4{style: "color: #F97316;"} Assigned Vendor
+      - vendor = @booking.vendor
+      - if vendor
+        .mb-3.sm:mb-4
+          .flex.items-center.gap-3
+            .w-12.h-12.sm:w-16.sm:h-16.rounded-full.flex.items-center.justify-center.font-bold.text-white.text-lg.sm:text-xl.flex-shrink-0{style: 'background-color: #F97316'}
+              = vendor.company_name&.first&.upcase || 'V'
+            %div.flex-1.min-w-0
+              %div.font-semibold.text-base.sm:text-lg.text-gray-900.break-words= vendor.company_name
+              %div.text-sm.text-gray-500= vendor.name
+
+        .space-y-3
+          .flex.items-start
+            %i.fas.fa-envelope.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+            .ml-3.flex-1.min-w-0
+              %p.text-xs.font-semibold.text-gray-500.uppercase Email
+              %p.text-sm.sm:text-base.text-gray-700.break-all= vendor.email
+
+          .flex.items-start
+            %i.fas.fa-phone.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+            .ml-3.flex-1.min-w-0
+              %p.text-xs.font-semibold.text-gray-500.uppercase Phone
+              %p.text-sm.sm:text-base.text-gray-700= vendor.phone
+
+          .flex.items-start
+            %i.fas.fa-map-marker-alt.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+            .ml-3.flex-1.min-w-0
+              %p.text-xs.font-semibold.text-gray-500.uppercase Address
+              %p.text-sm.sm:text-base.text-gray-700.break-words= vendor.address
+
+        .mt-3.sm:mt-4.p-3.sm:p-4.rounded-lg{style: "background-color: #e8f0f0; border: 1px solid #d1e0e0;"}
+          %p.text-sm{style: "color: #F97316;"}
+            %i.fas.fa-info-circle.mr-2
+            %span This vendor is assigned to handle this booking
+      - else
+        .text-center.py-6.sm:py-8
+          %i.fas.fa-exclamation-triangle.text-3xl.sm:text-4xl.text-gray-300.mb-3.sm:mb-4
+          %p.text-sm.sm:text-base.text-gray-500 No vendor assigned to this booking
+          %p.text-xs.sm:text-sm.text-gray-400.mt-2 Please assign a vendor using the dropdown above
+
+  .mt-6.sm:mt-8.bg-white.shadow-lg.rounded-xl.overflow-hidden.p-4.sm:p-6.lg:p-8
+    %h2.text-lg.sm:text-xl.font-bold.mb-3.sm:mb-4{style: "color: #F97316;"} Customer Info
+    - user = @booking.user
+    - if user
+      .mb-3.sm:mb-4
+        .flex.items-center.gap-3.mb-2
+          %i.fas.fa-user.text-lg.sm:text-xl{style: "color: #F97316;"}
+          %div.font-semibold.text-base.sm:text-lg.text-gray-900.break-words= user.full_name.presence || user.email
+
+      .space-y-3
+        .flex.items-start
+          %i.fas.fa-envelope.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Email
+            %p.text-sm.sm:text-base.text-gray-700.break-all= user.email
+
+        .flex.items-start
+          %i.fas.fa-phone.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Phone
+            %p.text-sm.sm:text-base.text-gray-700= user.phone || 'Not provided'
+
+        .flex.items-start
+          %i.fas.fa-home.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Home Address
+            %p.text-sm.sm:text-base.text-gray-700.break-words= user.home_address || 'Not provided'
+
+        .flex.items-start
+          %i.fas.fa-globe.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Nationality
+            %p.text-sm.sm:text-base.text-gray-700= user.nationality&.capitalize || 'Not provided'
+
+        .flex.items-start
+          %i.fas.fa-calendar.w-5.sm:w-6.mt-1{style: "color: #F97316;"}
+          .ml-3.flex-1.min-w-0
+            %p.text-xs.font-semibold.text-gray-500.uppercase Member Since
+            %p.text-sm.sm:text-base.text-gray-700= user.created_at.strftime('%b %d, %Y')
+    - else
+      .text-center.py-6.sm:py-8
+        %i.fas.fa-user-slash.text-3xl.sm:text-4xl.text-gray-300.mb-3
+        %p.text-sm.sm:text-base.text-gray-500 User not found 
+      

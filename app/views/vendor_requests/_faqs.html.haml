@@ -1,0 +1,75 @@
+%section.py-16.px-4.sm:px-6.lg:px-8.bg-white
+  .max-w-4xl.mx-auto
+    .text-center.mb-12
+      %h2.text-4xl.md:text-5xl.font-bold.text-gray-900.mb-4
+        Frequently Asked Questions
+      %p.text-lg.text-gray-600
+        Everything you need to know about partnering with TronsDrive
+
+    .space-y-4#faq-container
+      - @faqs.each_with_index do |faq, index|
+        .faq-item.border.border-gray-200.rounded-lg.overflow-hidden.transition-all.duration-300.hover:border-blue-400{data: {index: index}}
+          .faq-toggle.w-full.px-6.py-4.flex.items-center.justify-between.bg-gray-50.hover:bg-gray-100.transition-colors.cursor-pointer{
+            onclick: "toggleFAQ(this); return false;"
+          }
+            %h3.text-left.font-semibold.text-gray-900.text-base.md:text-lg
+              = faq[:question]
+            .flex.items-center.justify-center.w-6.h-6.rounded-full.flex-shrink-0{ style: "background-color: #F97316" }
+              %svg.faq-icon.w-4.h-4.text-white.transition-transform.duration-300{
+                fill: 'none',
+                stroke: 'currentColor',
+                viewBox: '0 0 24 24',
+                style: 'transform: rotate(0deg);'
+              }
+                %line{x1: '12', y1: '5', x2: '12', y2: '19', 'stroke-width': '2', 'stroke-linecap': 'round'}
+                %line{x1: '5', y1: '12', x2: '19', y2: '12', 'stroke-width': '2', 'stroke-linecap': 'round'}
+
+          .faq-answer.hidden.bg-white.border-t.border-gray-200
+            .px-6.py-4.text-gray-600.text-base.leading-relaxed
+              = faq[:answer]
+
+%script
+  :plain
+
+    function toggleFAQ(toggleElement) {
+      
+      // Prevent any default behavior
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      const faqItem = toggleElement.closest('.faq-item');
+      const answer = faqItem.querySelector('.faq-answer');
+      const icon = faqItem.querySelector('.faq-icon');
+
+      if (!answer || !icon) {
+        return false;
+      }
+
+      // Close all other FAQs
+      document.querySelectorAll('.faq-answer').forEach((otherAnswer) => {
+        if (otherAnswer !== answer) {
+          otherAnswer.classList.add('hidden');
+        }
+      });
+
+      // Reset all other icons
+      document.querySelectorAll('.faq-icon').forEach((otherIcon) => {
+        if (otherIcon !== icon) {
+          otherIcon.style.transform = 'rotate(0deg)';
+        }
+      });
+
+      // Toggle current answer
+      const isHidden = answer.classList.contains('hidden');
+      
+      if (isHidden) {
+        answer.classList.remove('hidden');
+        icon.style.transform = 'rotate(45deg)';
+      } else {
+        answer.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
+      }
+
+      return false;
+    }

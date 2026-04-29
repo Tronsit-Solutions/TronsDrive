@@ -1,0 +1,347 @@
+.container.mx-auto.max-w-7xl.p-6
+  = render partial: "vendors/navbar"
+  
+  / Header Section
+  .bg-white.rounded-2xl.shadow-xl.p-8.mb-8
+    .flex.flex-col.md:flex-row.md:items-center.md:justify-between.gap-4
+      .flex-1
+        %h1.text-4xl.font-extrabold.mb-2{style: 'color:#F97316'} Booking ##{@booking.id}
+        .flex.items-center.gap-4.mb-4
+          - status_classes = {'pending' => 'bg-yellow-100 text-yellow-700', 'confirmed' => 'bg-green-100 text-green-700', 'cancelled' => 'bg-red-100 text-red-700'}
+          %span.inline-block.rounded-full.text-sm.font-semibold.px-4.py-2{class: status_classes[@booking.status] || 'bg-gray-100 text-gray-700'}= @booking.status.titleize
+          - payment_status_classes = {'paid' => 'bg-green-100 text-green-700', 'pending' => 'bg-yellow-100 text-yellow-700', 'unpaid' => 'bg-red-100 text-red-700', 'refunded' => 'bg-purple-100 text-purple-700', 'refund_pending' => 'bg-orange-100 text-orange-700'}
+          %span.inline-block.px-4.py-2.rounded-full.text-sm.font-semibold{class: payment_status_classes[@booking.payment_status] || 'bg-gray-100 text-gray-700'}
+            - if @booking.payment_status == 'paid'
+              %i.fas.fa-check-circle
+            - elsif @booking.payment_status == 'pending'
+              %i.fas.fa-clock
+            - elsif @booking.payment_status == 'unpaid'
+              %i.fas.fa-times-circle
+            - elsif @booking.payment_status == 'refunded'
+              %i.fas.fa-undo
+            - elsif @booking.payment_status == 'refund_pending'
+              %i.fas.fa-hourglass-half
+            = " Payment: #{@booking.payment_status.titleize}"
+        %p.text-lg.text-gray-600= "Created on #{@booking.created_at.strftime('%B %d, %Y at %I:%M %p')}"
+      .flex.gap-3
+        = link_to vendors_bookings_path, class: 'bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2' do
+          %i.fas.fa-arrow-left
+          Back to Bookings
+
+  / Main Content Grid
+  .grid.grid-cols-1.lg:grid-cols-3.gap-8
+    / Left Column - Booking Details
+    .lg:col-span-2.space-y-6
+      / Customer Information Card
+      .bg-white.rounded-xl.shadow-lg.p-6
+        %h2.text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color:#F97316'}
+          %i.fas.fa-user{style: 'color:#F97316'}
+          Customer Information
+        .grid.grid-cols-1.md:grid-cols-2.gap-4
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Name
+            %span.text-gray-900= @booking.user&.full_name || 'N/A'
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Email
+            %span.text-gray-900= @booking.user&.email || 'N/A'
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Phone
+            %span.text-gray-900= @booking.user&.phone || 'N/A'
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Address
+            %span.text-gray-900= @booking.user&.home_address || 'N/A'
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Nationality
+            %span.text-gray-900= @booking.user&.nationality&.titleize || 'N/A'
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Member Since
+            %span.text-gray-900= @booking.user&.created_at&.strftime('%B %d, %Y') || 'N/A'
+
+      / Car Information Card
+      .bg-white.rounded-xl.shadow-lg.p-6
+        %h2.text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color:#F97316'}
+          %i.fas.fa-car{style: 'color:#F97316'}
+          Car Information
+        .grid.grid-cols-1.md:grid-cols-2.gap-4
+          - if @booking.car
+            .flex.justify-between.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Car
+              %span.text-gray-900= "#{@booking.car.brand} #{@booking.car.model}"
+            .flex.justify-between.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Year
+              %span.text-gray-900= @booking.car.year
+            .flex.justify-between.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Color
+              %span.text-gray-900= @booking.car.color
+            .flex.justify-between.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Category
+              %span.text-gray-900= @booking.car.category.presence || 'N/A'
+            .flex.justify-between.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600= @booking.car.with_driver? ? "Base Service Rate" : "Daily Rate"
+              %span.text-gray-900
+                - if @booking.car.with_driver?
+                  = "#{@booking.car.five_hours_charge}/5h • #{@booking.car.ten_hours_charge}/10h"
+                - else
+                  = @booking.car.daily_price ? number_to_currency(@booking.car.daily_price) : 'N/A'
+            .flex.justify-between.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Car Status
+              - car_status_classes = {'available' => 'bg-green-100 text-green-700', 'rented' => 'bg-red-100 text-red-700', 'maintenance' => 'bg-yellow-100 text-yellow-700'}
+              %span.inline-block.rounded-full.text-xs.font-semibold.px-3.py-1{class: car_status_classes[@booking.car.status] || 'bg-gray-100 text-gray-700'}= @booking.car.status.titleize
+          - else
+            .col-span-1.md:col-span-2.text-center.py-6
+              %i.fas.fa-car-crash.text-3xl.text-red-400.mb-2
+              %p.text-lg.font-bold.text-red-500 Deleted Car
+              %p.text-sm.text-gray-500 This car has been removed from your fleet
+
+      / Booking Details Card
+      .bg-white.rounded-xl.shadow-lg.p-6
+        %h2.text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color:#F97316'}
+          %i.fas.fa-calendar-alt{style: 'color:#F97316'}
+          Booking Details
+        .grid.grid-cols-1.md:grid-cols-2.gap-4
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Start Date
+            %span.text-gray-900= @booking.start_date.strftime('%B %d, %Y')
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 End Date
+            %span.text-gray-900= @booking.end_date.strftime('%B %d, %Y')
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Duration
+            %span.text-gray-900= "#{(@booking.end_date - @booking.start_date).to_i} days"
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Total Amount
+            - if @booking.total_amount
+              - if @booking.has_discount?
+                .flex.flex-col.items-end
+                  %span.text-sm.text-gray-400.line-through= number_to_currency(@booking.calculate_total_amount_without_discount + (@booking.delivery_charge || 0))
+                  %span.font-semibold.text-lg.text-green-600.flex.items-center.gap-1
+                    %i.fas.fa-tag.text-sm
+                    = number_to_currency(@booking.total_amount)
+              - else
+                %span.font-semibold.text-lg.text-blue-600= number_to_currency(@booking.total_amount)
+            - else
+              %span.text-gray-400 N/A
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Booking Status
+            - status_classes = {'pending' => 'bg-yellow-100 text-yellow-700', 'confirmed' => 'bg-green-100 text-green-700', 'cancelled' => 'bg-red-100 text-red-700'}
+            %span.inline-block.rounded-full.text-xs.font-semibold.px-3.py-1{class: status_classes[@booking.status] || 'bg-gray-100 text-gray-700'}= @booking.status.titleize
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Payment Status
+            - payment_status_classes = {'paid' => 'bg-green-100 text-green-700', 'pending' => 'bg-yellow-100 text-yellow-700', 'unpaid' => 'bg-red-100 text-red-700', 'refunded' => 'bg-purple-100 text-purple-700', 'refund_pending' => 'bg-orange-100 text-orange-700'}
+            %span.inline-block.px-3.py-1.rounded-full.text-xs.font-semibold{class: payment_status_classes[@booking.payment_status] || 'bg-gray-100 text-gray-700'}= @booking.payment_status.titleize
+          .flex.justify-between.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Payment Mode
+            - payment_mode_classes = {'Cash' => 'bg-yellow-100 text-yellow-700', 'Online' => 'bg-green-100 text-green-700'}
+            %span.inline-block.rounded-full.text-xs.font-semibold.px-3.py-1{class: payment_mode_classes[@booking.payment_mode] || 'bg-gray-100 text-gray-700'}= @booking.payment_mode
+
+
+    / Right Column - Sidebar
+    .space-y-6
+      / Booking Stats Card
+      .bg-white.rounded-xl.shadow-lg.p-6
+        %h2.text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color:#F97316'}
+          %i.fas.fa-chart-bar{style: 'color:#F97316'}
+          Booking Summary
+        .space-y-4
+          .flex.justify-between.items-center.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Booking ID
+            %span.font-mono.text-gray-900 ##{@booking.id}
+          .flex.justify-between.items-center.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Created
+            %span.text-gray-900= @booking.created_at.strftime('%b %d, %Y')
+          .flex.justify-between.items-center.py-2.border-b.border-gray-100
+            %span.font-medium.text-gray-600 Last Updated
+            %span.text-gray-900= @booking.updated_at.strftime('%b %d, %Y')
+          - if @booking.total_amount
+            - original_amount = @booking.calculate_total_amount_without_discount
+            .flex.justify-between.items-center.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Rental Period
+              %span.text-gray-900= @booking.selected_period&.titleize || 'Daily'
+            .flex.justify-between.items-center.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Duration
+              %span.text-gray-900= "#{(@booking.end_date - @booking.start_date).to_i} days"
+            .flex.justify-between.items-center.py-2.border-b.border-gray-100
+              %span.font-medium.text-gray-600 Subtotal
+              %span.text-gray-900= number_to_currency(original_amount)
+
+            - if @booking.has_discount?
+              .flex.justify-between.items-center.py-2.border-b.border-gray-100.bg-red-50
+                %span.font-medium.text-gray-600.flex.items-center.gap-2
+                  %i.fas.fa-tag.text-red-500
+                  = "Discount (#{@booking.discount_percentage}% OFF)"
+                %span.font-bold.text-red-600= "- #{number_to_currency(@booking.discount_amount)}"
+
+            - if @booking.delivery_charge_applicable?
+              .flex.justify-between.items-center.py-2.border-b.border-gray-100
+                %span.font-medium.text-gray-600= "#{@booking.delivery_option&.titleize} Charge"
+                %span.text-gray-900= number_to_currency(@booking.delivery_charge)
+
+            .flex.justify-between.items-center.py-2
+              %span.font-bold.text-gray-900 Total
+              - if @booking.has_discount?
+                .flex.flex-col.items-end
+                  %span.text-sm.text-gray-400.line-through= number_to_currency(original_amount + (@booking.delivery_charge || 0))
+                  %span.font-bold.text-lg.text-blue-600= number_to_currency(@booking.total_amount)
+              - else
+                %span.font-bold.text-lg.text-blue-600= number_to_currency(@booking.total_amount)
+
+      / Status Update Card
+      .bg-white.rounded-xl.shadow-lg.p-6
+        %h2.text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color:#F97316'}
+          %i.fas.fa-sliders-h{style: 'color:#F97316'}
+          Update Status
+        
+        .space-y-4
+          / Booking Status Update
+          .pb-4.border-b.border-gray-200
+            %label.block.text-sm.font-semibold.text-gray-700.mb-2 Booking Status
+            .flex.gap-2
+              %select#bookingStatusSelect.flex-1.px-4.py-2.border.border-gray-300.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500{data: { booking_id: @booking.id }}
+                %option{value: 'pending', selected: @booking.status == 'pending'} Pending
+                %option{value: 'confirmed', selected: @booking.status == 'confirmed'} Confirmed
+                %option{value: 'cancelled', selected: @booking.status == 'cancelled'} Cancelled
+              %button#updateBookingStatusBtn.px-4.py-2.bg-blue-600.hover:bg-blue-700.text-white.font-medium.rounded-lg.transition.disabled:opacity-50{disabled: true}
+                %i.fas.fa-check
+                %span Update
+
+          / Payment Status Update
+          .pb-4.border-b.border-gray-200
+            %label.block.text-sm.font-semibold.text-gray-700.mb-2 Payment Status
+            .flex.gap-2
+              %select#paymentStatusSelect.flex-1.px-4.py-2.border.border-gray-300.rounded-lg.focus:outline-none.focus:ring-2.focus:ring-blue-500{data: { booking_id: @booking.id }}
+                %option{value: 'pending', selected: @booking.payment_status == 'pending'} Pending
+                %option{value: 'paid', selected: @booking.payment_status == 'paid'} Paid
+                %option{value: 'unpaid', selected: @booking.payment_status == 'unpaid'} Unpaid
+                %option{value: 'refunded', selected: @booking.payment_status == 'refunded'} Refunded
+                %option{value: 'refund_pending', selected: @booking.payment_status == 'refund_pending'} Refund Pending
+              %button#updatePaymentStatusBtn.px-4.py-2.bg-green-600.hover:bg-green-700.text-white.font-medium.rounded-lg.transition.disabled:opacity-50{disabled: true}
+                %i.fas.fa-check
+                %span Update
+
+          / Payment Mode Display
+          .pt-2
+            %label.block.text-sm.font-semibold.text-gray-700.mb-2 Payment Method
+            - payment_mode_colors = {'Cash' => 'bg-yellow-100 text-yellow-700', 'Online' => 'bg-green-100 text-green-700'}
+            %span.inline-block.rounded-full.text-xs.font-semibold.px-4.py-2{class: payment_mode_colors[@booking.payment_mode] || 'bg-gray-100 text-gray-700'}
+              = @booking.payment_mode
+
+      / Quick Actions Card
+      .bg-white.rounded-xl.shadow-lg.p-6
+        %h2.text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color:#F97316'}
+          %i.fas.fa-bolt{style: 'color:#F97316'}
+          Quick Actions
+        .space-y-3
+          - if @booking.car
+            = link_to vendors_car_path(@booking.car), class: 'w-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2' do
+              %i.fas.fa-car
+              View Car Details
+          = link_to vendors_bookings_path, class: 'w-full bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2' do
+            %i.fas.fa-arrow-left
+            Back to Bookings
+
+:javascript
+  document.addEventListener('DOMContentLoaded', function() {
+    const bookingStatusSelect = document.getElementById('bookingStatusSelect');
+    const updateBookingStatusBtn = document.getElementById('updateBookingStatusBtn');
+    const paymentStatusSelect = document.getElementById('paymentStatusSelect');
+    const updatePaymentStatusBtn = document.getElementById('updatePaymentStatusBtn');
+
+    // Store original statuses for comparison
+    let originalBookingStatus = bookingStatusSelect.value;
+    let originalPaymentStatus = paymentStatusSelect.value;
+
+    // Enable/disable update button based on booking status change
+    bookingStatusSelect.addEventListener('change', function() {
+      updateBookingStatusBtn.disabled = this.value === originalBookingStatus;
+    });
+
+    // Enable/disable update button based on payment status change
+    paymentStatusSelect.addEventListener('change', function() {
+      updatePaymentStatusBtn.disabled = this.value === originalPaymentStatus;
+    });
+
+    // Update Booking Status
+    updateBookingStatusBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const newStatus = bookingStatusSelect.value;
+      const bookingId = bookingStatusSelect.getAttribute('data-booking-id');
+
+      fetch(`/vendors/bookings/${bookingId}/update_booking_status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+          status: newStatus
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          originalBookingStatus = newStatus;
+          updateBookingStatusBtn.disabled = true;
+          showNotification('success', data.message);
+
+          // Reload page to reflect changes
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          showNotification('error', data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showNotification('error', 'Failed to update booking status');
+      });
+    });
+
+    // Update Payment Status
+    updatePaymentStatusBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const newPaymentStatus = paymentStatusSelect.value;
+      const bookingId = paymentStatusSelect.getAttribute('data-booking-id');
+
+      fetch(`/vendors/bookings/${bookingId}/update_payment_status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+          payment_status: newPaymentStatus
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          originalPaymentStatus = newPaymentStatus;
+          updatePaymentStatusBtn.disabled = true;
+          showNotification('success', data.message);
+
+          // Reload page to reflect changes
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          showNotification('error', data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showNotification('error', 'Failed to update payment status');
+      });
+    });
+
+    // Helper function to show notifications
+    function showNotification(type, message) {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 ${
+        type === 'success' ? 'bg-green-600' : 'bg-red-600'
+      }`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+  });
+

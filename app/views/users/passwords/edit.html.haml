@@ -1,0 +1,75 @@
+.container.mx-auto.px-4.py-8
+  .max-w-md.mx-auto
+    / Header
+    .text-center.mb-8
+      %h1.text-3xl.font-bold.text-gray-900.flex.items-center.justify-center
+        %i.fas.fa-key.mr-4.text-blue-600.text-2xl
+        Reset Password
+      %p.text-gray-600.mt-2 Enter your new password below.
+
+    / Flash Messages
+    - if flash[:notice]
+      .mb-6.p-4.bg-green-50.border.border-green-200.rounded-lg
+        .flex.items-center
+          %i.fas.fa-check-circle.text-green-600.mr-2
+          %span.text-green-800= flash[:notice]
+    - if flash[:alert]
+      .mb-6.p-4.bg-red-50.border.border-red-200.rounded-lg
+        .flex.items-center
+          %i.fas.fa-exclamation-circle.text-red-600.mr-2
+          %span.text-red-800= flash[:alert]
+
+    / Password Reset Form
+    .bg-white.rounded-lg.shadow-md.p-8
+      = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+        = f.hidden_field :reset_password_token
+
+        .space-y-6
+          .field
+            = f.label :password, 'New Password', class: 'block text-sm font-medium text-gray-700 mb-2'
+            = f.password_field :password, 
+                autocomplete: 'new-password',
+                class: 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors',
+                placeholder: 'Enter your new password'
+            - if resource.errors[:password].any?
+              %p.text-red-600.text-sm.mt-1= resource.errors[:password].join(', ')
+            %p.text-gray-500.text-xs.mt-1
+              %i.fas.fa-info-circle.mr-1
+              Password must be at least 6 characters long
+
+          .field
+            = f.label :password_confirmation, 'Confirm New Password', class: 'block text-sm font-medium text-gray-700 mb-2'
+            = f.password_field :password_confirmation, 
+                autocomplete: 'new-password',
+                class: 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors',
+                placeholder: 'Confirm your new password'
+            - if resource.errors[:password_confirmation].any?
+              %p.text-red-600.text-sm.mt-1= resource.errors[:password_confirmation].join(', ')
+
+          .field
+            = f.submit 'Update Password', 
+                class: 'w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+
+      / Additional Links
+      .mt-6.text-center
+        = link_to 'Back to Sign In', new_user_session_path, 
+            class: 'text-blue-600 hover:text-blue-800 font-medium transition-colors'
+
+    / Security Tips
+    .mt-8.bg-yellow-50.rounded-lg.p-6
+      %h3.text-lg.font-semibold.text-yellow-900.mb-3.flex.items-center
+        %i.fas.fa-shield-alt.mr-2
+        Password Security Tips
+      %ul.text-yellow-800.text-sm.space-y-2
+        %li.flex.items-start
+          %i.fas.fa-check.mr-2.mt-0.5.text-yellow-600
+          Use a combination of letters, numbers, and symbols
+        %li.flex.items-start
+          %i.fas.fa-check.mr-2.mt-0.5.text-yellow-600
+          Avoid using personal information like your name or birthdate
+        %li.flex.items-start
+          %i.fas.fa-check.mr-2.mt-0.5.text-yellow-600
+          Make it at least 8 characters long for better security
+        %li.flex.items-start
+          %i.fas.fa-check.mr-2.mt-0.5.text-yellow-600
+          Don't reuse passwords from other accounts 

@@ -1,0 +1,23 @@
+#flash-container.fixed.bottom-6.left-6.z-50.flex.flex-col.gap-3.max-w-md.w-full.sm:w-auto
+  - flash.each do |key, message|
+    - if key.to_s == 'notice' || key.to_s == 'success'
+      - bg_style = "background: #FFF7ED; border-color: #FED7AA; color: #9A3412;"
+      - icon_class = "fas fa-check-circle mt-1 mr-3 flex-shrink-0"
+      - icon_style = "color: #F97316;"
+    - elsif key.to_s == 'alert' || key.to_s == 'error'
+      - bg_style = "background: #FEF2F2; border-color: #FECACA; color: #991B1B;"
+      - icon_class = "fas fa-exclamation-circle mt-1 mr-3 flex-shrink-0"
+      - icon_style = "color: #EF4444;"
+    - else
+      - bg_style = "background: #EFF6FF; border-color: #BFDBFE; color: #1E40AF;"
+      - icon_class = "fas fa-info-circle mt-1 mr-3 flex-shrink-0"
+      - icon_style = "color: #3B82F6;"
+
+    %div{ style: "#{bg_style} display: flex; padding: 1rem; border-radius: 0.75rem; border: 1px solid; box-shadow: 0 4px 16px rgba(0,0,0,0.10);", role: "alert", id: "flash-#{key}", data: { controller: "flash" } }
+      %div.flex.items-start.w-full
+        %i{ class: icon_class, style: icon_style }
+        %div.flex-1.mr-4
+          %p.text-sm.font-semibold= message
+        %button.inline-flex.focus:outline-none{ type: "button", data: { action: "flash#close" }, "aria-label": "Close", style: "color: rgba(0,0,0,0.4);" }
+          %span.sr-only Close
+          %i.fas.fa-times.text-sm

@@ -1,0 +1,60 @@
+.container.mx-auto.px-3.sm:px-4.lg:px-6.py-4.sm:py-6.lg:py-8
+  .max-w-2xl.mx-auto
+    .flex.flex-col.sm:flex-row.items-start.sm:items-center.justify-between.gap-3.sm:gap-4.mb-4.sm:mb-6.lg:mb-8
+      %h1.text-xl.sm:text-2xl.lg:text-3xl.font-bold{style: "color: #F97316;"} Edit Profile
+      = link_to admins_path, class: "font-medium flex items-center transition-colors", style: "color: #F97316;", onmouseover: "this.style.color='#EA580C'", onmouseout: "this.style.color='#F97316'" do
+        %i.fas.fa-arrow-left.mr-2
+        Back to Profile
+
+    .bg-white.rounded-lg.shadow-md.p-4.sm:p-5.lg:p-6
+      = form_with model: @admin, url: admins_path, method: :patch, local: true, class: "space-y-5.sm:space-y-6" do |f|
+        - if @admin.errors.any?
+          .border-l-4.rounded-r.p-3.sm:p-4.mb-5.sm:mb-6{style: "background-color: #fee; border-color: #dc3545;"}
+            .flex
+              .flex-shrink-0
+                %i.fas.fa-exclamation-triangle{style: "color: #dc3545;"}
+              .ml-3
+                %h3.text-sm.font-medium{style: "color: #dc3545;"}
+                  There were errors with your submission:
+                .mt-2.text-sm{style: "color: #dc3545;"}
+                  %ul.list-disc.pl-5.space-y-1
+                    - @admin.errors.full_messages.each do |message|
+                      %li= message
+
+        .grid.grid-cols-1.sm:grid-cols-2.gap-4.sm:gap-5.lg:gap-6
+          .field
+            = f.label :first_name, class: "block text-xs sm:text-sm font-medium mb-2", style: "color: #F97316;"
+            = f.text_field :first_name, class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2", placeholder: "Enter first name", style: "focus:ring-color: #F97316; focus:border-color: #F97316;"
+            - if @admin.errors[:first_name].any?
+              .mt-1.text-sm{style: "color: #dc3545;"}= @admin.errors[:first_name].first
+
+          .field
+            = f.label :last_name, class: "block text-xs sm:text-sm font-medium mb-2", style: "color: #F97316;"
+            = f.text_field :last_name, class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2", placeholder: "Enter last name", style: "focus:ring-color: #F97316; focus:border-color: #F97316;"
+            - if @admin.errors[:last_name].any?
+              .mt-1.text-sm{style: "color: #dc3545;"}= @admin.errors[:last_name].first
+
+        .field
+          = f.label :email, class: "block text-xs sm:text-sm font-medium mb-2", style: "color: #F97316;"
+          = f.email_field :email, class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2", placeholder: "Enter email address", style: "focus:ring-color: #F97316; focus:border-color: #F97316;"
+          - if @admin.errors[:email].any?
+            .mt-1.text-sm{style: "color: #dc3545;"}= @admin.errors[:email].first
+
+        .field
+          %h3.text-base.sm:text-lg.font-medium.mb-3.sm:mb-4{style: "color: #F97316;"} Change Password (Optional)
+          .grid.grid-cols-1.sm:grid-cols-2.gap-4.sm:gap-5.lg:gap-6
+            .field
+              = f.label :password, "New Password", class: "block text-xs sm:text-sm font-medium mb-2", style: "color: #F97316;"
+              = f.password_field :password, class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2", placeholder: "Leave blank to keep current password", style: "focus:ring-color: #F97316; focus:border-color: #F97316;"
+              - if @admin.errors[:password].any?
+                .mt-1.text-sm{style: "color: #dc3545;"}= @admin.errors[:password].first
+
+            .field
+              = f.label :password_confirmation, "Confirm New Password", class: "block text-xs sm:text-sm font-medium mb-2", style: "color: #F97316;"
+              = f.password_field :password_confirmation, class: "block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2", placeholder: "Confirm new password", style: "focus:ring-color: #F97316; focus:border-color: #F97316;"
+              - if @admin.errors[:password_confirmation].any?
+                .mt-1.text-sm{style: "color: #dc3545;"}= @admin.errors[:password_confirmation].first
+
+        .flex.flex-col-reverse.sm:flex-row.items-stretch.sm:items-center.justify-end.gap-3.sm:gap-4.pt-5.sm:pt-6.border-t.border-gray-200
+          = link_to "Cancel", admins_path, class: "px-4 py-2 sm:py-2.5 rounded-md shadow-sm text-sm font-medium text-center text-gray-700 bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2", style: "border: 1px solid #F97316; focus:ring-color: #F97316;", onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='white'"
+          = f.submit "Update Profile", class: "px-4 py-2 sm:py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2", style: "background-color: #F97316; focus:ring-color: #F97316;", onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" 

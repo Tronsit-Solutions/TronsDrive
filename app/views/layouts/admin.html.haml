@@ -1,0 +1,252 @@
+!!! 5
+%html{ lang: "en" }
+  %head
+    %meta{ charset: "UTF-8" }
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0" }
+    = csrf_meta_tags
+    %title Admin Dashboard
+    %link{ rel: "stylesheet", href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css", integrity: "sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==", crossorigin: "anonymous", referrerpolicy: "no-referrer" }
+    = stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = stylesheet_link_tag "swiper-bundle.min"
+    -# %style
+      /* Custom styles for admin image sliders */
+      .swiper-container {
+        width: 100%;
+        height: 100%;
+      }
+      
+      .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .swiper-button-next,
+      .swiper-button-prev {
+        color: white;
+        background: rgba(0, 0, 0, 0.5);
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+      
+      .swiper-button-next:hover,
+      .swiper-button-prev:hover {
+        background: rgba(0, 0, 0, 0.8);
+        transform: scale(1.1);
+      }
+      
+      .swiper-pagination-bullet {
+        background: white;
+        opacity: 0.7;
+      }
+      
+      .swiper-pagination-bullet-active {
+        opacity: 1;
+        background: white;
+      }
+      
+      /* Uniform car card images */
+      .car-image {
+        transition: transform 0.3s ease;
+      }
+      
+      .car-image:hover {
+        transform: scale(1.05);
+      }
+      
+      /* Image counter styles */
+      .current-slide {
+        font-weight: bold;
+      }
+  %body.bg-gray-50.min-h-screen
+    .flex.min-h-screen
+      / Mobile Overlay
+      #sidebarOverlay.hidden.fixed.inset-0.bg-black.bg-opacity-50.z-30.md:hidden
+
+      / Sidebar - Hidden on mobile, slides in when toggled
+      #sidebar.fixed.md:fixed.w-64.text-white.flex.flex-col.py-8.px-4.h-screen.top-0.left-0.z-40.transform.-translate-x-full.md:translate-x-0.transition-transform.duration-300.ease-in-out{style: "background: linear-gradient(to bottom, #F97316, #EA580C);"}
+        %style
+          :plain
+            .no-scrollbar::-webkit-scrollbar { display: none; }
+            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .flex.items-center.mb-10
+          %span.text-2xl.font-extrabold.tracking-wide.ml-2 TronsDrive
+        %nav.flex-1.space-y-4.overflow-y-auto.pb-4.no-scrollbar
+          - nav_links = [{name: 'Dashboard', path: admin_dashboard_index_path, icon: 'fas fa-tachometer-alt'},{name: 'Vehicles', path: '/admin/cars', icon: 'fas fa-car'},{name: 'Featured Cars', path: admin_featured_cars_path, icon: 'fas fa-star'},{name: 'Vendors', path: admin_vendors_path, icon: 'fas fa-store'},{name: 'Discounts', path: admin_discounts_path, icon: 'fas fa-tags'},{name: 'Invited Vendors', path: admin_invited_vendors_path, icon: 'fas fa-user-plus'},{name: 'Vendor Join Requests', path: admin_vendor_requests_path, icon: 'fas fa-user-plus'},{name: 'Customers', path: '/admin/customers', icon: 'fas fa-users'},{name: 'Bookings', path: '/admin/bookings', icon: 'fas fa-calendar-check'},{name: 'Activities', path: admin_activities_path, icon: 'fas fa-chart-line'},{name: 'Analytics', path: admin_analytics_path, icon: 'fas fa-chart-bar'},{name: 'Car Features', path: admin_features_path, icon: 'fas fa-taxi'},{name: 'Blogs', path: admin_blogs_path, icon: 'fas fa-blog'},{name: 'Announcement', path: edit_admin_announcement_path, icon: 'fas fa-bullhorn'}]
+          - if current_admin&.super_admin?
+            - nav_links << {name: 'Admins', path: admins_path, icon: 'fas fa-user-shield'}
+          - nav_links.each do |link|
+            - active = request.path == link[:path]
+            %a.flex.items-center.gap-3.py-2.5.px-4.rounded-lg.font-medium.transition{ href: link[:path], class: (active ? 'bg-white/20 text-white shadow' : 'hover:bg-white/10 hover:text-white') }
+              %i{class: link[:icon]}
+              = link[:name]
+      / Main content
+      .flex-1.flex.flex-col.md:ml-64
+        %header.flex.items-center.justify-between.h-16.bg-white.shadow.px-4.md:px-6.sticky.top-0.z-20
+          .flex.items-center.gap-3
+            / Mobile Menu Button - Visible only on mobile
+            %button#mobileMenuBtn.md:hidden.p-2.rounded-lg.focus:outline-none.transition-all.duration-200{style: "color: #F97316; background-color: #e8f0f0;", onmouseover: "this.style.backgroundColor='#d1e0e0'; this.style.color='#EA580C'", onmouseout: "this.style.backgroundColor='#e8f0f0'; this.style.color='#F97316'"}
+              %i.fas.fa-bars.text-xl
+            %span.text-lg.font-bold.md:hidden{style: "color: #F97316;"} TronsDrive
+          .relative.flex.items-center.gap-4
+            / Notifications Bell
+            .relative
+              %button#notificationsDropdownBtn.relative.p-2.text-gray-600.hover:text-gray-800.focus:outline-none.transition-colors
+                %i.fas.fa-bell.text-xl
+                = render "admin/notifications/count", count: current_admin.notifications.unread.count
+              
+              / Notifications Dropdown
+              #notificationsDropdown.hidden.absolute.right-0.mt-2.w-80.sm:w-96.bg-white.rounded-lg.shadow-xl.overflow-hidden.z-50.border.border-gray-100
+                .flex.items-center.justify-between.px-4.py-3.border-b.bg-gray-50
+                  %h3.font-semibold.text-gray-700 Notifications
+                  - if current_admin.notifications.unread.count > 0
+                    = button_to "Mark all as read", mark_all_read_admin_notifications_path, method: :patch, class: "text-sm text-blue-600 hover:text-blue-800 font-medium"
+                
+                #notificationsList.max-h-96.overflow-y-auto.divide-y.divide-gray-100{ data: { controller: "infinite-scroll", action: "scroll->infinite-scroll#handleScroll" } }
+                  - notifications = current_admin.notifications.ordered.limit(6)
+                  - if notifications.any?
+                    = render partial: "admin/notifications/notification", collection: notifications
+                    - if current_admin.notifications.count > 6
+                      #notifications-pagination-frame.py-2.text-center
+                        = turbo_frame_tag "notifications_page_2", src: admin_notifications_path(page: 2, format: :turbo_stream), loading: :lazy do
+                          .text-sm.text-gray-500 Loading more...
+                  - else
+                    #empty-notifications-state.px-4.py-8.text-center.text-gray-500
+                      %i.fas.fa-bell-slash.text-3xl.mb-2.text-gray-300
+                      %p.text-sm No notifications yet
+
+            / Profile
+            .relative
+              %button#profileDropdownBtn.flex.items-center.focus:outline-none
+                -# %img.w-8.h-8.rounded-full.mr-2{:alt => "Profile", :src => "https://randomuser.me/api/portraits/men/32.jpg"}/
+                %span.hidden.md:block.font-medium.text-gray-700.text-lg
+                  = current_admin.display_name.titleize
+                %svg.w-4.h-4.ml-1.text-gray-500{:fill => "none", :stroke => "currentColor", "stroke-width" => "2", :viewbox => "0 0 24 24"}
+                  %path{:d => "M19 9l-7 7-7-7", "stroke-linecap" => "round", "stroke-linejoin" => "round"}
+              #profileDropdown.hidden.absolute.right-0.mt-2.w-40.bg-white.rounded.shadow-lg.py-2
+                = link_to "Edit Profile", edit_admins_path, class: "block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                .border-t.my-1
+                = button_to "Logout", destroy_admin_session_path, method: :delete, class: "block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+        / Main content area
+        .flex-1.bg-gray-50
+          = turbo_stream_from "admin_#{current_admin.id}_notifications"
+          = render 'shared/flash_messages'
+          .max-w-7xl.mx-auto
+            = yield
+
+    = render 'shared/loader'
+    = javascript_include_tag "swiper-bundle.min"
+
+:javascript
+  (function() {
+    function initializeAdminLayout() {
+      console.log('🔧 Initializing admin layout...');
+
+      // Profile dropdown toggle
+      var profileBtn = document.getElementById('profileDropdownBtn');
+      var profileMenu = document.getElementById('profileDropdown');
+      
+      // Notifications dropdown toggle
+      var notifBtn = document.getElementById('notificationsDropdownBtn');
+      var notifMenu = document.getElementById('notificationsDropdown');
+
+      if (profileBtn && profileMenu) {
+        profileBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          profileMenu.classList.toggle('hidden');
+          if (notifMenu) notifMenu.classList.add('hidden'); // Close other menu
+        });
+      }
+
+      if (notifBtn && notifMenu) {
+        notifBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          notifMenu.classList.toggle('hidden');
+          if (profileMenu) profileMenu.classList.add('hidden'); // Close other menu
+        });
+      }
+
+      document.addEventListener('click', function(e) {
+        if (profileBtn && profileMenu && !profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+          profileMenu.classList.add('hidden');
+        }
+        if (notifBtn && notifMenu && !notifBtn.contains(e.target) && !notifMenu.contains(e.target)) {
+          notifMenu.classList.add('hidden');
+        }
+      });
+
+      // Mobile sidebar toggle
+      var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      var sidebar = document.getElementById('sidebar');
+      var sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      if (mobileMenuBtn && sidebar && sidebarOverlay) {
+        console.log('✅ Mobile menu elements found');
+
+        // Open sidebar
+        mobileMenuBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          console.log('🔓 Opening sidebar');
+          sidebar.classList.remove('-translate-x-full');
+          sidebar.classList.add('translate-x-0');
+          sidebarOverlay.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        });
+
+        // Close sidebar when clicking overlay
+        sidebarOverlay.addEventListener('click', function() {
+          console.log('🔒 Closing sidebar');
+          sidebar.classList.add('-translate-x-full');
+          sidebar.classList.remove('translate-x-0');
+          sidebarOverlay.classList.add('hidden');
+          document.body.style.overflow = 'auto';
+        });
+
+        // Close sidebar on navigation (mobile only)
+        var sidebarLinks = sidebar.querySelectorAll('a');
+        sidebarLinks.forEach(function(link) {
+          link.addEventListener('click', function() {
+            // Only close on mobile
+            if (window.innerWidth < 768) {
+              sidebar.classList.add('-translate-x-full');
+              sidebar.classList.remove('translate-x-0');
+              sidebarOverlay.classList.add('hidden');
+              document.body.style.overflow = 'auto';
+            }
+          });
+        });
+
+        // Close sidebar on escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && !sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.add('-translate-x-full');
+            sidebar.classList.remove('translate-x-0');
+            sidebarOverlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+          }
+        });
+
+        console.log('✅ Mobile sidebar initialized');
+      } else {
+        console.log('⚠️ Some mobile menu elements not found');
+      }
+    }
+
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeAdminLayout);
+    } else {
+      initializeAdminLayout();
+    }
+
+    // Reinitialize on Turbo navigation
+    document.addEventListener('turbo:load', initializeAdminLayout);
+
+    console.log('✅ Admin layout script ready');
+  })();

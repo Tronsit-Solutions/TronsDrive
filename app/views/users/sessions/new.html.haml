@@ -1,0 +1,110 @@
+.container.mx-auto.max-w-md.p-6.mt-10
+  .bg-white.rounded-xl.shadow-lg.overflow-hidden.p-8{ style: "background: var(--td-surface); border: 1px solid var(--td-border)" }
+    .text-center.mb-8
+      %i{ class: 'fas fa-car text-4xl mb-4 block', style: 'color: #F97316' }
+      %h2.text-3xl.font-bold.mb-2{ style: "color: var(--td-text)" } Welcome Back
+      %p{ style: "color: var(--td-muted)" } Sign in to manage your bookings
+
+    - if alert
+      .mt-4.p-3.bg-red-50.text-red-700.rounded-lg.text-sm.border.border-red-200= alert
+    - if notice
+      .mt-4.p-3.text-green-700.rounded-lg.text-sm.border{ style: 'background-color: #FFF7ED; border-color: #F97316; color: #9A3412' }= notice
+
+    = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f|
+      - if params[:car_id].present?
+        = hidden_field_tag :car_id, params[:car_id]
+      - if params[:start_date].present?
+        = hidden_field_tag :start_date, params[:start_date]
+      - if params[:end_date].present?
+        = hidden_field_tag :end_date, params[:end_date]
+      - if params[:selected_period].present?
+        = hidden_field_tag :selected_period, params[:selected_period]
+      - if params[:selected_price].present?
+        = hidden_field_tag :selected_price, params[:selected_price]
+      - if params[:selected_mileage_limit].present?
+        = hidden_field_tag :selected_mileage_limit, params[:selected_mileage_limit]
+
+      .field.space-y-2
+        = f.label :email, class: "block text-sm font-medium", style: "color: var(--td-text)"
+        = f.email_field :email,
+          autofocus: true,
+          autocomplete: "email",
+          class: "w-full px-4 py-3 rounded-lg border transition duration-200",
+          style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+          placeholder: "your@email.com",
+          onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+          onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+
+      .field.space-y-2
+        = f.label :password, class: "block text-sm font-medium", style: "color: var(--td-text)"
+        .relative
+          = f.password_field :password,
+            autocomplete: "current-password",
+            class: "w-full px-4 py-3 pr-12 rounded-lg border transition duration-200",
+            style: "background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);",
+            placeholder: "••••••••",
+            onfocus: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.12)'",
+            onblur: "this.style.borderColor=''; this.style.boxShadow='none'"
+          %button.absolute.right-3.top-3.transition{ type: "button", onclick: "togglePassword(this)", style: "color: var(--td-muted)" }
+            %i.fas.fa-eye
+
+      - if devise_mapping.rememberable?
+        .field.flex.items-center
+          = f.check_box :remember_me,
+            class: "h-4 w-4 border-gray-300 rounded transition",
+            style: "accent-color: #F97316"
+          = f.label :remember_me, class: "ml-2 block text-sm", style: "color: var(--td-text)"
+
+      .actions
+        = f.submit "Log in",
+          class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white transition duration-200 hover:shadow-md",
+          style: "background: linear-gradient(135deg, #F97316, #EA580C);"
+
+    .relative.my-6
+      .absolute.inset-0.flex.items-center
+        .w-full{ style: 'border-top: 1px solid var(--td-border)' }
+      .relative.flex.justify-center.text-sm
+        %span.px-3.text-sm{ style: "background: var(--td-surface); color: var(--td-muted)" } Or continue with
+
+    = button_to user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: false },
+        params: { action_type: 'signin' },
+        class: "w-full flex items-center justify-center px-4 py-3 border shadow-sm text-sm font-medium rounded-lg transition duration-200",
+        style: "background: var(--td-surface); color: var(--td-text); border-color: var(--td-border);",
+        onmouseover: "this.style.borderColor='#F97316'; this.style.boxShadow='0 0 0 3px rgba(249,115,22,0.1)'",
+        onmouseout: "this.style.borderColor=''; this.style.boxShadow='none'" do
+      %svg.w-5.h-5.mr-3{ viewBox: "0 0 24 24" }
+        %path{ fill: "#4285F4", d: "M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" }
+        %path{ fill: "#34A853", d: "M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" }
+        %path{ fill: "#FBBC05", d: "M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" }
+        %path{ fill: "#EA4335", d: "M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" }
+      Sign in with Google
+
+    .mt-6.text-center.space-y-4
+      = link_to "Forgot your password?", new_password_path(resource_name),
+          class: 'font-medium transition-colors hover:underline',
+          style: 'color: #F97316'
+      %p.text-sm{ style: "color: var(--td-muted)" }
+        Don't have an account?
+        = link_to 'Sign up here', new_registration_path(resource_name),
+            class: 'font-medium transition-colors hover:underline',
+            style: 'color: #F97316'
+
+:javascript
+  function togglePassword(button) {
+    const input = button.previousElementSibling
+    const icon = button.querySelector('i')
+    if (input.type === 'password') {
+      input.type = 'text'
+      icon.classList.replace('fa-eye', 'fa-eye-slash')
+    } else {
+      input.type = 'password'
+      icon.classList.replace('fa-eye-slash', 'fa-eye')
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.querySelector('input[type="checkbox"]');
+    if (checkbox) {
+      checkbox.style.accentColor = '#F97316';
+    }
+  });
