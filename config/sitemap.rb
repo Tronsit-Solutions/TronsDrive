@@ -1,9 +1,9 @@
-SitemapGenerator::Sitemap.default_host = "https://www.wheelsonrent.ae"
+SitemapGenerator::Sitemap.default_host = "https://www.tronsdrive.com"
 SitemapGenerator::Sitemap.compress = true
 
 # Store the sitemap on S3 so it persists across Heroku dyno restarts and deploys.
 SitemapGenerator::Sitemap.adapter = SitemapGenerator::AwsSdkAdapter.new(
-  "wheels-on-rent-app",
+  "trons-drive-app",
   aws_access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
   aws_secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
   aws_region:            "us-east-1",
@@ -11,9 +11,9 @@ SitemapGenerator::Sitemap.adapter = SitemapGenerator::AwsSdkAdapter.new(
 )
 
 # Serve the sitemap through the app's public URL (not the raw S3 URL)
-SitemapGenerator::Sitemap.sitemaps_host = "https://www.wheelsonrent.ae/"
+SitemapGenerator::Sitemap.sitemaps_host = "https://www.tronsdrive.com/"
 
-# Sitemap stored at the root of the bucket → s3://wheels-on-rent-app/sitemap.xml.gz
+# Sitemap stored at the root of the bucket → s3://trons-drive-app/sitemap.xml.gz
 # This matches the URL declared in public/robots.txt
 
 # Ping Google & Bing to re-crawl after each sitemap refresh

@@ -112,7 +112,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     user_name: "apikey", # this is literally "apikey"
     password: ENV["SENDGRID_API_KEY"],
-    domain: "wheelsonrent.ae", # ✅ CHANGED from herokuapp.com to custom domain
+    domain: ENV.fetch("APP_HOST", "tronsdrive.com"),
     address: "smtp.sendgrid.net",
     port: 587,
     authentication: :plain,
@@ -121,7 +121,7 @@ Rails.application.configure do
 
   # ✅ CHANGED: Default URL options for ActionMailer - Updated to custom domain
   config.action_mailer.default_url_options = {
-    host: "wheelsonrent.ae", # ✅ CHANGED from herokuapp.com to custom domain
+    host: ENV.fetch("APP_HOST", "tronsdrive.com"),
     protocol: "https"
   }
 
@@ -138,10 +138,11 @@ Rails.application.configure do
   # ✅ ADDED: Enable DNS rebinding protection and other `Host` header attacks.
   # This allows requests from your custom domain - CRITICAL!
   config.hosts = [
-    "wheelsonrent.ae",      # Allow requests from root domain
-    "www.wheelsonrent.ae",  # Allow requests from www subdomain
-    ".herokuapp.com"        # Keep Heroku domain working too
-  ]
+    "tronsdrive.com",
+    "www.tronsdrive.com",
+    ".onrender.com",
+    ENV["RENDER_EXTERNAL_HOSTNAME"]
+  ].compact
 
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
