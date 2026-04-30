@@ -128,8 +128,8 @@ module AppConstants
   ].freeze
 
   COMPANY_INFO = {
-    name: "WheelsOnRent",
-    blurb: "Enjoy great offers on budget and luxury rentals, chauffeur services, and limousines with WheelsOnRent. Headquartered in Dubai, serving all of the UAE"
+    name: "TronsDrive",
+    blurb: "Enjoy great offers on budget and luxury rentals, chauffeur services, and limousines with TronsDrive. Headquartered in Dubai, serving all of the UAE"
   }.freeze
 
   CONTACT_INFO = {

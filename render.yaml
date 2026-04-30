@@ -1,0 +1,64 @@
+services:
+  - type: web
+    name: trons-drive
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    healthCheckPath: /up
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: trons-drive-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: trons-drive-redis
+          property: connectionString
+      - key: RENDER_EXTERNAL_HOSTNAME
+        fromService:
+          type: web
+          name: trons-drive
+          property: host
+      - key: APP_HOST
+        fromService:
+          type: web
+          name: trons-drive
+          property: host
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false
+      - key: GOOGLE_PLACE_ID
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: FROM_EMAIL
+        value: shehrozehsan@gmail.com
+
+databases:
+  - name: trons-drive-db
+    plan: starter
+    databaseName: trons_drive_production
+    user: trons_drive
+
+  - type: redis
+    name: trons-drive-redis
+    plan: starter
+    maxmemoryPolicy: noeviction
