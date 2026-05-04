@@ -141,9 +141,14 @@
                       Unpaid
 
               .pt-2
-                = link_to admin_car_path(booking.car), class: 'inline-flex items-center justify-center gap-2 w-full px-4 py-2 text-white font-semibold rounded-lg transition-colors shadow-md text-sm', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
-                  %i.fas.fa-eye
-                  %span View Car
+                - if booking.car
+                  = link_to admin_car_path(booking.car), class: 'inline-flex items-center justify-center gap-2 w-full px-4 py-2 text-white font-semibold rounded-lg transition-colors shadow-md text-sm', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
+                    %i.fas.fa-eye
+                    %span View Car
+                - else
+                  %span.inline-flex.items-center.justify-center.gap-2.w-full.px-4.py-2.font-semibold.rounded-lg.text-sm.cursor-not-allowed{ style: 'background-color: #d1d5db; color: #9ca3af;' }
+                    %i.fas.fa-eye
+                    %span Car Deleted
 
       / Desktop Table View - Hidden on Mobile
       .overflow-x-auto.hidden.lg:block
@@ -173,9 +178,14 @@
                       %i.fas.fa-times.mr-1
                       Unpaid
                 %td.px-6.py-4.rounded-r-lg
-                  = link_to admin_car_path(booking.car), class: 'inline-flex items-center gap-2 font-semibold px-4 py-1.5 rounded-lg transition-colors', style: 'background-color: #F97316; color: white;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
-                    %i.fas.fa-eye
-                    %span View Car
+                  - if booking.car
+                    = link_to admin_car_path(booking.car), class: 'inline-flex items-center gap-2 font-semibold px-4 py-1.5 rounded-lg transition-colors', style: 'background-color: #F97316; color: white;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
+                      %i.fas.fa-eye
+                      %span View Car
+                  - else
+                    %span.inline-flex.items-center.gap-2.font-semibold.px-4.py-1.5.rounded-lg.cursor-not-allowed{ style: 'background-color: #d1d5db; color: #9ca3af;' }
+                      %i.fas.fa-eye
+                      %span Car Deleted
     - else
       %p.text-sm.sm:text-base.text-gray-500 No bookings found for this user.
       

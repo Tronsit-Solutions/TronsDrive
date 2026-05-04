@@ -174,12 +174,12 @@
   .invoice-header-section
     .company-logo
       = image_tag 'new_logo.png', alt: 'Wheels on Rent Logo', class: 'h-150 w-auto'
-    %h1.main-company-name WHEELSONRENT
+    %h1.main-company-name TRONSDRIVE
 
   / Company Info Row
   .info-row
     .company-info-left
-      %p.company-name-bold Wheelsonrent-FZCO
+      %p.company-name-bold tronsDrive-FZCO
       %p
         %strong Email:
         info@tronsitsolutions.com
@@ -188,7 +188,7 @@
         971502770780
       %p
         %strong Website:
-        www.wheelsonrent.ae
+        www.tronsdrive.ae
       %p
         %strong Licensed & Registered by Dubai Govt 36188
 
@@ -212,7 +212,7 @@
     .bank-info
       %p
         %strong Account Holder Name:
-        wheelsonrent-FZCO
+        tronsdrive-FZCO
       %p
         %strong Bank Name:
         Rak Bank
@@ -248,11 +248,11 @@
   .terms-conditions-section
     %h3 Terms & Conditions
     %ul
-      %li All payments made to "Wheelsonrent-FZCO" are final and non refundable.
+      %li All payments made to "tronsDrive-FZCO" are final and non refundable.
       %li We are dedicated to providing high quality service on time.
       %li Monthly charges are applicable at the start of every month.
       %li Payments must be made as per agreed schedule to ensure smooth service delivery. Any delays in payment may affect the continuation of the service provided.
-      %li By submitting payment to "wheelsonrent-FZCO" you agree to these terms and conditions.
+      %li By submitting payment to "tronsdrive-FZCO" you agree to these terms and conditions.
       %li We are committed to delivering exceptional value and appreciate your partnership.
 
   / Company Stamp
@@ -263,7 +263,7 @@
         %br
         SEAL
         %br
-        WHEELSONRENT
+        TRONSDRIVE
 
 / Edit Invoice Modal (unchanged)
 #editInvoiceModal.fixed.inset-0.bg-gray-900.bg-opacity-50.hidden.z-50.overflow-y-auto

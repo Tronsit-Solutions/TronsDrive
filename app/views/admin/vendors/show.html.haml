@@ -88,22 +88,22 @@
             %p.text-sm.sm:text-base.text-gray-700.leading-relaxed= @vendor.description
 
         / Invoice Summary Card
-        .mt-4.sm:mt-6.p-4.sm:p-5.rounded-lg.border{style: "background: linear-gradient(to right, #e8f0f0, #f0f5f5); border-color: #F97316;"}
+        .mt-4.sm:mt-6.p-4.sm:p-5.rounded-lg.border{style: "background: var(--td-surface2); border-color: rgba(249,115,22,0.4);"}
           .flex.flex-col.sm:flex-row.sm:items-center.sm:justify-between.mb-3.sm:mb-4.gap-2
-            %h3.text-base.sm:text-lg.font-bold.text-gray-800.flex.items-center.gap-2
+            %h3.text-base.sm:text-lg.font-bold.flex.items-center.gap-2{style: "color: var(--td-text);"}
               %i.fas.fa-file-invoice-dollar{style: "color: #F97316;"}
               Invoice Summary
-            %span.text-xs.px-2.py-1.rounded-full.font-semibold.self-start{style: "background-color: #d1e0e0; color: #F97316;"}
+            %span.text-xs.px-2.py-1.rounded-full.font-semibold.self-start{style: "background-color: rgba(249,115,22,0.15); color: #F97316; border: 1px solid rgba(249,115,22,0.3);"}
               = @vendor.invoices.count
               = "Invoice".pluralize(@vendor.invoices.count)
 
           .grid.grid-cols-1.sm:grid-cols-2.gap-3.sm:gap-4
-            .bg-white.rounded-lg.p-3.shadow-sm
-              %p.text-xs.font-semibold.text-gray-500.uppercase Pending Amount
-              %p.text-lg.sm:text-xl.font-bold.text-amber-600= number_to_currency(@vendor.total_pending_amount)
-            .bg-white.rounded-lg.p-3.shadow-sm
-              %p.text-xs.font-semibold.text-gray-500.uppercase Paid Amount
-              %p.text-lg.sm:text-xl.font-bold.text-emerald-600= number_to_currency(@vendor.total_paid_amount)
+            .rounded-lg.p-3.shadow-sm{style: "background: var(--td-surface); border: 1px solid var(--td-border);"}
+              %p.text-xs.font-semibold.uppercase{style: "color: var(--td-muted);"} Pending Amount
+              %p.text-lg.sm:text-xl.font-bold{style: "color: #F97316;"}= number_to_currency(@vendor.total_pending_amount)
+            .rounded-lg.p-3.shadow-sm{style: "background: var(--td-surface); border: 1px solid var(--td-border);"}
+              %p.text-xs.font-semibold.uppercase{style: "color: var(--td-muted);"}  Paid Amount
+              %p.text-lg.sm:text-xl.font-bold.text-emerald-500= number_to_currency(@vendor.total_paid_amount)
 
         / Action Buttons
         .flex.flex-wrap.gap-2.sm:gap-3.md:gap-4.mt-6.sm:mt-8

@@ -9,6 +9,8 @@ class Admin::FeaturesController < ApplicationController
     @feature = Feature.new
   end
 
+  def create
+    @feature = Feature.new(feature_params)
     respond_to do |format|
       if @feature.save
         format.html { redirect_to admin_features_path, notice: "Feature was successfully created." }
@@ -25,6 +27,7 @@ class Admin::FeaturesController < ApplicationController
         end
       end
     end
+  end
 
   def edit
     respond_to do |format|
@@ -33,6 +36,7 @@ class Admin::FeaturesController < ApplicationController
     end
   end
 
+  def update
     respond_to do |format|
       if @feature.update(feature_params)
         format.html { redirect_to admin_features_path, notice: "Feature was successfully updated." }
@@ -47,6 +51,7 @@ class Admin::FeaturesController < ApplicationController
         end
       end
     end
+  end
 
   def destroy
     @feature.destroy

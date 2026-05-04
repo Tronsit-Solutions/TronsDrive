@@ -1,44 +1,44 @@
 .container-fluid.px-4.sm:px-6.lg:px-8.py-6.sm:py-8
-  .bg-white.shadow-lg.rounded-xl.overflow-hidden.p-4.sm:p-6.lg:p-8
+  .shadow-lg.rounded-xl.overflow-hidden.p-4.sm:p-6.lg:p-8{style: "background: var(--td-surface);"}
     / Header Section
     .flex.flex-col.sm:flex-row.sm:justify-between.sm:items-center.mb-4.sm:mb-6.gap-3
       %div
         %h1.text-2xl.sm:text-3xl.font-extrabold{style: "color: #F97316;"} Invoice History
-        %p.text-sm.sm:text-base.text-gray-600.mt-1= "Invoices for #{@vendor.company_name}"
+        %p.text-sm.sm:text-base.mt-1{style: "color: var(--td-muted);"}= "Invoices for #{@vendor.company_name}"
 
     / Summary Cards
     .grid.grid-cols-1.sm:grid-cols-2.md:grid-cols-3.gap-3.sm:gap-4.mb-4.sm:mb-6
-      .rounded-lg.p-3.sm:p-4.border{style: "background: linear-gradient(to right, #e8f0f0, #f0f5f5); border-color: #F97316;"}
+      .rounded-lg.p-3.sm:p-4.border{style: "background: var(--td-surface2); border-color: rgba(249,115,22,0.4);"}
         .flex.items-center.justify-between
           %div
             %p.text-xs.sm:text-sm.font-semibold.uppercase{style: "color: #F97316;"} Total Invoices
-            %p.text-2xl.sm:text-3xl.font-bold.text-gray-900= @vendor.invoices.count
-          %i.fas.fa-file-invoice.text-3xl.sm:text-4xl{style: "color: #d1e0e0;"}
+            %p.text-2xl.sm:text-3xl.font-bold{style: "color: var(--td-text);"}= @vendor.invoices.count
+          %i.fas.fa-file-invoice.text-3xl.sm:text-4xl{style: "color: rgba(249,115,22,0.3);"}
 
-      .bg-gradient-to-r.from-amber-50.to-amber-100.rounded-lg.p-3.sm:p-4.border.border-amber-200
+      .rounded-lg.p-3.sm:p-4.border{style: "background: var(--td-surface2); border-color: rgba(217,119,6,0.4);"}
         .flex.items-center.justify-between
           %div
-            %p.text-xs.sm:text-sm.font-semibold.text-amber-600.uppercase Pending Amount
-            %p.text-2xl.sm:text-3xl.font-bold.text-amber-900= number_to_currency(@vendor.total_pending_amount)
-          %i.fas.fa-clock.text-3xl.sm:text-4xl.text-amber-300
+            %p.text-xs.sm:text-sm.font-semibold.uppercase.text-amber-500 Pending Amount
+            %p.text-2xl.sm:text-3xl.font-bold.text-amber-500= number_to_currency(@vendor.total_pending_amount)
+          %i.fas.fa-clock.text-3xl.sm:text-4xl.text-amber-500{style: "opacity: 0.4;"}
 
-      .bg-gradient-to-r.from-emerald-50.to-emerald-100.rounded-lg.p-3.sm:p-4.border.border-emerald-200
+      .rounded-lg.p-3.sm:p-4.border{style: "background: var(--td-surface2); border-color: rgba(16,185,129,0.4);"}
         .flex.items-center.justify-between
           %div
-            %p.text-xs.sm:text-sm.font-semibold.text-emerald-600.uppercase Paid Amount
-            %p.text-2xl.sm:text-3xl.font-bold.text-emerald-900= number_to_currency(@vendor.total_paid_amount)
-          %i.fas.fa-check-circle.text-3xl.sm:text-4xl.text-emerald-300
+            %p.text-xs.sm:text-sm.font-semibold.uppercase.text-emerald-500 Paid Amount
+            %p.text-2xl.sm:text-3xl.font-bold.text-emerald-500= number_to_currency(@vendor.total_paid_amount)
+          %i.fas.fa-check-circle.text-3xl.sm:text-4xl.text-emerald-500{style: "opacity: 0.4;"}
 
     / Invoices Section
     - if @invoices.any?
       / Mobile Card View - Hidden on Desktop
       .block.md:hidden.space-y-3.sm:space-y-4.mb-6
         - @invoices.each do |invoice|
-          .bg-white.rounded-lg.shadow-md.p-3.sm:p-4.border-l-4{style: "border-color: #F97316;"}
+          .rounded-lg.shadow-md.p-3.sm:p-4.border-l-4{style: "background: var(--td-surface2); border-color: #F97316;"}
             .flex.justify-between.items-start.mb-3
               %div
-                %code.text-xs.sm:text-sm.font-mono.bg-gray-100.px-2.py-1.rounded= "Invoice ##{invoice.id}"
-                %p.text-xs.text-gray-500.mt-1
+                %code.text-xs.sm:text-sm.font-mono.px-2.py-1.rounded{style: "background: var(--td-surface); color: var(--td-text);"}= "Invoice ##{invoice.id}"
+                %p.text-xs.mt-1{style: "color: var(--td-muted);"}
                   = invoice.created_at.strftime('%b %d, %Y')
                   •
                   = invoice.created_at.strftime('%I:%M %p')
@@ -46,43 +46,43 @@
                 %i.fas.fa-eye
 
             .space-y-2
-              .flex.justify-between.items-center.py-2.border-b.border-gray-100
-                %span.text-xs.font-medium.text-gray-500 Items
-                %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium{style: "background-color: #d1e0e0; color: #F97316;"}
+              .flex.justify-between.items-center.py-2.border-b{style: "border-color: var(--td-border);"}
+                %span.text-xs.font-medium{style: "color: var(--td-muted);"} Items
+                %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium{style: "background-color: rgba(249,115,22,0.15); color: #F97316;"}
                   %i.fas.fa-list.mr-1
                   = invoice.invoice_items.count
                   = "item".pluralize(invoice.invoice_items.count)
 
-              .flex.justify-between.items-center.py-2.border-b.border-gray-100
-                %span.text-xs.font-medium.text-gray-500 Total Amount
-                %span.text-sm.font-bold.text-gray-900= number_to_currency(invoice.invoice_items.sum(:amount))
+              .flex.justify-between.items-center.py-2.border-b{style: "border-color: var(--td-border);"}
+                %span.text-xs.font-medium{style: "color: var(--td-muted);"} Total Amount
+                %span.text-sm.font-bold{style: "color: var(--td-text);"}= number_to_currency(invoice.invoice_items.sum(:amount))
 
               .flex.justify-between.items-center.py-2
-                %span.text-xs.font-medium.text-gray-500 Status
+                %span.text-xs.font-medium{style: "color: var(--td-muted);"} Status
                 %div
                   - case invoice.payment_status
                   - when 'paid'
-                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium.bg-green-100.text-green-800
+                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium{style: "background: rgba(16,185,129,0.15); color: #10b981;"}
                       %i.fas.fa-check-circle.mr-1
                       Paid
                   - when 'pending'
-                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium.bg-yellow-100.text-yellow-800
+                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium{style: "background: rgba(245,158,11,0.15); color: #f59e0b;"}
                       %i.fas.fa-clock.mr-1
                       Pending
                   - when 'overdue'
-                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium.bg-red-100.text-red-800
+                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium{style: "background: rgba(239,68,68,0.15); color: #ef4444;"}
                       %i.fas.fa-exclamation-circle.mr-1
                       Overdue
                   - when 'cancelled'
-                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium.bg-gray-100.text-gray-800
+                    %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-medium{style: "background: rgba(100,116,139,0.15); color: var(--td-muted);"}
                       %i.fas.fa-ban.mr-1
                       Cancelled
 
       / Desktop Table View - Hidden on Mobile
-      .bg-white.rounded-lg.shadow.overflow-hidden.hidden.md:block
+      .rounded-lg.shadow.overflow-hidden.hidden.md:block{style: "background: var(--td-surface);"}
         .overflow-x-auto
-          %table.min-w-full.divide-y.divide-gray-200
-            %thead{style: "background-color: #e8f0f0;"}
+          %table.min-w-full{style: "border-collapse: separate; border-spacing: 0;"}
+            %thead{style: "background: var(--td-surface2);"}
               %tr
                 %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Invoice #
                 %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Items
@@ -90,37 +90,37 @@
                 %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Created Date
                 %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Status
                 %th.px-6.py-3.text-left.text-xs.font-medium.uppercase.tracking-wider{style: "color: #F97316;"} Actions
-            %tbody.bg-white.divide-y.divide-gray-200
+            %tbody{style: "divide-y: var(--td-border);"}
               - @invoices.each do |invoice|
-                %tr.transition-colors{style: "transition: background-color 0.2s;", onmouseover: "this.style.backgroundColor='#e8f0f0'", onmouseout: "this.style.backgroundColor='white'"}
+                %tr.transition-colors{style: "background: var(--td-surface); border-top: 1px solid var(--td-border);", onmouseover: "this.style.background='var(--td-surface2)'", onmouseout: "this.style.background='var(--td-surface)'"}
                   %td.px-6.py-4.whitespace-nowrap
-                    %code.text-sm.font-mono.bg-gray-100.px-2.py-1.rounded= invoice.id
+                    %code.text-sm.font-mono.px-2.py-1.rounded{style: "background: var(--td-surface2); color: var(--td-text);"}= invoice.id
                   %td.px-6.py-4.whitespace-nowrap
-                    %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium{style: "background-color: #d1e0e0; color: #F97316;"}
+                    %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium{style: "background: rgba(249,115,22,0.15); color: #F97316;"}
                       %i.fas.fa-list.mr-1
                       = invoice.invoice_items.count
                       = "item".pluralize(invoice.invoice_items.count)
                   %td.px-6.py-4.whitespace-nowrap
-                    .text-sm.font-bold.text-gray-900= number_to_currency(invoice.invoice_items.sum(:amount))
+                    .text-sm.font-bold{style: "color: var(--td-text);"}= number_to_currency(invoice.invoice_items.sum(:amount))
                   %td.px-6.py-4.whitespace-nowrap
-                    .text-sm.text-gray-900= invoice.created_at.strftime('%b %d, %Y')
-                    .text-xs.text-gray-500= invoice.created_at.strftime('%I:%M %p')
+                    .text-sm{style: "color: var(--td-text);"}= invoice.created_at.strftime('%b %d, %Y')
+                    .text-xs{style: "color: var(--td-muted);"}= invoice.created_at.strftime('%I:%M %p')
                   %td.px-6.py-4.whitespace-nowrap
                     - case invoice.payment_status
                     - when 'paid'
-                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium.bg-green-100.text-green-800
+                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium{style: "background: rgba(16,185,129,0.15); color: #10b981;"}
                         %i.fas.fa-check-circle.mr-1
                         Paid
                     - when 'pending'
-                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium.bg-yellow-100.text-yellow-800
+                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium{style: "background: rgba(245,158,11,0.15); color: #f59e0b;"}
                         %i.fas.fa-clock.mr-1
                         Pending
                     - when 'overdue'
-                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium.bg-red-100.text-red-800
+                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium{style: "background: rgba(239,68,68,0.15); color: #ef4444;"}
                         %i.fas.fa-exclamation-circle.mr-1
                         Overdue
                     - when 'cancelled'
-                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium.bg-gray-100.text-gray-800
+                      %span.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-xs.font-medium{style: "background: rgba(100,116,139,0.15); color: var(--td-muted);"}
                         %i.fas.fa-ban.mr-1
                         Cancelled
                   %td.px-6.py-4.whitespace-nowrap.text-sm.font-medium
@@ -130,10 +130,10 @@
                         View
 
     - else
-      .bg-gray-50.rounded-lg.p-6.sm:p-8.text-center
-        %i.fas.fa-file-invoice.text-5xl.sm:text-6xl.text-gray-300.mb-3.sm:mb-4
-        %h3.text-lg.sm:text-xl.font-semibold.text-gray-700.mb-2 No Invoices Yet
-        %p.text-sm.sm:text-base.text-gray-500.mb-4 This vendor doesn't have any invoices yet.
+      .rounded-lg.p-6.sm:p-8.text-center{style: "background: var(--td-surface2);"}
+        %i.fas.fa-file-invoice.text-5xl.sm:text-6xl.mb-3.sm:mb-4{style: "color: var(--td-muted);"}
+        %h3.text-lg.sm:text-xl.font-semibold.mb-2{style: "color: var(--td-text);"} No Invoices Yet
+        %p.text-sm.sm:text-base.mb-4{style: "color: var(--td-muted);"} This vendor doesn't have any invoices yet.
 
     / Back Button
     .mt-4.sm:mt-6

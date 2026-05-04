@@ -1,27 +1,25 @@
 .w-full.min-h-screen{ style: "background: var(--td-bg);" }
   .px-4.md:px-12.lg:px-32
-    
+
     = render 'shared/user_header'
-    
-    .mx-auto
-      / Back Button
-      .mb-6
-        = link_to user_home_path, class: 'inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-colors' do
-          %i.fas.fa-arrow-left.mr-2
-          Back to Dashboard
-    
-  .bg-white.rounded-3xl.shadow-xl.p-8.mt-0.mx-auto
+
+    .mb-6
+      = link_to user_home_path, class: 'inline-flex items-center font-semibold transition-colors', style: 'color: #F97316;' do
+        %i.fas.fa-arrow-left.mr-2
+        Back to Dashboard
+
+    .rounded-3xl.shadow-xl.p-8.mt-0{ style: "background: var(--td-surface);" }
     / Flash messages
     - if flash[:alert]
-      .mb-8.p-4.bg-red-50.border-l-4.border-red-500.rounded-lg.text-red-700.font-medium.flex.items-center
+      .mb-8.p-4.border-l-4.border-red-500.rounded-lg.font-medium.flex.items-center{ style: "background: rgba(239,68,68,0.1); color: #ef4444;" }
         %i.fas.fa-exclamation-circle.mr-3.text-lg
         = flash[:alert]
 
     / Header
     .container
       .flex.flex-col.sm:flex-row.items-start.sm:items-center.justify-between.mb-8.gap-4
-        %h2.text-2xl.sm:text-3xl.font-bold.text-gray-900.flex.items-center
-          %i.fas.fa-calendar-alt.mr-2.sm:mr-4.text-blue-600.text-xl.sm:text-2xl
+        %h2.text-2xl.sm:text-3xl.font-bold.flex.items-center{ style: "color: var(--td-text);" }
+          %i.fas.fa-calendar-alt.mr-2.sm:mr-4.text-xl.sm:text-2xl{ style: "color: #F97316;" }
           - if params[:filter] == 'active'
             Active Bookings
           - elsif params[:filter] == 'cancelled'
@@ -35,23 +33,23 @@
               .relative.w-full
                 = f.select :filter,
                     options_for_select([['All Bookings', 'all'],['Active Bookings', 'active'],['Cancelled Bookings', 'cancelled']], params[:filter] || 'all'),{},
-                    { class: 'appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors shadow-sm hover:border-gray-400 w-full',id: 'booking-filter',onchange: 'this.form.submit()'}
+                    { class: 'appearance-none border rounded-lg px-4 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 transition-colors shadow-sm w-full', style: 'background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);', id: 'booking-filter', onchange: 'this.form.submit()' }
                 .absolute.inset-y-0.right-0.flex.items-center.pr-2.pointer-events-none
-                  %i.fas.fa-chevron-down.text-gray-400.text-xs
+                  %i.fas.fa-chevron-down.text-xs{ style: "color: var(--td-muted);" }
 
       / Notifications Section
       - if current_user.bookings_notification?
         .grid.grid-cols-1.md:grid-cols-2.gap-3.md:gap-4.mb-6.md:mb-8
           / Unpaid Bookings Notification
           - if current_user.unpaid_bookings.any?
-            .bg-orange-50.border-l-4.border-orange-500.rounded-lg.p-3.md:p-4.shadow-sm
+            .border-l-4.border-orange-500.rounded-lg.p-3.md:p-4.shadow-sm{ style: "background: rgba(249,115,22,0.08);" }
               .flex.items-start.gap-2.md:gap-3
                 %i.fas.fa-credit-card.text-orange-500.text-lg.md:text-xl.mt-1
                 .flex-1
-                  %h3.text-sm.md:text-base.font-semibold.text-orange-800.mb-1 Payment Required
-                  %p.text-orange-700.text-xs.md:text-sm.mb-2
+                  %h3.text-sm.md:text-base.font-semibold.mb-1{ style: "color: #F97316;" } Payment Required
+                  %p.text-xs.md:text-sm.mb-2{ style: "color: var(--td-text);" }
                     #{current_user.unpaid_bookings.count} booking#{current_user.unpaid_bookings.count == 1 ? '' : 's'} awaiting payment
-                  %ul.text-orange-600.text-xs.space-y-1.mb-2.md:mb-3
+                  %ul.text-xs.space-y-1.mb-2.md:mb-3{ style: "color: var(--td-muted);" }
                     - current_user.unpaid_bookings.limit(3).each do |booking|
                       %li.flex.items-center.gap-1
                         %i.fas.fa-circle.text-xs
@@ -60,29 +58,29 @@
                         - else
                           %span.truncate Deleted Car - #{booking.start_date.strftime('%b %d')}
                     - if current_user.unpaid_bookings.count > 3
-                      %li.text-orange-500.font-semibold +#{current_user.unpaid_bookings.count - 3} more...
+                      %li.font-semibold{ style: "color: #F97316;" } +#{current_user.unpaid_bookings.count - 3} more...
 
           / Failed Payments Notification
           - if current_user.failed_payments.any?
-            .bg-red-50.border-l-4.border-red-700.rounded-lg.p-3.md:p-4.shadow-sm
+            .border-l-4.border-red-500.rounded-lg.p-3.md:p-4.shadow-sm{ style: "background: rgba(239,68,68,0.08);" }
               .flex.items-start.gap-2.md:gap-3
-                %i.fas.fa-exclamation-circle.text-red-700.text-lg.md:text-xl.mt-1
+                %i.fas.fa-exclamation-circle.text-red-500.text-lg.md:text-xl.mt-1
                 .flex-1
-                  %h3.text-sm.md:text-base.font-semibold.text-red-800.mb-1 Payment Failed
-                  %p.text-red-700.text-xs.md:text-sm.mb-2
+                  %h3.text-sm.md:text-base.font-semibold.text-red-500.mb-1 Payment Failed
+                  %p.text-xs.md:text-sm.mb-2{ style: "color: var(--td-text);" }
                     #{current_user.failed_payments.count} payment#{current_user.failed_payments.count == 1 ? '' : 's'} failed
-                  %p.text-red-600.text-xs.mb-2.md:mb-3 Please retry payment or contact support
-                  = link_to users_bookings_path, class: 'inline-flex items-center text-red-700 hover:text-red-900 font-semibold text-xs md:text-sm' do
+                  %p.text-xs.mb-2.md:mb-3{ style: "color: var(--td-muted);" } Please retry payment or contact support
+                  = link_to users_bookings_path, class: 'inline-flex items-center font-semibold text-xs md:text-sm', style: 'color: #ef4444;' do
                     Retry Payment
                     %i.fas.fa-arrow-right.ml-1
 
       / Filter Summary
       - if @bookings.any? || params[:filter].present?
-        .mb-6.p-4.bg-blue-50.rounded-lg.border.border-blue-200
+        .mb-6.p-4.rounded-lg.border{ style: "background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.3);" }
           .flex.items-center.justify-between
             .flex.items-center
-              %i.fas.fa-filter.mr-2.text-blue-600
-              %span.text-sm.font-medium.text-blue-800
+              %i.fas.fa-filter.mr-2{ style: "color: #F97316;" }
+              %span.text-sm.font-medium{ style: "color: var(--td-text);" }
                 - case params[:filter]
                 - when 'active'
                   Showing #{@bookings.count} active booking#{@bookings.count == 1 ? '' : 's'} (pending and confirmed)
@@ -91,39 +89,42 @@
                 - else
                   Showing #{@bookings.count} booking#{@bookings.count == 1 ? '' : 's'} (all statuses)
             - if params[:filter].present? && params[:filter] != 'all'
-              = link_to 'Clear Filter', users_bookings_path, class: 'text-sm text-blue-600 hover:text-blue-800 underline'
+              = link_to 'Clear Filter', users_bookings_path, class: 'text-sm underline', style: 'color: #F97316;'
 
       / Bookings List
       - if @bookings.any?
-        .space-y-8
+        .space-y-8.flex.flex-col.items-center
           - @bookings.each do |booking|
-            .bg-white.rounded-2xl.shadow-md.hover:shadow-lg.transition-shadow.duration-300.border.border-gray-100.overflow-hidden.relative
+            .rounded-2xl.shadow-md.hover:shadow-lg.transition-shadow.duration-300.overflow-hidden.relative.w-full{ style: "background: var(--td-surface2); border: 1px solid var(--td-border);" }
               / Cancel Button - Top Right
               - if (booking.status == 'pending' || booking.status == 'confirmed') && !booking.payment_processed?
                 .absolute.top-2.right-2.lg:top-4.lg:right-4.z-10
                   = button_to users_cancel_booking_path(booking.id),
                       method: :patch,
-                      class: 'bg-red-600 hover:bg-red-700 text-white px-2 py-1 lg:px-3 lg:py-1 rounded-lg text-xs lg:text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center',
-                      data: { confirm: 'Are you sure you want to cancel this booking? This action cannot be undone.',turbo_confirm: 'Are you sure you want to cancel this booking? This action cannot be undone.'} do
+                      class: 'text-white px-2 py-1 lg:px-3 lg:py-1 rounded-lg text-xs lg:text-sm font-medium transition-all duration-200 shadow-md flex items-center',
+                      style: 'background-color: #ef4444;',
+                      onmouseover: "this.style.backgroundColor='#dc2626'",
+                      onmouseout: "this.style.backgroundColor='#ef4444'",
+                      data: { confirm: 'Are you sure you want to cancel this booking? This action cannot be undone.', turbo_confirm: 'Are you sure you want to cancel this booking? This action cannot be undone.' } do
                     %i.fas.fa-times.mr-1.text-xs.lg:text-sm
                     %span.hidden.sm:inline Cancel
-              
+
               .flex.flex-col.lg:flex-row
                 / Car Image Section
-                .relative.w-full.lg_w-33.bg-gray-50.flex.items-center.justify-center.p-4.lg:p-6
-                  .w-full.h-48.lg:h-full.bg-gray-100.rounded-lg.overflow-hidden.flex.items-center.justify-center
+                .relative.w-full.lg_w-33.flex.items-center.justify-center.p-4.lg:p-6{ style: "background: var(--td-surface);" }
+                  .w-full.h-48.lg:h-full.rounded-lg.overflow-hidden.flex.items-center.justify-center{ style: "background: var(--td-surface2);" }
                     - if booking.car
                       = car_main_image(booking.car, size: [400, 300])
                     - else
-                      %i.fas.fa-car-crash.text-4xl.text-gray-300
+                      %i.fas.fa-car-crash.text-4xl{ style: "color: var(--td-muted);" }
                   / Status Badge
                   .absolute.top-4.left-4
-                    - badge_class = case booking.status
-                    - when 'confirmed' then 'bg-green-100 text-green-800'
-                    - when 'pending' then 'bg-yellow-100 text-yellow-800'
-                    - when 'cancelled' then 'bg-red-100 text-red-800'
-                    - else 'bg-gray-100 text-gray-800'
-                    %span.inline-flex.items-center.px-2.py-1.lg:px-3.lg:py-1.rounded-full.text-xs.lg:text-sm.font-medium.shadow-sm{class: badge_class}
+                    - badge_style = case booking.status
+                    - when 'confirmed' then 'background: rgba(16,185,129,0.15); color: #10b981;'
+                    - when 'pending'   then 'background: rgba(245,158,11,0.15); color: #f59e0b;'
+                    - when 'cancelled' then 'background: rgba(239,68,68,0.15);  color: #ef4444;'
+                    - else                  'background: rgba(100,116,139,0.15); color: #64748b;'
+                    %span.inline-flex.items-center.px-2.py-1.lg:px-3.lg:py-1.rounded-full.text-xs.lg:text-sm.font-medium.shadow-sm{ style: badge_style }
                       - if booking.status == 'confirmed'
                         %i.fas.fa-check-circle.mr-1.lg:mr-2.text-xs.lg:text-sm
                       - elsif booking.status == 'pending'
@@ -138,56 +139,54 @@
                     / Car Info
                     %div
                       - if booking.car
-                        %h3.text-xl.lg:text-2xl.font-bold.text-gray-900.mb-2= "#{booking.car.brand} #{booking.car.model}"
+                        %h3.text-xl.lg:text-2xl.font-bold.mb-2{ style: "color: var(--td-text);" }= "#{booking.car.brand} #{booking.car.model}"
                         .flex.flex-wrap.items-center.gap-x-3.lg:gap-x-6.gap-y-2.lg:gap-y-3.mb-4.text-sm.lg:text-base
-                          .flex.items-center.text-gray-600
-                            %i.fas.fa-calendar.mr-1.lg:mr-2.text-blue-500.text-sm
+                          .flex.items-center{ style: "color: var(--td-muted);" }
+                            %i.fas.fa-calendar.mr-1.lg:mr-2.text-sm{ style: "color: #F97316;" }
                             = booking.car.year
-                          .flex.items-center.text-gray-600
-                            %i.fas.fa-palette.mr-1.lg:mr-2.text-purple-500.text-sm
+                          .flex.items-center{ style: "color: var(--td-muted);" }
+                            %i.fas.fa-palette.mr-1.lg:mr-2.text-sm{ style: "color: #F97316;" }
                             = booking.car.color
-                          .flex.items-center.text-gray-600
-                            %i.fas.fa-tag.mr-1.lg:mr-2.text-green-500.text-sm
+                          .flex.items-center{ style: "color: var(--td-muted);" }
+                            %i.fas.fa-tag.mr-1.lg:mr-2.text-sm{ style: "color: #F97316;" }
                             = booking.car.category
                       - else
-                        %h3.text-xl.lg:text-2xl.font-bold.text-red-500.italic.mb-2 Deleted Car
-                        .text-sm.text-gray-500.mb-4 This car is no longer available
-                      .text-lg.lg:text-xl.font-semibold.text-blue-600.mb-4
+                        %h3.text-xl.lg:text-2xl.font-bold.italic.mb-2{ style: "color: #ef4444;" } Deleted Car
+                        .text-sm.mb-4{ style: "color: var(--td-muted);" } This car is no longer available
+                      .text-lg.lg:text-xl.font-semibold.mb-4{ style: "color: #F97316;" }
                         = number_to_currency(booking.selected_price)
                         - if booking.selected_period == 'daily'
-                          %span.text-xs.lg:text-sm.font-normal.text-gray-500.ml-1 per day
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per day
                         - elsif booking.selected_period == 'weekly'
-                          %span.text-xs.lg:text-sm.font-normal.text-gray-500.ml-1 per week
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per week
                         - elsif booking.selected_period == 'monthly'
-                          %span.text-xs.lg:text-sm.font-normal.text-gray-500.ml-1 per month
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per month
                         - elsif ['5 Hours', '10 Hours'].include?(booking.selected_period)
-                          %span.text-xs.lg:text-sm.font-normal.text-gray-500.ml-1 per service
-
-                          
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per service
 
                     / Rental Period
-                    .bg-gray-50.rounded-xl.p-3.mb-4.lg:mb-6
+                    .rounded-xl.p-3.mb-4.lg:mb-6{ style: "background: var(--td-surface); border: 1px solid var(--td-border);" }
                       .flex.flex-col.sm:flex-row.sm:items-center.sm:justify-between.gap-3.sm:gap-4.text-xs.sm:text-sm
                         .flex.flex-wrap.items-center.gap-2.sm:gap-4
-                          .flex.items-center
-                            %i.fas.fa-calendar-day.mr-1.sm:mr-2.text-blue-500.text-sm
+                          .flex.items-center{ style: "color: var(--td-text);" }
+                            %i.fas.fa-calendar-day.mr-1.sm:mr-2.text-sm{ style: "color: #F97316;" }
                             %span.font-medium= booking.start_date.strftime('%b %d, %Y')
-                          
+
                           - unless ['5 Hours', '10 Hours'].include?(booking.selected_period)
-                            %i.fas.fa-arrow-right.text-gray-400.text-xs
-                            .flex.items-center
-                              %i.fas.fa-calendar-day.mr-1.sm:mr-2.text-blue-500.text-sm
+                            %i.fas.fa-arrow-right.text-xs{ style: "color: var(--td-muted);" }
+                            .flex.items-center{ style: "color: var(--td-text);" }
+                              %i.fas.fa-calendar-day.mr-1.sm:mr-2.text-sm{ style: "color: #F97316;" }
                               %span.font-medium= booking.end_date.strftime('%b %d, %Y')
 
-                        .flex.items-center.border-t.sm:border-t-0.sm:border-l.border-gray-200.pt-2.sm:pt-0.sm:pl-4
-                          %i.fas.fa-clock.mr-1.sm:mr-2.text-blue-500.text-sm
+                        .flex.items-center.border-t.sm:border-t-0.sm:border-l.pt-2.sm:pt-0.sm:pl-4{ style: "border-color: var(--td-border);" }
+                          %i.fas.fa-clock.mr-1.sm:mr-2.text-sm{ style: "color: #F97316;" }
                           - if ['5 Hours', '10 Hours'].include?(booking.selected_period)
-                            %span.font-bold.text-blue-600= booking.selected_period
+                            %span.font-bold{ style: "color: #F97316;" }= booking.selected_period
                           - else
-                            %span.font-bold.text-blue-600= pluralize((booking.end_date - booking.start_date).to_i, 'day')
+                            %span.font-bold{ style: "color: #F97316;" }= pluralize((booking.end_date - booking.start_date).to_i, 'day')
 
                     / Payment Section
-                    .mt-auto.pt-3.lg:pt-4.border-t.border-gray-200
+                    .mt-auto.pt-3.lg:pt-4.border-t{ style: "border-color: var(--td-border);" }
                       .flex.flex-col.gap-3.lg:gap-4
                         .flex-1
                           - duration_days = (booking.end_date - booking.start_date).to_i
@@ -199,9 +198,8 @@
                             - full_weeks = duration_days / 7
                             - remaining_days = duration_days % 7
                             - total_amount = (full_weeks * weekly_price) + (remaining_days * daily_price)
-
-                            %p.text-xs.sm:text-sm.text-gray-600.mb-2
-                              %span.font-medium Pricing:
+                            %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
+                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
                               %span.ml-1
                                 = "#{full_weeks} week#{full_weeks == 1 ? '' : 's'} × AED #{weekly_price.to_i}"
                                 - if remaining_days > 0
@@ -212,9 +210,8 @@
                             - full_months = duration_days / 30
                             - remaining_days = duration_days % 30
                             - total_amount = (full_months * monthly_price) + (remaining_days * daily_price)
-
-                            %p.text-xs.sm:text-sm.text-gray-600.mb-2
-                              %span.font-medium Pricing:
+                            %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
+                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
                               %span.ml-1
                                 = "#{full_months} month#{full_months == 1 ? '' : 's'} × AED #{monthly_price.to_i}"
                                 - if remaining_days > 0
@@ -222,52 +219,52 @@
 
                           - elsif ['5 Hours', '10 Hours'].include?(booking.selected_period)
                             - total_amount = booking.selected_price.to_f
-                            %p.text-xs.sm:text-sm.text-gray-600.mb-2
-                              %span.font-medium Pricing:
+                            %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
+                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
                               %span.ml-1= "1 Service (#{booking.selected_period}) × AED #{total_amount.to_i}"
 
                           - else
                             - total_amount = duration_days * daily_price
-                            %p.text-xs.sm:text-sm.text-gray-600.mb-2
-                              %span.font-medium Pricing:
+                            %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
+                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
                               %span.ml-1= "#{duration_days} days × AED #{daily_price.to_i}"
 
                           / Discount if applicable
                           - if booking.has_discount?
-                            %p.text-xs.sm:text-sm.text-red-600.mb-2.flex.items-center
+                            %p.text-xs.sm:text-sm.mb-2.flex.items-center{ style: "color: #ef4444;" }
                               %i.fas.fa-tag.mr-1
                               %span.font-medium= "Discount (#{booking.discount_percentage}% OFF):"
                               %span.ml-1= "- AED #{booking.discount_amount.to_i}"
 
                           / Delivery/Pickup Charge if selected
                           - if booking.delivery_option.present?
-                            %p.text-xs.sm:text-sm.text-purple-600.mb-2
-                              %i.fas{class: booking.delivery_option == 'delivery' ? 'fa-shipping-fast' : 'fa-car'}
-                              %span.font-medium= "#{booking.delivery_option.capitalize} Charge:"
+                            %p.text-xs.sm:text-sm.mb-2{ style: "color: #a855f7;" }
+                              %i{class: booking.delivery_option == 'delivery' ? 'fas fa-shipping-fast' : 'fas fa-car'}
+                              %span.font-medium= " #{booking.delivery_option.capitalize} Charge:"
                               %span.ml-1= "AED #{booking.delivery_charge.to_i}"
 
-                          / Total Amount with discount display
+                          / Total Amount
                           - if booking.has_discount?
                             .flex.flex-col.items-start
-                              %p.text-sm.text-gray-400.line-through
+                              %p.text-sm.line-through{ style: "color: var(--td-muted);" }
                                 = number_to_currency(total_amount + booking.delivery_charge)
-                              %p.text-xl.lg:text-2xl.font-bold.text-green-600
+                              %p.text-xl.lg:text-2xl.font-bold{ style: "color: #10b981;" }
                                 = number_to_currency(booking.total_amount)
                           - else
-                            %p.text-xl.lg:text-2xl.font-bold.text-green-600
+                            %p.text-xl.lg:text-2xl.font-bold{ style: "color: #10b981;" }
                               = number_to_currency(total_amount + booking.delivery_charge)
 
-                        / Status Pill + Button Container
+                        / Status Pills + Action Button
                         .flex.flex-col.sm:flex-row.items-stretch.sm:items-center.gap-2.sm:gap-3
-                          / Status Pills - Always Visible
+                          / Status Pills
                           .flex.flex-wrap.gap-2
                             / Booking Status
-                            - badge_class = case booking.status
-                            - when 'confirmed' then 'bg-green-100 text-green-800'
-                            - when 'pending' then 'bg-yellow-100 text-yellow-800'
-                            - when 'cancelled' then 'bg-red-100 text-red-800'
-                            - else 'bg-gray-100 text-gray-800'
-                            %span.inline-flex.items-center.justify-center.px-3.py-1.rounded-full.text-xs.font-medium.shadow-sm.whitespace-nowrap{class: badge_class}
+                            - badge_style = case booking.status
+                            - when 'confirmed' then 'background: rgba(16,185,129,0.15); color: #10b981;'
+                            - when 'pending'   then 'background: rgba(245,158,11,0.15); color: #f59e0b;'
+                            - when 'cancelled' then 'background: rgba(239,68,68,0.15);  color: #ef4444;'
+                            - else                  'background: rgba(100,116,139,0.15); color: #64748b;'
+                            %span.inline-flex.items-center.justify-center.px-3.py-1.rounded-full.text-xs.font-medium.shadow-sm.whitespace-nowrap{ style: badge_style }
                               - if booking.status == 'confirmed'
                                 %i.fas.fa-check-circle.mr-1.text-xs
                               - elsif booking.status == 'pending'
@@ -277,14 +274,14 @@
                               = booking.status.titleize
 
                             / Payment Status
-                            - payment_badge_class = case booking.payment_status
-                            - when 'paid' then 'bg-green-100 text-green-800'
-                            - when 'pending' then 'bg-yellow-100 text-yellow-800'
-                            - when 'unpaid' then 'bg-red-100 text-red-800'
-                            - when 'refunded' then 'bg-purple-100 text-purple-800'
-                            - when 'refund_pending' then 'bg-orange-100 text-orange-800'
-                            - else 'bg-gray-100 text-gray-800'
-                            %span.inline-flex.items-center.justify-center.px-3.py-1.rounded-full.text-xs.font-medium.shadow-sm.whitespace-nowrap{class: payment_badge_class}
+                            - pay_style = case booking.payment_status
+                            - when 'paid'           then 'background: rgba(16,185,129,0.15);  color: #10b981;'
+                            - when 'pending'        then 'background: rgba(245,158,11,0.15);  color: #f59e0b;'
+                            - when 'unpaid'         then 'background: rgba(239,68,68,0.15);   color: #ef4444;'
+                            - when 'refunded'       then 'background: rgba(168,85,247,0.15);  color: #a855f7;'
+                            - when 'refund_pending' then 'background: rgba(249,115,22,0.15);  color: #F97316;'
+                            - else                       'background: rgba(100,116,139,0.15); color: #64748b;'
+                            %span.inline-flex.items-center.justify-center.px-3.py-1.rounded-full.text-xs.font-medium.shadow-sm.whitespace-nowrap{ style: pay_style }
                               - if booking.payment_status == 'paid'
                                 %i.fas.fa-check-circle.mr-1.text-xs
                               - elsif booking.payment_status == 'pending'
@@ -299,34 +296,33 @@
 
                           / Action Buttons
                           - if booking.cancelled_with_refund?
-                            / View Details Button for Cancelled/Refunded Bookings
-                            = link_to users_booking_path(booking), class: 'bg-red-600 hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center' do
+                            = link_to users_booking_path(booking), class: 'text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-200 shadow-md flex items-center justify-center', style: 'background-color: #ef4444;', onmouseover: "this.style.backgroundColor='#dc2626'", onmouseout: "this.style.backgroundColor='#ef4444'" do
                               %i.fas.fa-exclamation-circle.mr-2
                               View Details
                           - elsif !current_user.documents_approved?
-                            .payment-disabled.bg-gray-300.text-gray-500.px-4.sm:px-6.py-2.sm:py-3.rounded-lg.text-sm.sm:text-base.font-semibold.cursor-not-allowed.flex.items-center.justify-center.opacity-60{ title: 'Payment is disabled until your documents are approved' }
+                            .payment-disabled.px-4.sm:px-6.py-2.sm:py-3.rounded-lg.text-sm.sm:text-base.font-semibold.cursor-not-allowed.flex.items-center.justify-center.opacity-60{ style: 'background: var(--td-surface2); color: var(--td-muted); border: 1px solid var(--td-border);', title: 'Payment is disabled until your documents are approved' }
                               %i.fas.fa-lock.mr-2
                               Payment Disabled
                           - else
-                            = link_to users_payment_path(booking.id), class: 'bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center' do
+                            = link_to users_payment_path(booking.id), class: 'text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-200 shadow-md flex items-center justify-center', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
                               %i.fas.fa-eye.mr-2
                               View/Pay Booking
-                        
+
 
       - else
         .text-center.py-16
           .max-w-md.mx-auto
-            .bg-gray-50.rounded-3xl.p-8.flex.flex-col.items-center
-              .w-20.h-20.rounded-full.bg-blue-50.flex.items-center.justify-center.mb-6
-                %i.fas.fa-calendar-times.text-3xl.text-blue-400
-              %h3.text-xl.font-semibold.text-gray-800.mb-3 No Bookings Yet
-              %p.text-gray-600.mb-6 It looks like you haven't made any bookings yet. Browse our collection to find your perfect car.
-              = link_to cars_path, class: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow hover:from-blue-700 hover:to-blue-800 transition-all duration-200 inline-flex items-center space-x-2' do
+            .rounded-3xl.p-8.flex.flex-col.items-center{ style: "background: var(--td-surface2);" }
+              .w-20.h-20.rounded-full.flex.items-center.justify-center.mb-6{ style: "background: rgba(249,115,22,0.1);" }
+                %i.fas.fa-calendar-times.text-3xl{ style: "color: #F97316;" }
+              %h3.text-xl.font-semibold.mb-3{ style: "color: var(--td-text);" } No Bookings Yet
+              %p.mb-6{ style: "color: var(--td-muted);" } It looks like you haven't made any bookings yet. Browse our collection to find your perfect car.
+              = link_to cars_path, class: 'text-white font-semibold py-3 px-8 rounded-lg shadow transition-all duration-200 inline-flex items-center space-x-2', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
                 %i.fas.fa-car
                 %span Explore Cars
+
 :javascript
   document.addEventListener('DOMContentLoaded', function() {
-    // Enhanced cancel booking confirmation
     document.querySelectorAll('form[action*="/cancel"]').forEach(function(form) {
       form.addEventListener('submit', function(e) {
         if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
@@ -335,12 +331,10 @@
         }
       });
     });
-    
-    // Filter dropdown enhancement
+
     const filterSelect = document.getElementById('booking-filter');
     if (filterSelect) {
       filterSelect.addEventListener('change', function() {
-        // Add loading state
         const form = document.getElementById('filter-form');
         if (form) {
           const submitButton = document.createElement('button');
@@ -351,8 +345,7 @@
         }
       });
     }
-    
-    // Original pay button logic for other cases
+
     document.querySelectorAll('.pay-btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         if (btn.dataset.pendingDocs === 'true') {

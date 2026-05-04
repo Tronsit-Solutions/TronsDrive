@@ -1,51 +1,51 @@
-.container.mx-auto.max-w-7xl.p-2.sm:p-4.md:p-8.pt-5
-  .bg-white.rounded-xl.sm:rounded-3xl.shadow-2xl.overflow-hidden
+.container.mx-auto.max-w-7xl.p-2.sm:p-4.md:p-8.pt-20.sm:pt-24
+  .rounded-xl.sm:rounded-3xl.shadow-2xl.overflow-hidden{ style: "background: var(--td-surface);" }
     / Header
-    .p-3.sm:p-4.text-center
-      %h1.text-xl.sm:text-2xl.md:text-3xl.font-bold Payment Details
-      %p.text-sm.sm:text-base Complete your booking securely
+    .p-3.sm:p-4.text-center.border-b{ style: "border-color: var(--td-border);" }
+      %h1.text-xl.sm:text-2xl.md:text-3xl.font-bold{ style: "color: var(--td-text);" } Payment Details
+      %p.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Complete your booking securely
 
     .p-4.sm:p-6.md:p-8
       .grid.grid-cols-1.lg:grid-cols-2.gap-4.sm:gap-6.md:gap-8
         / Left Half - Car Details
         .space-y-4.sm:space-y-6
           / Car Information
-          .bg-gray-50.rounded-xl.sm:rounded-2xl.p-4.sm:p-6
-            %h2.text-lg.sm:text-xl.md:text-2xl.font-bold.text-gray-800.mb-3.sm:mb-4
-              %i.fas.fa-car.mr-2.sm:mr-3.text-blue-600.text-base.sm:text-lg
+          .rounded-xl.sm:rounded-2xl.p-4.sm:p-6{ style: "background: var(--td-surface2); border: 1px solid var(--td-border);" }
+            %h2.text-lg.sm:text-xl.md:text-2xl.font-bold.mb-3.sm:mb-4{ style: "color: var(--td-text);" }
+              %i.fas.fa-car.mr-2.sm:mr-3.text-base.sm:text-lg{ style: "color: #F97316;" }
               Car Information
 
             .mb-3.sm:mb-4.p-1.sm:p-2
               = car_main_image(@car, size: [400, 400])
 
               .flex-1.mt-3.sm:mt-4
-                %h3.text-base.sm:text-lg.md:text-xl.font-bold.text-gray-800= "#{@car.brand} #{@car.model}"
-                %p.text-sm.sm:text-base.text-gray-600= "#{@car.year} • #{@car.color}"
-                %p.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(@car.daily_price)
-                %span.text-xs.sm:text-sm.text-gray-500 per day
+                %h3.text-base.sm:text-lg.md:text-xl.font-bold{ style: "color: var(--td-text);" }= "#{@car.brand} #{@car.model}"
+                %p.text-sm.sm:text-base{ style: "color: var(--td-muted);" }= "#{@car.year} • #{@car.color}"
+                %p.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(@car.daily_price)
+                %span.text-xs.sm:text-sm{ style: "color: var(--td-muted);" } per day
 
           / Rental Period
-          .bg-green-50.rounded-xl.sm:rounded-2xl.p-4.sm:p-6
-            %h3.text-base.sm:text-lg.font-semibold.text-gray-800.mb-3.sm:mb-4
-              %i.fas.fa-calendar.mr-2.text-green-600.text-sm.sm:text-base
+          .rounded-xl.sm:rounded-2xl.p-4.sm:p-6{ style: "background: var(--td-surface2); border: 1px solid var(--td-border);" }
+            %h3.text-base.sm:text-lg.font-semibold.mb-3.sm:mb-4{ style: "color: var(--td-text);" }
+              %i.fas.fa-calendar.mr-2.text-sm.sm:text-base{ style: "color: #10b981;" }
               Rental Period
             .space-y-2.sm:space-y-3
-              .flex.justify-between.items-center.py-2.border-b.border-green-200
-                %span.text-sm.sm:text-base.text-gray-600 Start Date
-                %span.text-sm.sm:text-base.font-semibold= @booking.start_date.strftime('%B %d, %Y')
-              .flex.justify-between.items-center.py-2.border-b.border-green-200
-                %span.text-sm.sm:text-base.text-gray-600 End Date
-                %span.text-sm.sm:text-base.font-semibold= @booking.end_date.strftime('%B %d, %Y')
+              .flex.justify-between.items-center.py-2.border-b{ style: "border-color: var(--td-border);" }
+                %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Start Date
+                %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= @booking.start_date.strftime('%B %d, %Y')
+              .flex.justify-between.items-center.py-2.border-b{ style: "border-color: var(--td-border);" }
+                %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } End Date
+                %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= @booking.end_date.strftime('%B %d, %Y')
               .flex.justify-between.items-center.py-2
-                %span.text-sm.sm:text-base.text-gray-600 Duration
-                %span.text-sm.sm:text-base.font-semibold.text-green-600= pluralize(@days, 'day')
+                %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Duration
+                %span.text-sm.sm:text-base.font-semibold{ style: "color: #10b981;" }= pluralize(@days, 'day')
 
         / Right Half - Payment Summary
         .space-y-4.sm:space-y-6
           / Payment Summary
-          .bg-blue-50.rounded-xl.sm:rounded-2xl.p-4.sm:p-6
-            %h2.text-lg.sm:text-xl.md:text-2xl.font-bold.text-gray-800.mb-4.sm:mb-6
-              %i.fas.fa-receipt.mr-2.sm:mr-3.text-blue-600.text-base.sm:text-lg
+          .rounded-xl.sm:rounded-2xl.p-4.sm:p-6{ style: "background: var(--td-surface2); border: 1px solid var(--td-border);" }
+            %h2.text-lg.sm:text-xl.md:text-2xl.font-bold.mb-4.sm:mb-6{ style: "color: var(--td-text);" }
+              %i.fas.fa-receipt.mr-2.sm:mr-3.text-base.sm:text-lg{ style: "color: #F97316;" }
               Payment Summary
 
             .space-y-3.sm:space-y-4
@@ -63,64 +63,64 @@
                 - if @booking.has_discount?
                   - subtotal = subtotal - (@booking.discount_amount)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Weekly Rate
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(weekly_price)
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Daily Rate
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(daily_price)
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Rental Duration
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Weekly Rate
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(weekly_price)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Daily Rate
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(daily_price)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Rental Duration
                   %span.text-sm.sm:text-base.font-semibold
                     = "#{full_weeks} week#{full_weeks == 1 ? '' : 's'}"
                     - if remaining_days > 0
                       %span.ml-1
                         = "+ #{remaining_days} day#{remaining_days == 1 ? '' : 's'}"
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-xs.sm:text-sm.text-gray-700
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-xs.sm:text-sm{ style: "color: var(--td-muted);" }
                     = "#{full_weeks} week#{full_weeks == 1 ? '' : 's'} × "
-                    %span.font-semibold= number_to_currency(weekly_price)
-                  %span.text-sm.sm:text-base.font-semibold.text-blue-600= number_to_currency(full_weeks * weekly_price)
+                    %span.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(weekly_price)
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(full_weeks * weekly_price)
 
                 - if remaining_days > 0
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                    %span.text-xs.sm:text-sm.text-gray-700
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-xs.sm:text-sm{ style: "color: var(--td-muted);" }
                       = "#{remaining_days} day#{remaining_days == 1 ? '' : 's'} × "
-                      %span.font-semibold= number_to_currency(daily_price)
-                    %span.text-sm.sm:text-base.font-semibold.text-blue-600= number_to_currency(remaining_days * daily_price)
+                      %span.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(daily_price)
+                    %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(remaining_days * daily_price)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Subtotal
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(rental_subtotal)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Subtotal
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(rental_subtotal)
 
                 / Discount if applicable
                 - if @booking.has_discount?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200.bg-red-50
-                    %span.text-sm.sm:text-base.text-gray-700.flex.items-center.gap-2
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base.flex.items-center.gap-2
                       %i.fas.fa-tag.text-red-500
                       = "Discount (#{@booking.discount_percentage}% OFF)"
                     %span.text-sm.sm:text-base.font-bold.text-red-600= "- #{number_to_currency(@booking.discount_amount)}"
 
                 / Delivery/Pickup Charge if selected
                 - if @booking.delivery_option.present?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                    %span.text-sm.sm:text-base.text-gray-700
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base
                       = @booking.delivery_option.capitalize
                       Charge
-                    %span.text-sm.sm:text-base.font-semibold.text-purple-600= number_to_currency(@booking.delivery_charge)
+                    %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(@booking.delivery_charge)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Tax
-                  %span.text-sm.sm:text-base.text-green-600 Free
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Tax
+                  %span.text-sm.sm:text-base{ style: "color: #10b981;" } Free
                 .flex.justify-between.items-center.py-3.sm:py-4
-                  %span.text-base.sm:text-lg.md:text-xl.font-bold.text-gray-800 Total Amount
+                  %span.text-base.sm:text-lg.md:text-xl.font-bold{ style: "color: var(--td-text);" } Total Amount
                   - if @booking.has_discount?
                     - original_total_with_delivery = rental_subtotal + @booking.delivery_charge
                     .flex.flex-col.items-end
-                      %span.text-sm.text-gray-400.line-through= number_to_currency(original_total_with_delivery)
-                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                      %span.text-sm.line-through{ style: "color: var(--td-muted);" }= number_to_currency(original_total_with_delivery)
+                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
                   - else
-                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
 
               - elsif @selected_period == 'monthly'
                 - full_months = duration_days / 30
@@ -130,62 +130,62 @@
                 - if @booking.has_discount?
                   - subtotal = subtotal - (@booking.discount_amount)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Monthly Rate
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(monthly_price)
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Daily Rate
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(daily_price)
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Rental Duration
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Monthly Rate
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(monthly_price)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Daily Rate
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(daily_price)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Rental Duration
                   %span.text-sm.sm:text-base.font-semibold
                     = "#{full_months} month#{full_months == 1 ? '' : 's'}"
                     - if remaining_days > 0
                       %span.ml-1
                         = "+ #{remaining_days} day#{remaining_days == 1 ? '' : 's'}"
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-xs.sm:text-sm.text-gray-700
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-xs.sm:text-sm{ style: "color: var(--td-muted);" }
                     = "#{full_months} month#{full_months == 1 ? '' : 's'} × "
-                    %span.font-semibold= number_to_currency(monthly_price)
-                  %span.text-sm.sm:text-base.font-semibold.text-blue-600= number_to_currency(full_months * monthly_price)
+                    %span.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(monthly_price)
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(full_months * monthly_price)
 
                 - if remaining_days > 0
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                    %span.text-xs.sm:text-sm.text-gray-700
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-xs.sm:text-sm{ style: "color: var(--td-muted);" }
                       = "#{remaining_days} day#{remaining_days == 1 ? '' : 's'} × "
-                      %span.font-semibold= number_to_currency(daily_price)
-                    %span.text-sm.sm:text-base.font-semibold.text-blue-600= number_to_currency(remaining_days * daily_price)
+                      %span.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(daily_price)
+                    %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(remaining_days * daily_price)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Subtotal
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(rental_subtotal)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Subtotal
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(rental_subtotal)
 
                 - if @booking.has_discount?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200.bg-red-50
-                    %span.text-sm.sm:text-base.text-gray-700.flex.items-center.gap-2
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base.flex.items-center.gap-2
                       %i.fas.fa-tag.text-red-500
                       = "Discount (#{@booking.discount_percentage}% OFF)"
                     %span.text-sm.sm:text-base.font-bold.text-red-600= "- #{number_to_currency(@booking.discount_amount)}"
 
                 - if @booking.delivery_option.present?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                    %span.text-sm.sm:text-base.text-gray-700
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base
                       = @booking.delivery_option.capitalize
                       Charge
-                    %span.text-sm.sm:text-base.font-semibold.text-purple-600= number_to_currency(@booking.delivery_charge)
+                    %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(@booking.delivery_charge)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Tax
-                  %span.text-sm.sm:text-base.text-green-600 Free
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Tax
+                  %span.text-sm.sm:text-base{ style: "color: #10b981;" } Free
                 .flex.justify-between.items-center.py-3.sm:py-4
-                  %span.text-base.sm:text-lg.md:text-xl.font-bold.text-gray-800 Total Amount
+                  %span.text-base.sm:text-lg.md:text-xl.font-bold{ style: "color: var(--td-text);" } Total Amount
                   - if @booking.has_discount?
                     - original_total_with_delivery = rental_subtotal + @booking.delivery_charge
                     .flex.flex-col.items-end
-                      %span.text-sm.text-gray-400.line-through= number_to_currency(original_total_with_delivery)
-                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                      %span.text-sm.line-through{ style: "color: var(--td-muted);" }= number_to_currency(original_total_with_delivery)
+                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
                   - else
-                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
 
               - elsif ['5 Hours', '10 Hours'].include?(@selected_period)
                 - rental_subtotal = @booking.selected_price.to_f
@@ -193,43 +193,43 @@
                 - if @booking.has_discount?
                   - subtotal = subtotal - (@booking.discount_amount)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Service
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Service
                   %span.text-sm.sm:text-base.font-semibold= @selected_period
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Rate
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(rental_subtotal)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Rate
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(rental_subtotal)
                 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Subtotal
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(rental_subtotal)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Subtotal
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(rental_subtotal)
 
                 - if @booking.has_discount?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200.bg-red-50
-                    %span.text-sm.sm:text-base.text-gray-700.flex.items-center.gap-2
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base.flex.items-center.gap-2
                       %i.fas.fa-tag.text-red-500
                       = "Discount (#{@booking.discount_percentage}% OFF)"
                     %span.text-sm.sm:text-base.font-bold.text-red-600= "- #{number_to_currency(@booking.discount_amount)}"
 
                 - if @booking.delivery_option.present?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                    %span.text-sm.sm:text-base.text-gray-700
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base
                       = @booking.delivery_option.capitalize
                       Charge
-                    %span.text-sm.sm:text-base.font-semibold.text-purple-600= number_to_currency(@booking.delivery_charge)
+                    %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(@booking.delivery_charge)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Tax
-                  %span.text-sm.sm:text-base.text-green-600 Free
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Tax
+                  %span.text-sm.sm:text-base{ style: "color: #10b981;" } Free
                 .flex.justify-between.items-center.py-3.sm:py-4
-                  %span.text-base.sm:text-lg.md:text-xl.font-bold.text-gray-800 Total Amount
+                  %span.text-base.sm:text-lg.md:text-xl.font-bold{ style: "color: var(--td-text);" } Total Amount
                   - if @booking.has_discount?
                     - original_total_with_delivery = rental_subtotal + @booking.delivery_charge
                     .flex.flex-col.items-end
-                      %span.text-sm.text-gray-400.line-through= number_to_currency(original_total_with_delivery)
-                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                      %span.text-sm.line-through{ style: "color: var(--td-muted);" }= number_to_currency(original_total_with_delivery)
+                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
                   - else
-                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
 
               - else
                 / Daily pricing (default)
@@ -238,142 +238,141 @@
                 - if @booking.has_discount?
                   - subtotal = subtotal - (@booking.discount_amount)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Daily Rate
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(daily_price)
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Number of Days
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Daily Rate
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(daily_price)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Number of Days
                   %span.text-sm.sm:text-base.font-semibold= duration_days
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Subtotal
-                  %span.text-sm.sm:text-base.font-semibold= number_to_currency(rental_subtotal)
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Subtotal
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(rental_subtotal)
 
                 - if @booking.has_discount?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200.bg-red-50
-                    %span.text-sm.sm:text-base.text-gray-700.flex.items-center.gap-2
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base.flex.items-center.gap-2
                       %i.fas.fa-tag.text-red-500
                       = "Discount (#{@booking.discount_percentage}% OFF)"
                     %span.text-sm.sm:text-base.font-bold.text-red-600= "- #{number_to_currency(@booking.discount_amount)}"
 
                 - if @booking.delivery_option.present?
-                  .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                    %span.text-sm.sm:text-base.text-gray-700
+                  .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                    %span.text-sm.sm:text-base
                       = @booking.delivery_option.capitalize
                       Charge
-                    %span.text-sm.sm:text-base.font-semibold.text-purple-600= number_to_currency(@booking.delivery_charge)
+                    %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" }= number_to_currency(@booking.delivery_charge)
 
-                .flex.justify-between.items-center.py-2.sm:py-3.border-b.border-blue-200
-                  %span.text-sm.sm:text-base.text-gray-700 Tax
-                  %span.text-sm.sm:text-base.text-green-600 Free
+                .flex.justify-between.items-center.py-2.sm:py-3.border-b{ style: "border-color: var(--td-border);" }
+                  %span.text-sm.sm:text-base{ style: "color: var(--td-muted);" } Tax
+                  %span.text-sm.sm:text-base{ style: "color: #10b981;" } Free
                 .flex.justify-between.items-center.py-3.sm:py-4
-                  %span.text-base.sm:text-lg.md:text-xl.font-bold.text-gray-800 Total Amount
+                  %span.text-base.sm:text-lg.md:text-xl.font-bold{ style: "color: var(--td-text);" } Total Amount
                   - if @booking.has_discount?
                     - original_total_with_delivery = rental_subtotal + @booking.delivery_charge
                     .flex.flex-col.items-end
-                      %span.text-sm.text-gray-400.line-through= number_to_currency(original_total_with_delivery)
-                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                      %span.text-sm.line-through{ style: "color: var(--td-muted);" }= number_to_currency(original_total_with_delivery)
+                      %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
                   - else
-                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold.text-blue-600= number_to_currency(subtotal + @booking.delivery_charge)
+                    %span.text-lg.sm:text-xl.md:text-2xl.font-bold{ style: "color: #F97316;" }= number_to_currency(subtotal + @booking.delivery_charge)
 
       / Payment Mode Selection - Only show if booking is not confirmed
       - unless @booking.status == 'confirmed'
-        .mt-4.sm:mt-6.md:mt-8.p-4.sm:p-6.bg-purple-50.rounded-xl.sm:rounded-2xl
-          %h3.text-base.sm:text-lg.md:text-xl.font-semibold.text-gray-800.mb-4.sm:mb-6
-            %i.fas.fa-credit-card.mr-2.sm:mr-3.text-purple-600.text-sm.sm:text-base
+        .mt-4.sm:mt-6.md:mt-8.p-4.sm:p-6.rounded-xl.sm:rounded-2xl{ style: "background: var(--td-surface2); border: 1px solid var(--td-border);" }
+          %h3.text-base.sm:text-lg.md:text-xl.font-semibold.mb-4.sm:mb-6{ style: "color: var(--td-text);" }
+            %i.fas.fa-credit-card.mr-2.sm:mr-3.text-sm.sm:text-base{ style: "color: #F97316;" }
             Payment Method
 
           .space-y-3.sm:space-y-4
-            / Payment Mode Radio Buttons
             .flex.flex-col.sm:flex-row.gap-3.sm:gap-4
               / Online Payment Option
-              %label.flex.items-center.cursor-pointer.flex-1.p-3.sm:p-4.border-2.rounded-lg.sm:rounded-xl.transition-all.duration-200{class: (@booking.payment_mode == 'Online' ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white hover:border-blue-300')}
+              - online_style = @booking.payment_mode == 'Online' ? "border: 2px solid #F97316; background: rgba(249,115,22,0.08);" : "border: 2px solid var(--td-border); background: var(--td-surface);"
+              %label.flex.items-center.cursor-pointer.flex-1.p-3.sm:p-4.rounded-lg.sm:rounded-xl.transition-all.duration-200{ style: online_style }
                 %input.mr-3.sm:mr-4.w-4.h-4.sm:w-5.sm:h-5.cursor-pointer{
-                  type: 'radio',
-                  name: 'payment_mode',
-                  value: 'Online',
+                  type: 'radio', name: 'payment_mode', value: 'Online',
                   data: { booking_id: @booking.id },
                   checked: @booking.payment_mode == 'Online',
-                  class: 'payment-mode-radio'
+                  class: 'payment-mode-radio',
+                  style: 'accent-color: #F97316;'
                 }
                 .flex-1
-                  %span.text-sm.sm:text-base.font-semibold.text-gray-800 Online Payment
-                  %p.text-xs.sm:text-sm.text-gray-600 Pay securely via Stripe (Card)
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" } Online Payment
+                  %p.text-xs.sm:text-sm{ style: "color: var(--td-muted);" } Pay securely via Stripe (Card)
 
               / Cash Payment Option
-              %label.flex.items-center.cursor-pointer.flex-1.p-3.sm:p-4.border-2.rounded-lg.sm:rounded-xl.transition-all.duration-200{class: (@booking.payment_mode == 'Cash' ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-white hover:border-green-300')}
+              - cash_style = @booking.payment_mode == 'Cash' ? "border: 2px solid #10b981; background: rgba(16,185,129,0.08);" : "border: 2px solid var(--td-border); background: var(--td-surface);"
+              %label.flex.items-center.cursor-pointer.flex-1.p-3.sm:p-4.rounded-lg.sm:rounded-xl.transition-all.duration-200{ style: cash_style }
                 %input.mr-3.sm:mr-4.w-4.h-4.sm:w-5.sm:h-5.cursor-pointer{
-                  type: 'radio',
-                  name: 'payment_mode',
-                  value: 'Cash',
+                  type: 'radio', name: 'payment_mode', value: 'Cash',
                   data: { booking_id: @booking.id },
                   checked: @booking.payment_mode == 'Cash',
-                  class: 'payment-mode-radio'
+                  class: 'payment-mode-radio',
+                  style: 'accent-color: #10b981;'
                 }
                 .flex-1
-                  %span.text-sm.sm:text-base.font-semibold.text-gray-800 Pay at Pickup
-                  %p.text-xs.sm:text-sm.text-gray-600 Pay cash when collecting the vehicle
+                  %span.text-sm.sm:text-base.font-semibold{ style: "color: var(--td-text);" } Pay at Pickup
+                  %p.text-xs.sm:text-sm{ style: "color: var(--td-muted);" } Pay cash when collecting the vehicle
 
-      / Payment Method Confirmed Badge - Only show if booking is confirmed
+      / Payment Method Confirmed Badge
       - if @booking.status == 'confirmed'
-        .mt-4.sm:mt-6.md:mt-8.p-4.sm:p-6.bg-blue-50.rounded-xl.sm:rounded-2xl
+        .mt-4.sm:mt-6.md:mt-8.p-4.sm:p-6.rounded-xl.sm:rounded-2xl{ style: "background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3);" }
           .flex.items-center.justify-between.gap-2.sm:gap-3
             .flex.items-center.gap-2.sm:gap-3.flex-1
-              %i.fas.fa-check-circle.text-lg.sm:text-xl.md:text-2xl.text-blue-600
+              %i.fas.fa-check-circle.text-lg.sm:text-xl.md:text-2xl{ style: "color: #10b981;" }
               .flex-1
-                %h3.text-sm.sm:text-base.md:text-lg.lg:text-xl.font-semibold.text-gray-800
+                %h3.text-sm.sm:text-base.md:text-lg.lg:text-xl.font-semibold{ style: "color: var(--td-text);" }
                   Payment Method:
-                  %span.text-blue-600
+                  %span{ style: "color: #F97316;" }
                     - if @booking.payment_mode == 'Online'
                       Online Payment
                     - else
                       Pay at Pickup
-                %p.text-xs.sm:text-sm.text-gray-600
+                %p.text-xs.sm:text-sm{ style: "color: var(--td-muted);" }
                   - if @booking.payment_mode == 'Online'
                     Payment has been processed securely
                   - else
                     Payment will be collected at vehicle pickup
-            %i.fas.fa-lock.text-lg.sm:text-xl.md:text-2xl.text-green-600
+            %i.fas.fa-lock.text-lg.sm:text-xl.md:text-2xl{ style: "color: #10b981;" }
 
-
-      / Pay Button - Full Width Below
-      / Payment/Status Section - Full Width Below
+      / Action Buttons
       .mt-4.sm:mt-6.md:mt-8
         .rounded-xl.sm:rounded-2xl.p-4.sm:p-6.text-center
-          %h3.text-base.sm:text-lg.md:text-xl.font-semibold.mb-2
           - if @booking.status == 'confirmed'
-            %p.mb-4.sm:mb-6.text-sm.sm:text-base.text-green-600.font-semibold
+            %p.mb-4.sm:mb-6.text-sm.sm:text-base.font-semibold{ style: "color: #10b981;" }
               Payment Confirmed ✓
             .flex.flex-col.sm:flex-row.justify-center.gap-3.sm:gap-4.p-2.sm:p-3.rounded-xl.sm:rounded-2xl
-              .inline-flex.items-center.px-6.sm:px-8.py-2.sm:py-3.bg-green-100.text-green-700.font-bold.rounded-lg.border.border-green-300.gap-2.text-sm.sm:text-base
+              .inline-flex.items-center.px-6.sm:px-8.py-2.sm:py-3.font-bold.rounded-lg.gap-2.text-sm.sm:text-base{ style: "background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.4);" }
                 %i.fas.fa-check-circle.text-base.sm:text-lg.md:text-xl
                 %span PAID
 
-              %button.inline-flex.items-center.px-4.sm:px-6.py-2.sm:py-3.bg-purple-600.hover:bg-purple-700.text-white.font-medium.rounded-lg.transition-colors.duration-200.shadow-md.hover:shadow-lg.gap-2.text-sm.sm:text-base.justify-center{type: 'button', onclick: 'window.print()'}
+              %button.inline-flex.items-center.px-4.sm:px-6.py-2.sm:py-3.text-white.font-medium.rounded-lg.transition-colors.duration-200.shadow-md.gap-2.text-sm.sm:text-base.justify-center{ type: 'button', onclick: 'window.print()', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" }
                 %i.fas.fa-print
                 %span Print Invoice
           - else
-            %p.mb-4.sm:mb-6.text-xs.sm:text-sm.md:text-base
+            %p.mb-4.sm:mb-6.text-xs.sm:text-sm.md:text-base{ style: "color: var(--td-muted);" }
               Your payment will be processed securely by Stripe
             .flex.flex-col.sm:flex-row.justify-center.gap-3.sm:gap-4.p-2.sm:p-3.rounded-xl.sm:rounded-2xl
               = button_to create_checkout_users_payment_path(@booking.id), method: :post, data: { turbo: false },
                 id: 'payOnlineBtn',
-                class: 'inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg gap-2 text-sm sm:text-base' do
+                class: 'inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-white font-medium rounded-lg transition-colors duration-200 shadow-md gap-2 text-sm sm:text-base',
+                style: 'background-color: #F97316;',
+                onmouseover: "this.style.backgroundColor='#EA580C'",
+                onmouseout: "this.style.backgroundColor='#F97316'" do
                 %i.fas.fa-lock
                 %span Pay #{number_to_currency(@total_amount)}
 
-              %button.inline-flex.items-center.px-4.sm:px-6.py-2.sm:py-3.text-white.font-medium.rounded-lg.transition-colors.duration-200.shadow-md.gap-2.text-sm.sm:text-base.justify-center.bg-gray-400.cursor-not-allowed.opacity-50{type: 'button', onclick: 'window.print()', disabled: true, style: 'pointer-events: none;'}
+              %button.inline-flex.items-center.px-4.sm:px-6.py-2.sm:py-3.font-medium.rounded-lg.transition-colors.duration-200.shadow-md.gap-2.text-sm.sm:text-base.justify-center.cursor-not-allowed.opacity-50{ type: 'button', disabled: true, style: 'pointer-events: none; background: var(--td-surface2); color: var(--td-muted); border: 1px solid var(--td-border);' }
                 %i.fas.fa-print
                 %span Print Invoice
 
     / Footer
-    .bg-gray-50.p-4.sm:p-6.border-t.border-gray-200
-      .text-center.text-xs.sm:text-sm.text-gray-600
+    .p-4.sm:p-6.border-t{ style: "background: var(--td-surface2); border-color: var(--td-border);" }
+      .text-center.text-xs.sm:text-sm{ style: "color: var(--td-muted);" }
         %p
           %i.fas.fa-info-circle.mr-1
           By proceeding with payment, you agree to our
-          = link_to 'Terms of Service', '#', class: 'text-blue-600 hover:underline'
+          = link_to 'Terms of Service', '#', class: 'hover:underline', style: 'color: #F97316;'
           and
-          = link_to 'Privacy Policy', '#', class: 'text-blue-600 hover:underline'
+          = link_to 'Privacy Policy', '#', class: 'hover:underline', style: 'color: #F97316;'
 
 / Print-Only Invoice Layout
 #printable-invoice.print-only
@@ -384,7 +383,7 @@
         .logo-section
           = image_tag 'new_logo.png', alt: 'TronsDrive Logo', class: 'company-logo'
         .company-details
-          %h1.company-name WHEELSONRENT-FZCO
+          %h1.company-name TRONSDRIVE-FZCO
       .invoice-number
         %h1.invoice-code
           %span.invoice-label Invoice #
@@ -476,7 +475,7 @@
         %li Payment accepted via cash or card.
         %li This invoice must be presented at the time of picking up the vehicle from our car rental partners.
         %li Full payment is required before vehicle release.
-      %p.thank-you Thank you for choosing Wheelsonrent for your car rental needs!
+      %p.thank-you Thank you for choosing tronsDrive for your car rental needs!
 
 :css
   /* Hide print layout on screen */

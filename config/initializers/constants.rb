@@ -174,7 +174,7 @@ module AppConstants
   ].freeze
 
   FAQ_CONTENT = [
-    { question: "How can I book the car with Wheelsonrent?", answer: "<strong>Step 1:</strong> Browse and select your preferred car on our website.<br><strong>Step 2:</strong> Book online and make the payment securely.<br><strong>Step 3:</strong> Alternatively, contact us on WhatsApp or give us a call — our team will book the car for you.".html_safe },
+    { question: "How can I book the car with tronsDrive?", answer: "<strong>Step 1:</strong> Browse and select your preferred car on our website.<br><strong>Step 2:</strong> Book online and make the payment securely.<br><strong>Step 3:</strong> Alternatively, contact us on WhatsApp or give us a call — our team will book the car for you.".html_safe },
     { question: "Can I rent a car in Dubai without a deposit?", answer: "Yes, Wheels on Rent provides zero deposit options for select vehicles." },
     { question: "Do you provide cars with drivers for tourists?", answer: "Yes, professional drivers are available for sightseeing, business trips, and airport transfers." },
     { question: "Can I rent electric or luxury cars?", answer: "Absolutely. Our fleet includes luxury, sports, and electric vehicles." },

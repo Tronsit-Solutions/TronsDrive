@@ -7,13 +7,13 @@
       = render 'shared/form_errors', object: @car
       / With Driver Toggle at the top
       .field.space-y-2.mb-6
-        .flex.items-center.p-4.bg-blue-50.rounded-xl.border-2.border-blue-200.shadow-sm
+        .flex.items-center.p-4.rounded-xl.border-2.shadow-sm{ style: "background: var(--td-surface2); border-color: var(--td-border);" }
           = f.check_box :with_driver, id: 'with_driver_toggle', class: 'h-6 w-6 border-gray-300 rounded focus:ring-2 transition-all duration-200', style: 'accent-color:#F97316'
-          = f.label :with_driver, class: 'ml-3 block text-lg font-bold text-gray-800 cursor-pointer' do
+          = f.label :with_driver, class: 'ml-3 block text-lg font-bold cursor-pointer', style: "color: var(--td-text);" do
             .flex.items-center.gap-2
-              %i.fas.fa-user-tie.text-blue-600
+              %i.fas.fa-user-tie{ style: "color: #F97316;" }
               %span Is this a "Car with Driver" service?
-              %span.text-xs.font-normal.text-gray-500.italic (Selecting this will show only driver-specific fields)
+              %span.text-xs.font-normal.italic{ style: "color: var(--td-muted);" } (Selecting this will show only driver-specific fields)
 
       .field.space-y-2.mb-6
         = f.label :category, 'Category', class: 'block text-sm font-medium text-gray-700'
