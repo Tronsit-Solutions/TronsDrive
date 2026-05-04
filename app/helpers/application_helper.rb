@@ -66,10 +66,10 @@ module ApplicationHelper
         slider_content + counter
       end
     else
-      content_tag :div, class: "#{height} bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center" do
+      content_tag :div, class: "#{height} flex items-center justify-center", style: "background: var(--td-border);" do
         content_tag :div, class: "text-center" do
-          content_tag(:i, "", class: "fas fa-car text-gray-400 text-6xl mb-4") +
-          content_tag(:p, "No Images Available", class: "text-gray-500 text-lg")
+          content_tag(:i, "", class: "fas fa-car text-6xl mb-4", style: "color: var(--td-muted);") +
+          content_tag(:p, "No Images Available", class: "text-lg", style: "color: var(--td-muted);")
         end
       end
     end
@@ -122,8 +122,8 @@ module ApplicationHelper
   private
 
   def safe_car_placeholder
-    content_tag :div, class: "w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center" do
-      content_tag :i, "", class: "fas fa-car text-gray-400 text-3xl"
+    content_tag :div, class: "w-full h-full rounded-lg flex items-center justify-center", style: "background: var(--td-border);" do
+      content_tag :i, "", class: "fas fa-car text-3xl", style: "color: var(--td-muted);"
     end
   end
 

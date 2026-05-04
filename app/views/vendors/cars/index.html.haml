@@ -21,11 +21,11 @@
               
               / Status and Driver Badges
               .absolute.top-3.right-3.flex.flex-row.items-center.space-x-1
-                - status_classes = {'Available' => 'bg-green-500 text-white','Rented' => 'bg-red-500 text-white'}[car.status] || 'bg-orange-500 text-white'
-                %span.inline-block.rounded-full.text-xs.font-semibold.px-2.py-1{ class: status_classes }= car.status
-                
+                - status_style = {'Available' => 'background:#22C55E;color:white', 'Rented' => 'background:#EF4444;color:white'}[car.status] || 'background:#F97316;color:white'
+                %span.inline-block.rounded-full.text-xs.font-semibold.px-2.py-1{ style: status_style }= car.status
+
                 - if car.with_driver? || car.category == 'Limousine'
-                  %span.inline-block.rounded-full.text-xs.font-semibold.px-2.py-1.bg-blue-600.text-white.text-center{ title: "Available with Driver" }
+                  %span.inline-block.rounded-full.text-xs.font-semibold.px-2.py-1.text-center{ style: 'background:#3B82F6;color:white', title: "Available with Driver" }
                     %i.fas.fa-user-tie.text-xs
 
               - if car.featured?

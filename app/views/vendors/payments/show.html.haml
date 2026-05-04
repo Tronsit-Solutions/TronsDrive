@@ -1,155 +1,156 @@
-.container.mx-auto.max-w-7xl.p-6
+.container.mx-auto.max-w-7xl.p-4.sm:p-6
   = render partial: "vendors/navbar"
-  
+
   / Header Section
-  .bg-white.rounded-2xl.shadow-xl.p-8.mb-8
+  .bg-white.rounded-2xl.shadow-xl.p-4.sm:p-6.md:p-8.mb-6.sm:mb-8
     .flex.flex-col.md:flex-row.md:items-center.md:justify-between.gap-4
       .flex-1
-        %h1.text-4xl.font-extrabold.text-blue-900.mb-2 Payment ##{@booking.id}
-        .flex.items-center.gap-4.mb-4
-          %span.inline-block.bg-green-100.text-green-700.px-4.py-2.rounded-full.text-sm.font-semibold Paid
-          %span.text-lg.text-gray-600= "Processed on #{@booking.updated_at.strftime('%B %d, %Y at %I:%M %p')}"
+        %h1.text-2xl.sm:text-3xl.md:text-4xl.font-extrabold.mb-2{style: 'color: #F97316'}
+          Payment ##{@booking.id}
+        .flex.flex-wrap.items-center.gap-3.mb-3
+          %span.inline-block.bg-green-100.text-green-700.px-4.py-1.rounded-full.text-sm.font-semibold Paid
+          %span.text-sm.sm:text-base.text-gray-600= "Processed on #{@booking.updated_at.strftime('%B %d, %Y at %I:%M %p')}"
         - if @booking.car
-          %p.text-lg.text-gray-600= "Payment for #{@booking.car.brand} #{@booking.car.model} rental"
+          %p.text-sm.sm:text-base.text-gray-600= "Payment for #{@booking.car.brand} #{@booking.car.model} rental"
         - else
-          %p.text-lg.text-gray-600 Payment for a Deleted Car rental
-      .flex.gap-3
-        = link_to vendors_payments_path, class: 'bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2' do
+          %p.text-sm.sm:text-base.text-gray-600 Payment for a Deleted Car rental
+      .flex.gap-3.mt-2.md:mt-0
+        = link_to vendors_payments_path, class: 'bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition flex items-center gap-2 text-sm sm:text-base' do
           %i.fas.fa-arrow-left
           Back to Payments
-        = link_to vendors_booking_path(@booking), class: 'bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition flex items-center gap-2' do
+        = link_to vendors_booking_path(@booking), class: 'text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition flex items-center gap-2 hover:opacity-90 text-sm sm:text-base', style: 'background-color: #F97316' do
           %i.fas.fa-calendar
           View Booking
 
   / Main Content Grid
-  .grid.grid-cols-1.lg:grid-cols-3.gap-8
+  .grid.grid-cols-1.lg:grid-cols-3.gap-6.sm:gap-8
     / Left Column - Payment Details
     .lg:col-span-2.space-y-6
       / Payment Information Card
-      .bg-white.rounded-xl.shadow-lg.p-6
-        %h2.text-xl.font-bold.text-blue-900.mb-4.flex.items-center.gap-2
-          %i.fas.fa-credit-card.text-blue-500
+      .bg-white.rounded-xl.shadow-lg.p-4.sm:p-6
+        %h2.text-lg.sm:text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color: #F97316'}
+          %i.fas.fa-credit-card{style: 'color: #F97316'}
           Payment Information
-        .grid.grid-cols-1.md:grid-cols-2.gap-4
+        .grid.grid-cols-1.md:grid-cols-2.gap-x-6
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Payment ID
-            %span.font-mono.text-gray-900 ##{@booking.id}
+            %span.font-medium.text-gray-600.text-sm Payment ID
+            %span.font-mono.text-gray-900.text-sm ##{@booking.id}
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Payment Status
+            %span.font-medium.text-gray-600.text-sm Payment Status
             %span.inline-block.bg-green-100.text-green-700.px-3.py-1.rounded-full.text-xs.font-semibold Paid
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Payment Method
-            %span.text-gray-900= @payment_details[:payment_method] || 'Online Payment'
+            %span.font-medium.text-gray-600.text-sm Payment Method
+            %span.text-gray-900.text-sm= @payment_details[:payment_method] || 'Online Payment'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Payment Date
-            %span.text-gray-900= @payment_details[:payment_date]&.strftime('%B %d, %Y at %I:%M %p') || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Payment Date
+            %span.text-gray-900.text-sm= @payment_details[:payment_date]&.strftime('%B %d, %Y at %I:%M %p') || 'N/A'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Daily Rate
-            %span.text-gray-900= number_to_currency(@payment_details[:daily_rate]) || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Daily Rate
+            %span.text-gray-900.text-sm= number_to_currency(@payment_details[:daily_rate]) || 'N/A'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Duration
-            %span.text-gray-900= "#{@payment_details[:total_days]} days"
+            %span.font-medium.text-gray-600.text-sm Duration
+            %span.text-gray-900.text-sm= "#{@payment_details[:total_days]} days"
           .flex.justify-between.py-2.border-b.border-gray-100.md:col-span-2
-            %span.font-medium.text-gray-600 Total Amount
-            %span.font-bold.text-2xl.text-green-600= number_to_currency(@payment_details[:total_amount]) || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Total Amount
+            %span.font-bold.text-xl.sm:text-2xl.text-green-600= number_to_currency(@payment_details[:total_amount]) || 'N/A'
 
       / Customer Information Card
-      .bg-white.rounded-xl.shadow-lg.p-6
-        %h2.text-xl.font-bold.text-blue-900.mb-4.flex.items-center.gap-2
-          %i.fas.fa-user.text-blue-500
+      .bg-white.rounded-xl.shadow-lg.p-4.sm:p-6
+        %h2.text-lg.sm:text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color: #F97316'}
+          %i.fas.fa-user{style: 'color: #F97316'}
           Customer Information
-        .grid.grid-cols-1.md:grid-cols-2.gap-4
+        .grid.grid-cols-1.md:grid-cols-2.gap-x-6
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Name
-            %span.text-gray-900= @booking.user&.full_name || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Name
+            %span.text-gray-900.text-sm= @booking.user&.full_name || 'N/A'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Email
-            %span.text-gray-900= @booking.user&.email || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Email
+            %span.text-gray-900.text-sm.break-all= @booking.user&.email || 'N/A'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Phone
-            %span.text-gray-900= @booking.user&.phone || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Phone
+            %span.text-gray-900.text-sm= @booking.user&.phone || 'N/A'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Address
-            %span.text-gray-900= @booking.user&.home_address || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Address
+            %span.text-gray-900.text-sm= @booking.user&.home_address || 'N/A'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Nationality
-            %span.text-gray-900= @booking.user&.nationality&.titleize || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Nationality
+            %span.text-gray-900.text-sm= @booking.user&.nationality&.titleize || 'N/A'
           .flex.justify-between.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Member Since
-            %span.text-gray-900= @booking.user&.created_at&.strftime('%B %d, %Y') || 'N/A'
+            %span.font-medium.text-gray-600.text-sm Member Since
+            %span.text-gray-900.text-sm= @booking.user&.created_at&.strftime('%B %d, %Y') || 'N/A'
 
       / Car Information Card
-      .bg-white.rounded-xl.shadow-lg.p-6
-        %h2.text-xl.font-bold.text-blue-900.mb-4.flex.items-center.gap-2
-          %i.fas.fa-car.text-blue-500
+      .bg-white.rounded-xl.shadow-lg.p-4.sm:p-6
+        %h2.text-lg.sm:text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color: #F97316'}
+          %i.fas.fa-car{style: 'color: #F97316'}
           Car Information
-        .grid.grid-cols-1.md:grid-cols-2.gap-4
+        .grid.grid-cols-1.md:grid-cols-2.gap-x-6
           - if @booking.car
             .flex.justify-between.py-2.border-b.border-gray-100
-              %span.font-medium.text-gray-600 Car
-              %span.text-gray-900= "#{@booking.car.brand} #{@booking.car.model}"
+              %span.font-medium.text-gray-600.text-sm Car
+              %span.text-gray-900.text-sm= "#{@booking.car.brand} #{@booking.car.model}"
             .flex.justify-between.py-2.border-b.border-gray-100
-              %span.font-medium.text-gray-600 Year
-              %span.text-gray-900= @booking.car.year
+              %span.font-medium.text-gray-600.text-sm Year
+              %span.text-gray-900.text-sm= @booking.car.year
             .flex.justify-between.py-2.border-b.border-gray-100
-              %span.font-medium.text-gray-600 Color
-              %span.text-gray-900= @booking.car.color
+              %span.font-medium.text-gray-600.text-sm Color
+              %span.text-gray-900.text-sm= @booking.car.color
             .flex.justify-between.py-2.border-b.border-gray-100
-              %span.font-medium.text-gray-600 Category
-              %span.text-gray-900= @booking.car.category.presence || 'N/A'
+              %span.font-medium.text-gray-600.text-sm Category
+              %span.text-gray-900.text-sm= @booking.car.category.presence || 'N/A'
             .flex.justify-between.py-2.border-b.border-gray-100
-              %span.font-medium.text-gray-600 Daily Rate
-              %span.text-gray-900= @booking.car.daily_price ? number_to_currency(@booking.car.daily_price) : 'N/A'
+              %span.font-medium.text-gray-600.text-sm Daily Rate
+              %span.text-gray-900.text-sm= @booking.car.daily_price ? number_to_currency(@booking.car.daily_price) : 'N/A'
             .flex.justify-between.py-2.border-b.border-gray-100
-              %span.font-medium.text-gray-600 Car Status
+              %span.font-medium.text-gray-600.text-sm Car Status
               - car_status_classes = {'available' => 'bg-green-100 text-green-700', 'rented' => 'bg-red-100 text-red-700', 'maintenance' => 'bg-yellow-100 text-yellow-700'}
               %span.inline-block.rounded-full.text-xs.font-semibold.px-3.py-1{class: car_status_classes[@booking.car.status] || 'bg-gray-100 text-gray-700'}= @booking.car.status.titleize
           - else
             .col-span-1.md:col-span-2.text-center.py-6
               %i.fas.fa-car-crash.text-3xl.text-red-400.mb-2
-              %p.text-lg.font-bold.text-red-500 Deleted Car
+              %p.text-base.font-bold.text-red-500 Deleted Car
               %p.text-sm.text-gray-500 This car has been removed from your fleet
 
     / Right Column - Sidebar
     .space-y-6
       / Payment Summary Card
-      .bg-white.rounded-xl.shadow-lg.p-6
-        %h2.text-xl.font-bold.text-blue-900.mb-4.flex.items-center.gap-2
-          %i.fas.fa-calculator.text-blue-500
+      .bg-white.rounded-xl.shadow-lg.p-4.sm:p-6
+        %h2.text-lg.sm:text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color: #F97316'}
+          %i.fas.fa-calculator{style: 'color: #F97316'}
           Payment Summary
-        .space-y-4
+        .space-y-1
           .flex.justify-between.items-center.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Booking ID
-            %span.font-mono.text-gray-900 ##{@booking.id}
+            %span.font-medium.text-gray-600.text-sm Booking ID
+            %span.font-mono.text-gray-900.text-sm ##{@booking.id}
           .flex.justify-between.items-center.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Start Date
-            %span.text-gray-900= @booking.start_date.strftime('%b %d, %Y')
+            %span.font-medium.text-gray-600.text-sm Start Date
+            %span.text-gray-900.text-sm= @booking.start_date.strftime('%b %d, %Y')
           .flex.justify-between.items-center.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 End Date
-            %span.text-gray-900= @booking.end_date.strftime('%b %d, %Y')
+            %span.font-medium.text-gray-600.text-sm End Date
+            %span.text-gray-900.text-sm= @booking.end_date.strftime('%b %d, %Y')
           .flex.justify-between.items-center.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Days
-            %span.text-gray-900= @payment_details[:total_days]
+            %span.font-medium.text-gray-600.text-sm Days
+            %span.text-gray-900.text-sm= @payment_details[:total_days]
           .flex.justify-between.items-center.py-2.border-b.border-gray-100
-            %span.font-medium.text-gray-600 Rate/Day
-            %span.text-gray-900= number_to_currency(@payment_details[:daily_rate])
+            %span.font-medium.text-gray-600.text-sm Rate/Day
+            %span.text-gray-900.text-sm= number_to_currency(@payment_details[:daily_rate])
           .flex.justify-between.items-center.py-2
-            %span.font-bold.text-gray-900 Total
+            %span.font-bold.text-gray-900.text-sm Total
             %span.font-bold.text-lg.text-green-600= number_to_currency(@payment_details[:total_amount])
 
       / Quick Actions Card
-      .bg-white.rounded-xl.shadow-lg.p-6
-        %h2.text-xl.font-bold.text-blue-900.mb-4.flex.items-center.gap-2
-          %i.fas.fa-bolt.text-blue-500
+      .bg-white.rounded-xl.shadow-lg.p-4.sm:p-6
+        %h2.text-lg.sm:text-xl.font-bold.mb-4.flex.items-center.gap-2{style: 'color: #F97316'}
+          %i.fas.fa-bolt{style: 'color: #F97316'}
           Quick Actions
         .space-y-3
-          = link_to vendors_booking_path(@booking), class: 'w-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2' do
+          = link_to vendors_booking_path(@booking), class: 'w-full text-white font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2 hover:opacity-90 text-sm', style: 'background-color: #F97316' do
             %i.fas.fa-calendar
             View Booking Details
           - if @booking.car
-            = link_to vendors_car_path(@booking.car), class: 'w-full bg-green-50 hover:bg-green-100 text-green-700 font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2' do
+            = link_to vendors_car_path(@booking.car), class: 'w-full bg-green-50 hover:bg-green-100 text-green-700 font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2 text-sm' do
               %i.fas.fa-car
               View Car Details
-          = link_to vendors_payments_path, class: 'w-full bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2' do
+          = link_to vendors_payments_path, class: 'w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-3 rounded-lg transition flex items-center justify-center gap-2 text-sm' do
             %i.fas.fa-arrow-left
             Back to Payments

@@ -48,8 +48,8 @@
 
               / Status Badge - Right Side
               .absolute.top-3.right-3.flex.flex-row.items-center.space-x-1
-                - status_classes = {'Available' => 'bg-green-500 text-white','Rented' => 'bg-red-500 text-white'}[car.status] || 'bg-orange-500 text-white'
-                %span.inline-block.rounded-full.text-xs.font-semibold.px-2.py-1{ class: status_classes }= car.status
+                - status_style = {'Available' => 'background:#22C55E;color:white', 'Rented' => 'background:#EF4444;color:white'}[car.status] || 'background:#F97316;color:white'
+                %span.inline-block.rounded-full.text-xs.font-semibold.px-2.py-1{ style: status_style }= car.status
               
             .p-6.flex-1.flex.flex-col
               %div.flex.items-center.justify-between.mb-2

@@ -3,4 +3,4 @@
 # User-agent: *
 # Disallow: /
 
-Sitemap: https://www.wheelsonrent.ae/sitemap.xml.gz
+Sitemap: https://www.tronsdrive.ae/sitemap.xml.gz

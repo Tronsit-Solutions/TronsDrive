@@ -143,18 +143,18 @@
         %p.text-xs.sm:text-sm Start by inviting new vendors to join the platform
 
   / Recent Activity
-  .mt-6.sm:mt-8.bg-white.rounded-lg.shadow-md.p-4.sm:p-6
+  .mt-6.sm:mt-8.rounded-lg.shadow-md.p-4.sm:p-6{style: "background: var(--td-surface);"}
     %h2.text-lg.sm:text-xl.font-semibold.mb-3.sm:mb-4{style: "color: #F97316;"} Recent Activity
     .space-y-3.sm:space-y-4
       - @invited_vendors.order(created_at: :desc).limit(5).each do |invited_vendor|
-        .flex.flex-col.sm:flex-row.items-start.sm:items-center.justify-between.p-3.sm:p-4.rounded-lg.gap-3{style: "background-color: #f0f5f5;"}
+        .flex.flex-col.sm:flex-row.items-start.sm:items-center.justify-between.p-3.sm:p-4.rounded-lg.gap-3{style: "background: var(--td-surface2); border: 1px solid var(--td-border);"}
           .flex.items-center.gap-3.flex-1.min-w-0
             .w-10.h-10.sm:w-12.sm:h-12.rounded-full.flex.items-center.justify-center.flex-shrink-0{style: "background: linear-gradient(to bottom right, #F97316, #EA580C);"}
               %span.text-white.font-bold.text-sm.sm:text-base= invited_vendor.first_name&.first&.upcase || invited_vendor.email.first.upcase
             %div.min-w-0.flex-1
-              %p.text-sm.sm:text-base.font-medium.text-gray-900= "#{invited_vendor.first_name} #{invited_vendor.last_name}"
-              %p.text-xs.sm:text-sm.text-gray-500.break-all= invited_vendor.email
+              %p.text-sm.sm:text-base.font-medium{style: "color: var(--td-text);"}= "#{invited_vendor.first_name} #{invited_vendor.last_name}"
+              %p.text-xs.sm:text-sm.break-all{style: "color: var(--td-muted);"}= invited_vendor.email
           %div.flex.items-center.gap-3.sm:gap-0.sm:flex-col.sm:text-right.w-full.sm:w-auto.justify-between.sm:justify-start
-            %p.text-xs.text-gray-500= invited_vendor.created_at.strftime('%b %d, %Y')
-            %p.text-xs.font-medium{class: invited_vendor.status == 'pending' ? 'text-yellow-600' : invited_vendor.status == 'accepted' ? 'text-green-600' : 'text-red-600'}
-              = invited_vendor.status.titleize 
+            %p.text-xs{style: "color: var(--td-muted);"}= invited_vendor.created_at.strftime('%b %d, %Y')
+            - status_color = invited_vendor.status == 'pending' ? '#f59e0b' : invited_vendor.status == 'accepted' ? '#10b981' : '#ef4444'
+            %p.text-xs.font-medium{style: "color: #{status_color};"}= invited_vendor.status.titleize

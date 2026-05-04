@@ -6,7 +6,7 @@ class Admin::SettingsController < ApplicationController
     @settings = {
       site_name: "TronsDrive",
       site_description: "Premium car rental platform",
-      contact_email: "admin@wheelsonrent.com",
+      contact_email: "admin@tronsdrive.com",
       support_phone: "+1 (555) 123-4567",
       stripe_enabled: true,
       stripe_publishable_key: ENV["STRIPE_PUBLISHABLE_KEY"],
