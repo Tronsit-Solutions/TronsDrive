@@ -241,5 +241,7 @@ Rails.application.routes.draw do
   get "/sitemap.xml.gz", to: "sitemaps#show"
   get "/sitemap.xml",    to: "sitemaps#show"
 
+  post "locale", to: "locales#update", as: :switch_locale
+
   root "car_rental#index"
 end

@@ -32,19 +32,19 @@
                 - if car.featured?
                   %span{class: "flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-400 text-gray-900 shadow-sm"}
                     %i{class: "fas fa-star mr-1 text-[10px]"}
-                    Featured
+                    = t("car.featured")
 
                 / Discount Badge
                 - if car.has_discount?
                   .flex{class: "items-center gap-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-2 py-0.5 rounded-full shadow-sm"}
                     %i{class: "fas fa-tag text-[10px]"}
-                    %span{class: "text-[10px] font-bold"}= "#{car.discount_percentage}% OFF"
+                    %span{class: "text-[10px] font-bold"}= "#{car.discount_percentage}% #{t('car.off')}"
 
                 / Driver Badge
                 - if car.with_driver?
                   .flex{class: "items-center gap-1 bg-blue-600 text-white px-2 py-0.5 rounded-full shadow-sm"}
                     %i{class: "fas fa-user-tie text-[10px]"}
-                    %span{class: "text-[10px] font-bold"} With Driver
+                    %span{class: "text-[10px] font-bold"}= t("car.with_driver")
 
               / Status Badge - Right Side
               .absolute.top-3.right-3.flex.flex-row.items-center.space-x-1
@@ -63,15 +63,15 @@
               
               - if car.category == 'Limousine'
                 %div.text-gray-700.mb-3
-                  %span.text-gray-500 Limousine
+                  %span.text-gray-500= t("car.limousine_service")
               - else
                 %div.text-gray-700.mb-3
                   = car.color
                   - if car.with_driver?
                     %span.text-gray-500.ml-2 •
-                    %span.text-gray-500= "#{car.seats || 5} Seats"
+                    %span.text-gray-500= "#{car.seats || 5} #{t('home.seats')}"
                     %span.text-gray-500.ml-2 •
-                    %span.text-gray-500= "#{car.luggage_capacity || 0} Bags"
+                    %span.text-gray-500= "#{car.luggage_capacity || 0} #{t('home.bags')}"
                   - elsif car.category.present?
                     %span.text-gray-500.ml-2 •
                     %span.text-gray-500= car.category.capitalize
@@ -100,11 +100,11 @@
                     %span.text-2xl.font-bold{style: 'color: #F97316'}= car.daily_price ? number_to_currency(car.daily_price) : 'N/A'
                 %span.text-sm.text-gray-500
                   - if car.category == 'Limousine'
-                    \/hr
+                    = t("car.per_hr")
                   - elsif car.with_driver?
-                    \/5h Service
+                    = t("car.per_5h")
                   - else
-                    \/day
+                    = t("car.per_day")
  
   / SEO Content Section
   - allowed_categories = %w[convertible economy electric hybrid luxury sports suv truck van]

@@ -3,7 +3,7 @@
   -# .absolute.inset-0.bg-cover.bg-center.opacity-30.pointer-events-none{ style: "background-image: url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80');" }
   / Content layer
   .relative.z-10.flex-1
-    %h1.text-4xl.font-extrabold.mb-2 Hello, #{current_user.first_name.presence || current_user.email.split('@').first}!
-    %p.mt-1.text-lg{style: 'color: rgba(255,255,255,0.75)'} Welcome to your dashboard
+    %h1.text-4xl.font-extrabold.mb-2= t("user.hello", name: current_user.first_name.presence || current_user.email.split('@').first)
+    %p.mt-1.text-lg{style: 'color: rgba(255,255,255,0.75)'}= t("user.welcome_dashboard")
   .relative.z-10.flex-shrink-0
     %i.fas.fa-user-circle.text-7xl{style: 'color: rgba(255,255,255,0.7)'}

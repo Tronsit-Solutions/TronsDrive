@@ -6,22 +6,22 @@
 
         / Search field
         .flex.flex-col.relative
-          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Search
-          = f.text_field :search, placeholder: "Brand, model, year...", style: "display: block; width: 100%; padding: 0.5rem 1rem; border: 1px solid var(--td-border); border-radius: 0.5rem; background: var(--td-surface2); color: var(--td-text); font-size: 0.875rem; outline: none;", id: "search_input", autocomplete: "off"
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" }= t("filters.search_label")
+          = f.text_field :search, placeholder: t("filters.search_placeholder"), style: "display: block; width: 100%; padding: 0.5rem 1rem; border: 1px solid var(--td-border); border-radius: 0.5rem; background: var(--td-surface2); color: var(--td-text); font-size: 0.875rem; outline: none;", id: "search_input", autocomplete: "off"
           %div{ id: "search_results", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; max-height:16rem; overflow-y:auto; overflow-x:hidden;" }
 
         / Category custom dropdown
         .flex.flex-col.relative{ data: { dropdown: "category" } }
-          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Category
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" }= t("filters.category_label")
           = f.hidden_field :category, id: "category_hidden", value: params[:category]
           %button.filter-custom-btn{ type: "button", id: "category_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "category" }
-            %span{ id: "category_label" }= params[:category].present? ? params[:category] : "All Categories"
+            %span{ id: "category_label" }= params[:category].present? ? params[:category] : t("filters.all_categories")
             %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
           %div.filter-dropdown{ id: "category_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden;" }
             .py-1
               %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "category", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
                 %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
-                All Categories
+                = t("filters.all_categories")
               - @car_categories.each do |cat|
                 %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => cat, "data-filter" => "category", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
                   %i.fas.fa-car.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
@@ -29,16 +29,16 @@
 
         / Brand custom dropdown
         .flex.flex-col.relative{ data: { dropdown: "brand" } }
-          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Brand
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" }= t("filters.brand_label")
           = f.hidden_field :brand, id: "brand_hidden", value: params[:brand]
           %button.filter-custom-btn{ type: "button", id: "brand_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "brand" }
-            %span{ id: "brand_label" }= params[:brand].present? ? params[:brand] : "All Brands"
+            %span{ id: "brand_label" }= params[:brand].present? ? params[:brand] : t("filters.all_brands")
             %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
           %div.filter-dropdown{ id: "brand_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden; max-height:14rem; overflow-y:auto;" }
             .py-1
               %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "brand", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
                 %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
-                All Brands
+                = t("filters.all_brands")
               - (@car_brands || []).each do |brand|
                 %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => brand, "data-filter" => "brand", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
                   %i.fas.fa-tag.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
@@ -46,16 +46,16 @@
 
         / Model custom dropdown
         .flex.flex-col.relative{ data: { dropdown: "model" } }
-          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Model
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" }= t("filters.model_label")
           = f.hidden_field :model, id: "model_hidden", value: params[:model]
           %button.filter-custom-btn{ type: "button", id: "model_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "model" }
-            %span{ id: "model_label" }= params[:model].present? ? params[:model] : "All Models"
+            %span{ id: "model_label" }= params[:model].present? ? params[:model] : t("filters.all_models")
             %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
           %div.filter-dropdown{ id: "model_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden; max-height:14rem; overflow-y:auto;" }
             .py-1
               %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "model", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
                 %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
-                All Models
+                = t("filters.all_models")
               - (@car_models || []).each do |model|
                 %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => model, "data-filter" => "model", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
                   %i.fas.fa-car-side.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
@@ -63,16 +63,16 @@
 
         / Monthly Price custom dropdown
         .flex.flex-col.relative{ data: { dropdown: "monthly_price" } }
-          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" } Price / Month
+          %label{ style: "font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--td-muted); margin-bottom: 0.375rem;" }= t("filters.price_label")
           = f.hidden_field :monthly_price, id: "monthly_price_hidden", value: params[:monthly_price]
           %button.filter-custom-btn{ type: "button", id: "monthly_price_btn", style: "display:flex; align-items:center; justify-content:space-between; width:100%; padding:0.5rem 1rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; cursor:pointer;", "data-filter" => "monthly_price" }
-            %span{ id: "monthly_price_label" }= params[:monthly_price].present? ? params[:monthly_price] : "All Prices"
+            %span{ id: "monthly_price_label" }= params[:monthly_price].present? ? params[:monthly_price] : t("filters.all_prices")
             %i.fas.fa-chevron-down.text-xs{ style: "color:var(--td-muted); transition:transform 0.2s;" }
           %div.filter-dropdown{ id: "monthly_price_dropdown", style: "display:none; position:absolute; top:100%; left:0; right:0; margin-top:0.5rem; background:var(--td-surface); border:1px solid var(--td-border); border-radius:0.75rem; box-shadow:0 16px 40px rgba(0,0,0,0.18); z-index:200; overflow:hidden; max-height:14rem; overflow-y:auto;" }
             .py-1
               %a.filter-option{ href: "#", style: "display:flex; align-items:center; padding:0.625rem 1rem; font-size:0.875rem; color:var(--td-text); transition:background 0.15s;", "data-value" => "", "data-filter" => "monthly_price", onmouseover: "this.style.background='rgba(249,115,22,0.08)'", onmouseout: "this.style.background=''" }
                 %i.fas.fa-th-large.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
-                All Prices
+                = t("filters.all_prices")
               - (@monthly_price_slabs || []).each do |slab|
                 - slab_value = slab.is_a?(Array) ? slab[1] : slab
                 - slab_label = slab.is_a?(Array) ? slab[0] : slab
@@ -80,7 +80,7 @@
                   %i.fas.fa-money-bill-wave.mr-3.w-4{ style: "color:#F97316; font-size:0.75rem;" }
                   = slab_label
 
-        = f.submit "Search", style: "background: linear-gradient(135deg, #F97316, #EA580C); color: white; font-weight: 700; padding: 0.5rem 1.5rem; border-radius: 0.5rem; border: none; cursor: pointer; width: 100%; box-shadow: 0 4px 14px rgba(249,115,22,0.35); transition: transform 0.1s ease;", class: "hover:scale-105"
+        = f.submit t("filters.search_button"), style: "background: linear-gradient(135deg, #F97316, #EA580C); color: white; font-weight: 700; padding: 0.5rem 1.5rem; border-radius: 0.5rem; border: none; cursor: pointer; width: 100%; box-shadow: 0 4px 14px rgba(249,115,22,0.35); transition: transform 0.1s ease;", class: "hover:scale-105"
 
 :javascript
   (function initializeFilters() {

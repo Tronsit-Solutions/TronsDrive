@@ -15,16 +15,16 @@
       .hidden.md:flex.items-center.gap-6.flex-shrink-0
 
         - unless user_signed_in? || vendor_signed_in?
-          = link_to 'Home', root_path, class: 'text-sm font-medium whitespace-nowrap transition navbar-link'
+          = link_to t("navbar.home"), root_path, class: 'text-sm font-medium whitespace-nowrap transition navbar-link'
 
         - unless vendor_signed_in?
           = link_to cars_path(with_driver: true), class: 'text-sm font-medium whitespace-nowrap transition navbar-link' do
-            Car With Driver
+            = t("navbar.car_with_driver")
 
           / Rent A Car dropdown
           .relative
             %button#rent-car-menu-button.flex.items-center.gap-1.text-sm.font-medium.whitespace-nowrap.transition.navbar-link{ type: "button", onclick: "toggleRentCarMenu()" }
-              %span Rent A Car
+              %span= t("navbar.rent_a_car")
               %i#rent-car-arrow.fas.fa-chevron-down.text-xs.transition-transform.duration-200
             #rent-car-dropdown.absolute.left-0.mt-2.w-52.rounded-xl.shadow-2xl.border.hidden.overflow-hidden{ style: "background: var(--td-surface); border-color: var(--td-border); z-index: 200;" }
               .py-1
@@ -61,23 +61,23 @@
               .py-1
                 = link_to cars_path, class: "flex items-center px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-car mr-3 w-4', style: 'color: #F97316' }
-                  Browse Cars
+                  = t("navbar.browse_cars")
                 = link_to user_home_path, class: "flex items-center px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-home mr-3 w-4', style: 'color: #F97316' }
-                  My Dashboard
+                  = t("navbar.my_dashboard")
                 = link_to users_documents_path, class: "flex items-center px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-file-upload mr-3 w-4', style: 'color: #F97316' }
-                  Documents
+                  = t("navbar.documents")
                 = link_to users_bookings_path, class: "flex items-center px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-calendar-check mr-3 w-4', style: 'color: #F97316' }
-                  Bookings
+                  = t("navbar.bookings")
                 = link_to user_path(current_user), class: "flex items-center px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-user mr-3 w-4', style: 'color: #F97316' }
-                  Profile
+                  = t("navbar.profile")
                 .border-t.my-1{ style: "border-color: var(--td-border)" }
                 = link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-all duration-150" do
                   %i.fas.fa-sign-out-alt.mr-3.w-4
-                  Sign Out
+                  = t("navbar.sign_out")
 
         - elsif vendor_signed_in?
           .relative
@@ -97,33 +97,55 @@
               .py-1
                 = link_to vendors_dashboard_path, class: "flex items-center px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-tachometer-alt mr-3 w-4', style: 'color: #F97316' }
-                  Dashboard
+                  = t("navbar.dashboard")
                 = link_to vendor_path(current_vendor), class: "flex items-center px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-user mr-3 w-4', style: 'color: #F97316' }
-                  Profile
+                  = t("navbar.profile")
                 .border-t.my-1{ style: "border-color: var(--td-border)" }
                 = link_to destroy_vendor_session_path, method: :delete, data: { turbo_method: :delete }, class: "flex items-center px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-all duration-150" do
                   %i.fas.fa-sign-out-alt.mr-3.w-4
-                  Sign Out
+                  = t("navbar.sign_out")
 
         - else
           .relative
             %button#login-menu-button.flex.items-center.gap-1.whitespace-nowrap.text-sm.font-medium.transition.navbar-link{ type: "button", onclick: "toggleLoginMenu()" }
               %i.fas.fa-user.text-xs.flex-shrink-0
-              %span Login
+              %span= t("navbar.login")
               %i#login-arrow.fas.fa-chevron-down.text-xs.transition-transform.duration-200
             #login-dropdown.absolute.right-0.mt-2.w-48.rounded-xl.shadow-2xl.border.hidden.overflow-hidden{ style: "background: var(--td-surface); border-color: var(--td-border); z-index: 200;" }
               .py-1
                 = link_to new_user_session_path, class: "flex items-center px-4 py-2.5 text-sm transition navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-user mr-3 w-4', style: 'color: #F97316' }
-                  Customer Login
+                  = t("navbar.customer_login")
                 = link_to new_vendor_session_path, class: "flex items-center px-4 py-2.5 text-sm transition navbar-link hover:bg-orange-50" do
                   %i{ class: 'fas fa-store mr-3 w-4', style: 'color: #F97316' }
-                  Vendor Login
+                  = t("navbar.vendor_login")
 
           = link_to new_user_registration_path, class: 'navbar-button px-4 py-2 rounded-lg text-sm font-semibold shadow' do
             %i.fas.fa-rocket.mr-1
-            Sign Up
+            = t("navbar.sign_up")
+
+        / ── Language switcher (desktop) ──────────────────────
+        - current_locale = I18n.locale.to_s
+        - lang_labels = { "en" => ["🇬🇧", "English"], "ur" => ["🇵🇰", "اردو"], "ar" => ["🇸🇦", "عربي"] }
+        - active_flag, active_name = lang_labels[current_locale] || lang_labels["en"]
+        .relative
+          %button#lang-menu-button.hidden.md:flex.items-center.gap-2.px-3.py-1.5.rounded-xl.border.text-sm.font-medium.transition-all.duration-200{ type: "button", onclick: "toggleLangMenu()", style: "background: var(--td-surface2); border-color: var(--td-border); color: var(--td-text);" }
+            %span.text-base= active_flag
+            %span= active_name
+            %i#lang-arrow.fas.fa-chevron-down.text-xs.transition-transform.duration-200{ style: "color: var(--td-muted)" }
+          #lang-dropdown.absolute.right-0.mt-2.w-48.rounded-2xl.shadow-2xl.border.hidden.overflow-hidden{ style: "background: var(--td-surface); border-color: var(--td-border); z-index: 200;" }
+            .px-4.py-2.5.border-b{ style: "background: var(--td-surface2); border-color: var(--td-border)" }
+              %p.text-xs.font-semibold.uppercase.tracking-wider{ style: "color: var(--td-muted)" }= t("navbar.language")
+            .py-1
+              - [["en","🇬🇧","English","English"],["ur","🇵🇰","اردو","Urdu"],["ar","🇸🇦","عربي","Arabic"]].each do |loc, flag, native, roman|
+                = button_to switch_locale_path, method: :post, params: { locale: loc }, class: "w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-all duration-150 navbar-link hover:bg-orange-50 #{current_locale == loc ? 'font-semibold' : ''}", form: { data: { turbo: false } } do
+                  %span.text-lg= flag
+                  .flex.flex-col.items-start
+                    %span.font-medium= native
+                    %span.text-xs{ style: "color: var(--td-muted)" }= roman
+                  - if current_locale == loc
+                    %i.fas.fa-check.ml-auto{ style: "color: #F97316" }
 
       / ── Mobile hamburger ─────────────────────────────────────
       .md:hidden
@@ -136,12 +158,22 @@
 
       / Mobile theme toggle
       .flex.items-center.justify-between.px-2.py-3.mb-1
-        %span.text-sm.font-medium{ style: "color: var(--td-muted)" } Appearance
+        %span.text-sm.font-medium{ style: "color: var(--td-muted)" }= t("navbar.appearance")
         %button.td-theme-toggle{ type: "button", "data-action" => "click->theme#toggle", "data-theme-target" => "icon", "aria-label" => "Toggle theme" }
           %svg.w-4.h-4.td-sun-icon{ fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", "stroke-width" => "2", style: "display:none" }
             %path{ "stroke-linecap" => "round", "stroke-linejoin" => "round", d: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" }
           %svg.w-4.h-4.td-moon-icon{ fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", "stroke-width" => "2" }
             %path{ "stroke-linecap" => "round", "stroke-linejoin" => "round", d: "M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" }
+
+      / Mobile language switcher
+      - mob_locale = I18n.locale.to_s
+      .px-2.py-3.mb-1
+        %p.text-xs.font-semibold.uppercase.tracking-wider.mb-2{ style: "color: var(--td-muted)" }= t("navbar.language")
+        .flex.gap-2
+          - [["en","🇬🇧","EN"],["ur","🇵🇰","UR"],["ar","🇸🇦","AR"]].each do |loc, flag, label|
+            = button_to switch_locale_path, method: :post, params: { locale: loc }, class: "flex-1 flex flex-col items-center gap-1 py-2 rounded-xl text-sm transition border #{mob_locale == loc ? 'font-semibold border-orange-400 shadow-sm' : 'border-transparent'}", style: "background: var(--td-surface2); color: var(--td-text);#{mob_locale == loc ? ' outline: 2px solid #F97316; outline-offset: -2px;' : ''}", form: { data: { turbo: false } } do
+              %span.text-xl= flag
+              %span.text-xs.font-semibold= label
 
       - if user_signed_in?
         .flex.items-center.space-x-3.px-2.py-3.mb-2.rounded-xl{ style: "background: var(--td-surface2)" }
@@ -152,23 +184,23 @@
             %p.text-xs{ style: "color: var(--td-muted)" }= current_user.email
         = link_to cars_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
           %i{ class: 'fas fa-car mr-3 w-4', style: 'color: #F97316' }
-          Browse Cars
+          = t("navbar.browse_cars")
         = link_to user_home_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
           %i{ class: 'fas fa-home mr-3 w-4', style: 'color: #F97316' }
-          My Dashboard
+          = t("navbar.my_dashboard")
         = link_to users_documents_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
           %i{ class: 'fas fa-file-upload mr-3 w-4', style: 'color: #F97316' }
-          Documents
+          = t("navbar.documents")
         = link_to users_bookings_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
           %i{ class: 'fas fa-calendar-check mr-3 w-4', style: 'color: #F97316' }
-          Bookings
+          = t("navbar.bookings")
         = link_to user_path(current_user), class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
           %i{ class: 'fas fa-user mr-3 w-4', style: 'color: #F97316' }
-          Profile
+          = t("navbar.profile")
         .border-t.pt-3.mt-2{ style: "border-color: var(--td-border)" }
         = link_to destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: 'flex items-center px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition rounded-lg' do
           %i.fas.fa-sign-out-alt.mr-3.w-4
-          Sign Out
+          = t("navbar.sign_out")
 
       - elsif vendor_signed_in?
         .flex.items-center.space-x-3.px-2.py-3.mb-2.rounded-xl{ style: "background: var(--td-surface2)" }
@@ -179,23 +211,23 @@
             %p.text-xs{ style: "color: var(--td-muted)" }= current_vendor.email
         = link_to vendors_dashboard_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
           %i{ class: 'fas fa-tachometer-alt mr-3 w-4', style: 'color: #F97316' }
-          Dashboard
+          = t("navbar.dashboard")
         = link_to vendor_path(current_vendor), class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
           %i{ class: 'fas fa-user mr-3 w-4', style: 'color: #F97316' }
-          Profile
+          = t("navbar.profile")
         .border-t.pt-3.mt-2{ style: "border-color: var(--td-border)" }
         = link_to destroy_vendor_session_path, method: :delete, data: { turbo_method: :delete }, class: 'flex items-center px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition rounded-lg' do
           %i.fas.fa-sign-out-alt.mr-3.w-4
-          Sign Out
+          = t("navbar.sign_out")
 
       - else
-        = link_to 'Home', root_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50'
+        = link_to t("navbar.home"), root_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50'
         = link_to cars_path(with_driver: true), class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
-          Car With Driver
+          = t("navbar.car_with_driver")
 
         .px-3.py-2
           %button#mobile-rent-car-button.flex.items-center.justify-between.w-full.text-sm.font-medium.transition.navbar-link{ type: "button", onclick: "toggleMobileRentCar()" }
-            %span Rent A Car
+            %span= t("navbar.rent_a_car")
             %i.fas.fa-chevron-down.text-xs{ id: "mobile-rent-car-arrow", style: "transition: transform 0.2s;" }
           #mobile-rent-car-menu.hidden.mt-1.pl-4.space-y-1
             - AppConstants::CAR_CATEGORIES.each do |category, cat|
@@ -206,13 +238,13 @@
         .border-t.pt-3.mt-2.space-y-1{ style: "border-color: var(--td-border)" }
           = link_to new_user_session_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
             %i{ class: 'fas fa-user mr-3 w-4', style: 'color: #F97316' }
-            Customer Login
+            = t("navbar.customer_login")
           = link_to new_vendor_session_path, class: 'flex items-center px-3 py-2 text-sm font-medium transition rounded-lg navbar-link hover:bg-orange-50' do
             %i{ class: 'fas fa-store mr-3 w-4', style: 'color: #F97316' }
-            Vendor Login
+            = t("navbar.vendor_login")
           = link_to new_user_registration_path, class: 'navbar-button flex items-center justify-center px-3 py-2 text-sm font-semibold rounded-lg mt-2' do
             %i.fas.fa-rocket.mr-2
-            Sign Up
+            = t("navbar.sign_up")
 
 :javascript
   document.addEventListener('DOMContentLoaded', function() {
@@ -233,6 +265,7 @@
   function toggleVendorMenu()  { toggleDrop('vendor-dropdown',  'vendor-menu-button'); }
   function toggleLoginMenu()   { toggleDrop('login-dropdown',   'login-menu-button'); }
   function toggleRentCarMenu() { toggleDrop('rent-car-dropdown','rent-car-menu-button'); }
+  function toggleLangMenu()    { toggleDrop('lang-dropdown',    'lang-menu-button'); }
 
   function toggleDrop(dropId, btnId) {
     const drop = document.getElementById(dropId);
@@ -251,7 +284,8 @@
 
   document.addEventListener('click', function(e) {
     [['user-dropdown','user-menu-button'],['vendor-dropdown','vendor-menu-button'],
-     ['login-dropdown','login-menu-button'],['rent-car-dropdown','rent-car-menu-button']
+     ['login-dropdown','login-menu-button'],['rent-car-dropdown','rent-car-menu-button'],
+     ['lang-dropdown','lang-menu-button']
     ].forEach(([dropId, btnId]) => {
       const drop = document.getElementById(dropId);
       const btn  = document.getElementById(btnId);

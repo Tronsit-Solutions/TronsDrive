@@ -5,7 +5,7 @@
         %i.fas.fa-exclamation-circle.text-red-400
       .ml-3
         %h3.text-sm.font-medium.text-red-800
-          = "Please fix the following #{pluralize(object.errors.count, 'error')}:"
+          = "#{t('shared.fix_errors')} #{pluralize(object.errors.count, t('shared.errors'))}:"
         .mt-2.text-sm.text-red-700
           %ul.list-disc.pl-5.space-y-1
             - object.errors.full_messages.each do |message|
