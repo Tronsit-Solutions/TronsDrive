@@ -77,15 +77,15 @@
       .flex.items-center.justify-between
         %h1.text-2xl.font-bold{style: 'color: #F97316'}
           - if @car.category == 'Limousine'
-            = "#{@car.brand} in Dubai"
+            = "#{@car.brand} #{t('car.in_dubai')}"
           - else
-            = "#{@car.brand} #{@car.model} #{@car.year} in Dubai"
+            = "#{@car.brand} #{@car.model} #{@car.year} #{t('car.in_dubai')}"
           - if @car.featured?
             %span.inline-flex.items-center.px-2.py-1.rounded-full.text-xs.font-bold.bg-yellow-100.text-yellow-800.ml-2.align-middle
               %i.fas.fa-star.mr-1
-              Featured
+              = t("car.featured")
           - if @car.with_driver?
-            %span.inline-block.bg-blue-100.text-blue-700.text-sm.font-semibold.px-3.py-1.rounded-full.ml-2.align-middle With Driver
+            %span.inline-block.bg-blue-100.text-blue-700.text-sm.font-semibold.px-3.py-1.rounded-full.ml-2.align-middle= t("car.with_driver")
         .flex.items-center.space-x-4
           %button.p-2.border.rounded-lg.hover:bg-gray-50
             %i.far.fa-heart
@@ -144,33 +144,33 @@
             .h-96.bg-gradient-to-br.from-gray-200.to-gray-300.flex.items-center.justify-center
               .text-center
                 %i.fas.fa-car.text-gray-400.text-6xl.mb-4
-                %p.text-gray-500.text-lg No images available
+                %p.text-gray-500.text-lg= t("car.no_images")
 
         / Rental Terms Card under gallery
         - unless @car.with_driver?
           .bg-white.rounded-xl.shadow-sm.mb-6
             .px-6.py-4.border-b
-              %h3.font-semibold.text-gray-900 Rental Terms
+              %h3.font-semibold.text-gray-900= t("car.rental_terms")
             .p-6
               .grid.grid-cols-1.sm:grid-cols-2.gap-x-10.gap-y-5.place-items-center.text-center
                 .flex.items-center.justify-center.gap-3
                   %i.fas.fa-tachometer-alt.text-xl.text-gray-700
-                  %span.text-gray-800 Mileage Policy
+                  %span.text-gray-800= t("car.mileage_policy")
                   %button.text-gray-400.hover:text-gray-600{ "data-policy" => "mileage" }
                     %i.fas.fa-info-circle
                 .flex.items-center.justify-center.gap-3
                   %i.fas.fa-gas-pump.text-xl.text-gray-700
-                  %span.text-gray-800 Fuel Policy
+                  %span.text-gray-800= t("car.fuel_policy")
                   %button.text-gray-400.hover:text-gray-600{ "data-policy" => "fuel" }
                     %i.fas.fa-info-circle
                 .flex.items-center.justify-center.gap-3
                   %i.fas.fa-file-alt.text-xl.text-gray-700
-                  %span.text-gray-800 Rental Policy
+                  %span.text-gray-800= t("car.rental_policy")
                   %button.text-gray-400.hover:text-gray-600{ "data-policy" => "rental" }
                     %i.fas.fa-info-circle
                 .flex.items-center.justify-center.gap-3
                   %i.fas.fa-shield-alt.text-xl.text-gray-700
-                  %span.text-gray-800 Insurance Policy
+                  %span.text-gray-800= t("car.insurance_policy")
                   %button.text-gray-400.hover:text-gray-600{ "data-policy" => "insurance" }
                     %i.fas.fa-info-circle
 
@@ -182,7 +182,7 @@
                 .flex.items-center.gap-3
                   %span.inline-flex.items-center.justify-center.w-6.h-6.rounded-full.bg-green-500.text-white
                     %i.fas.fa-check.text-xs
-                  %span.text-gray-800= "Minimum #{min_days} days rental"
+                  %span.text-gray-800= t("car.minimum_rental", days: min_days)
 
       / Right Column - Pricing & Booking (1/3 width)
       .lg:col-span-1
@@ -191,23 +191,23 @@
           .flex.space-x-3
             = link_to admin_whatsapp_link("Hi, I'm interested in renting #{@car.brand} #{@car.model} #{@car.year}"), target: '_blank', class: 'flex-1 bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg text-center flex items-center justify-center gap-2' do
               %i.fab.fa-whatsapp.text-lg
-              %span WhatsApp
+              %span= t("car.whatsapp")
             = link_to admin_call_link, class: 'flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg text-center flex items-center justify-center gap-2' do
               %i.fas.fa-phone.text-lg
-              %span Call
+              %span= t("car.call")
 
         .bg-white.rounded-xl.shadow-sm.p-6.mb-6{ "data-controller" => "pricing-selector" }
           - if @car.category == 'Limousine'
             .grid.grid-cols-1.gap-4.mb-4
               .border.rounded-xl.p-6.flex.flex-col.items-center.text-center.transition.shadow-sm.bg-blue-50.border-blue-200
-                %div.font-medium.uppercase.text-gray-500.mb-1 Per Hour Price
+                %div.font-medium.uppercase.text-gray-500.mb-1= t("car.per_hour_price")
                 - if @car.has_discount?
                   %div.font-bold.text-gray-400.line-through AED #{@car.hourly_price}
                   %div.font-extrabold.text-red-600{style: 'font-size: 2rem;'}= @car.discounted_hourly_price.round(2)
                 - else
                   %div.font-bold{style: 'color: #F97316'} AED
                   %div.font-extrabold{style: 'color: #F97316; font-size: 2rem;'}= @car.hourly_price
-                %div.text-xs.text-gray-500.mt-2 Full Service Included
+                %div.text-xs.text-gray-500.mt-2= t("car.full_service")
           - elsif @car.with_driver?
             .grid.grid-cols-2.gap-4.mb-4
               / 5 Hours Card
@@ -218,7 +218,7 @@
                 "data-period" => "5 Hours",
                 "data-mileage" => "N/A"
               }
-                %div.font-medium.uppercase.text-gray-500.mb-1 5 Hours
+                %div.font-medium.uppercase.text-gray-500.mb-1= t("car.five_hours")
                 - if @car.has_discount?
                   %div.text-xs.text-gray-400.line-through AED #{@car.five_hours_charge}
                   %div.font-bold{style: 'color: #F97316'} AED
@@ -226,7 +226,7 @@
                 - else
                   %div.font-bold{style: 'color: #F97316'} AED
                   %div.font-extrabold{style: 'color: #F97316'}= @car.five_hours_charge
-                %div.text-xs.text-gray-500.mt-1 Service
+                %div.text-xs.text-gray-500.mt-1= t("car.service")
 
               / 10 Hours Card
               .cursor-pointer.border.rounded-xl.p-4.flex.flex-col.items-center.text-center.transition.shadow-sm.hover:shadow{
@@ -236,7 +236,7 @@
                 "data-period" => "10 Hours",
                 "data-mileage" => "N/A"
               }
-                %div.font-medium.uppercase.text-gray-500.mb-1 10 Hours
+                %div.font-medium.uppercase.text-gray-500.mb-1= t("car.ten_hours")
                 - if @car.has_discount?
                   %div.text-xs.text-gray-400.line-through AED #{@car.ten_hours_charge}
                   %div.font-bold{style: 'color: #F97316'} AED
@@ -244,7 +244,7 @@
                 - else
                   %div.font-bold{style: 'color: #F97316'} AED
                   %div.font-extrabold{style: 'color: #F97316'}= @car.ten_hours_charge
-                %div.text-xs.text-gray-500.mt-1 Service
+                %div.text-xs.text-gray-500.mt-1= t("car.service")
           - else
             .grid.grid-cols-1.sm:grid-cols-3.gap-3.mb-4
               - daily_price = @car.respond_to?(:daily_price) && @car.daily_price || 0
@@ -263,7 +263,7 @@
                 "data-period" => "daily",
                 "data-mileage" => daily_mileage
               }
-                %div.font-medium.uppercase.text-gray-500.mb-1 Daily
+                %div.font-medium.uppercase.text-gray-500.mb-1= t("car.daily")
                 - if @car.has_discount?
                   %div.text-xs.text-gray-400.line-through AED #{daily_price}
                   %div.font-bold{style: 'color: #F97316'} AED
@@ -271,8 +271,8 @@
                 - else
                   %div.font-bold{style: 'color: #F97316'} AED
                   %div.font-extrabold{style: 'color: #F97316'}= daily_price
-                %div.text-xs.text-gray-500.mt-1 /day
-                %div.mt-2.text-xs.text-gray-600 Includes
+                %div.text-xs.text-gray-500.mt-1= t("car.per_day")
+                %div.mt-2.text-xs.text-gray-600= t("car.includes")
                 %div.text-sm.font-medium= "#{daily_mileage} km"
 
               / Weekly Card
@@ -283,7 +283,7 @@
                 "data-period" => "weekly",
                 "data-mileage" => weekly_mileage
               }
-                %div.font-medium.uppercase.text-gray-500.mb-1 Weekly
+                %div.font-medium.uppercase.text-gray-500.mb-1= t("car.weekly")
                 - if @car.has_discount?
                   %div.text-xs.text-gray-400.line-through AED #{weekly_price}
                   %div.font-bold{style: 'color: #F97316'} AED
@@ -291,8 +291,8 @@
                 - else
                   %div.font-bold{style: 'color: #F97316'} AED
                   %div.font-extrabold{style: 'color: #F97316'}= weekly_price
-                %div.text-xs.text-gray-500.mt-1 /week
-                %div.mt-2.text-xs.text-gray-600 Includes
+                %div.text-xs.text-gray-500.mt-1= t("car.per_week")
+                %div.mt-2.text-xs.text-gray-600= t("car.includes")
                 %div.text-sm.font-medium= "#{weekly_mileage} km"
 
               / Monthly Card
@@ -303,7 +303,7 @@
                 "data-period" => "monthly",
                 "data-mileage" => monthly_mileage
               }
-                %div.font-medium.uppercase.text-gray-500.mb-1 Monthly
+                %div.font-medium.uppercase.text-gray-500.mb-1= t("car.monthly")
                 - if @car.has_discount?
                   %div.text-xs.text-gray-400.line-through AED #{monthly_price}
                   %div.font-bold{style: 'color: #F97316'} AED
@@ -311,15 +311,15 @@
                 - else
                   %div.font-bold{style: 'color: #F97316'} AED
                   %div.font-extrabold{style: 'color: #F97316'}= monthly_price
-                %div.text-xs.text-gray-500.mt-1 /month
-                %div.mt-2.text-xs.text-gray-600 Includes
+                %div.text-xs.text-gray-500.mt-1= t("car.per_month")
+                %div.mt-2.text-xs.text-gray-600= t("car.includes")
                 %div.text-sm.font-medium= "#{monthly_mileage} km"
 
           / Mileage and charge info
           - unless @car.with_driver?
             .space-y-3.text-sm
               .flex.justify-between
-                %span Additional mileage charge
+                %span= t("car.additional_mileage")
                 %span{ id: "additionalMileageText", "data-pricing-selector-target" => "additionalCharge" }= "AED #{extra_charge} /km"
 
           / Hidden inputs for booking submission
@@ -331,86 +331,86 @@
             - if @car.with_driver?
               = link_to with_driver_whatsapp_booking_link(@car), target: '_blank', class: "w-full py-3 px-4 rounded-lg text-white font-semibold text-center flex items-center justify-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg", style: 'background-color: #F97316' do
                 %i.fab.fa-whatsapp.text-lg
-                Enquire Booking
+                = t("car.enquire_booking")
             - else
               %button.w-full.py-3.px-4.rounded-lg.text-white.font-semibold{ type: "button", onclick: "openBookingModal()", style: "background-color: #F97316; cursor:pointer; border:none;" }
-                Book Now
+                = t("car.book_now")
 
   - unless @car.category == 'Limousine'
     / Car Overview Section
     - cache [@car, 'overview'] do
       .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8.pb-8
         .bg-white.rounded-xl.shadow-sm.p-8
-          %h2.text-2xl.font-bold.mb-6{style: 'color: #EA580C'} CAR OVERVIEW
+          %h2.text-2xl.font-bold.mb-6{style: 'color: #EA580C'}= t("car.car_overview")
           
           .grid.grid-cols-2.md:grid-cols-3.lg:grid-cols-4.gap-6
             - unless @car.with_driver?
               .flex.items-center.space-x-3
                 %i.fas.fa-car.text-gray-400.w-5
                 .div
-                  %span.text-sm.text-gray-500 Body Type
+                  %span.text-sm.text-gray-500= t("car.body_type")
                   %p.font-medium= @car.category || 'Sedan'
             
             - unless @car.with_driver?
               .flex.items-center.space-x-3
                 %i.fas.fa-calendar.text-gray-400.w-5
                 .div
-                  %span.text-sm.text-gray-500 Model
+                  %span.text-sm.text-gray-500= t("car.model_year")
                   %p.font-medium= @car.year || '2021'
-            
+
             .flex.items-center.space-x-3
               %i.fas.fa-palette.text-gray-400.w-5
               .div
-                %span.text-sm.text-gray-500 Colour
+                %span.text-sm.text-gray-500= t("car.colour")
                 %p.font-medium= @car.color || 'Black'
-            
+
             - unless @car.with_driver?
               .flex.items-center.space-x-3
                 %i.fas.fa-gas-pump.text-gray-400.w-5
                 .div
-                  %span.text-sm.text-gray-500 Fuel
+                  %span.text-sm.text-gray-500= t("car.fuel")
                   %p.font-medium= @car.fuel_type || 'Petrol'
-            
+
             - unless @car.with_driver?
               .flex.items-center.space-x-3
                 %i.fas.fa-cogs.text-gray-400.w-5
                 .div
-                  %span.text-sm.text-gray-500 Transmission
+                  %span.text-sm.text-gray-500= t("car.transmission")
                   %p.font-medium= @car.transmission || 'Auto'
-            
+
             .flex.items-center.space-x-3
               %i.fas.fa-users.text-gray-400.w-5
               .div
-                %span.text-sm.text-gray-500 Seating Capacity
-                %p.font-medium= "#{@car.seats || 5} passengers"
+                %span.text-sm.text-gray-500= t("car.seating_capacity")
+                %p.font-medium= "#{@car.seats || 5} #{t('car.passengers')}"
 
             - if @car.with_driver?
               .flex.items-center.space-x-3
                 %i.fas.fa-suitcase.text-gray-400.w-5
                 .div
-                  %span.text-sm.text-gray-500 Luggage Capacity
-                  %p.font-medium= "#{@car.luggage_capacity || 0} Bags"
-            
+                  %span.text-sm.text-gray-500= t("car.luggage_capacity")
+                  %p.font-medium= "#{@car.luggage_capacity || 0} #{t('home.bags')}"
+
             - unless @car.with_driver?
               .flex.items-center.space-x-3
                 %i.fas.fa-engine.text-gray-400.w-5
                 .div
-                  %span.text-sm.text-gray-500 Engine CC
+                  %span.text-sm.text-gray-500= t("car.engine_cc")
                   %p.font-medium= @car.engine_size || '2.0L'
 
             - if @car.with_driver?
               .flex.items-center.space-x-3
                 %i.fas.fa-user-tie.text-gray-400.w-5
                 .div
-                  %span.text-sm.text-gray-500 Service Type
-                  %p.font-medium.text-blue-600 With Driver Available
+                  %span.text-sm.text-gray-500= t("car.service_type")
+                  %p.font-medium.text-blue-600= t("car.with_driver_available")
 
   - unless @car.category == 'Limousine' || @car.with_driver?
     / Features & Specs Section
     - cache [@car, 'features'] do
       .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8.pb-8
         .bg-white.rounded-xl.shadow-sm.p-8
-          %h2.text-2xl.font-bold.mb-6{style: 'color: #EA580C'} FEATURES & SPECS
+          %h2.text-2xl.font-bold.mb-6{style: 'color: #EA580C'}= t("car.features_specs")
           
           - if @car.features.any?
             .relative
@@ -426,12 +426,12 @@
               - if @car.features.count > 12
                 .mt-6.text-center
                   %button#showMoreFeaturesBtn.px-6.py-3.text-white.rounded-lg.font-semibold.transition-all.duration-200.shadow-md.hover:shadow-lg.flex.items-center.justify-center.mx-auto.gap-2{style: 'background-color: #F97316'}
-                    %span#btnText Show More Features
+                    %span#btnText= t("car.show_more_features")
                     %i.fas.fa-chevron-down#btnIcon
           - else
             .text-center.py-8.text-gray-500
               %i.fas.fa-info-circle.text-3xl.mb-3
-              %p No features available for this vehicle
+              %p= t("car.no_features")
     
     / Required Document Section
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8.pb-8
@@ -439,39 +439,39 @@
 
         / Required Documents Section
         .mb-8
-          .text-xl.font-bold.text-gray-800.mb-4 ✅ Required Documents
+          .text-xl.font-bold.text-gray-800.mb-4 ✅ #{t("car.required_docs")}
           %ul.text-gray-700.text-left.max-w-2xl.mx-10.list-disc.pl-6.space-y-2
             %li
-              %strong Tourists / Non-Residents:
-              | Passport copy, home country license, International Driving Permit (if required), Visa Copy.
+              %strong= t("car.tourists_label")
+              = t("car.tourists_docs")
             %li
-              %strong Residents:
-              | Emirates ID, UAE driving license.
+              %strong= t("car.residents_label")
+              = t("car.residents_docs")
             %li
-              %strong GCC Nationals:
-              | GCC ID or Passport, GCC driving license.
+              %strong= t("car.gcc_label")
+              = t("car.gcc_docs")
 
         / Before Delivery Section
         .mb-8
-          .text-xl.font-bold.text-gray-800.mb-4 ✅ Before Delivery
+          .text-xl.font-bold.text-gray-800.mb-4 ✅ #{t("car.before_delivery")}
           %ul.text-gray-700.text-left.max-w-2xl.mx-10.list-disc.pl-6.space-y-2
-            %li Customers must present the receipt received during booking with tronsDrive at the time of car collection.
-            %li Collect payment receipt.
-            %li Collect a copy of the rental agreement.
+            %li= t("car.delivery_note_1")
+            %li= t("car.delivery_note_2")
+            %li= t("car.delivery_note_3")
 
         / Note Section
         .mb-8
-          .text-xl.font-bold.text-gray-800.mb-4 ⚠️ Note
+          .text-xl.font-bold.text-gray-800.mb-4 ⚠️ #{t("car.note")}
           %ul.text-gray-700.text-left.max-w-2xl.mx-10.list-disc.pl-6.space-y-2
-            %li tronsDrive platform only displays cars and manages reservations.
-            %li tronsDrive bears no responsibility for rental payments made between the customer and the car rental company.
+            %li= t("car.note_1")
+            %li= t("car.note_2")
       
   / Recommended Cars Section
   - if @recommended_cars&.any?
     - cache [@recommended_cars.map(&:id), 'recommended_cars'] do
       .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8.pb-8
         .bg-white.rounded-xl.shadow-sm.p-8
-          %h2.text-2xl.font-bold.mb-6{style: 'color: #EA580C'} RECOMMENDED CAR RENTALS
+          %h2.text-2xl.font-bold.mb-6{style: 'color: #EA580C'}= t("car.recommended")
           .grid.grid-cols-1.md:grid-cols-2.lg:grid-cols-4.gap-6
             - @recommended_cars.each do |car|
               = link_to car_path(car), class: 'block bg-white border rounded-xl overflow-hidden hover:shadow-md transition-shadow' do
@@ -486,7 +486,7 @@
                   .flex.justify-between.items-center
                     .text-sm.font-bold{style: 'color: #F97316'}
                       = car.daily_price ? "AED #{car.daily_price}" : 'AED 0'
-                    .text-xs.text-gray-400 /day
+                    .text-xs.text-gray-400= t("car.per_day")
 
 
   / FOOTER
@@ -501,7 +501,7 @@
   %div{ style: "position:relative; z-index:1; width:100%; max-width:480px; margin:1rem; border-radius:0.75rem; overflow:hidden; background:var(--td-surface); border:1px solid var(--td-border); box-shadow:0 25px 60px rgba(0,0,0,0.3);" }
     / Header
     %div{ style: "display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid var(--td-border);" }
-      %h5{ style: "font-size:1.1rem; font-weight:700; color:var(--td-text); margin:0;" } Book This Car
+      %h5{ style: "font-size:1.1rem; font-weight:700; color:var(--td-text); margin:0;" }= t("car.book_this_car")
       %button{ type: "button", onclick: "closeBookingModal()", style: "background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--td-muted); line-height:1; padding:0;" } ×
     / Body
     %div{ style: "padding:1.25rem;" }
@@ -513,43 +513,43 @@
 
         / Pickup Date
         %div{ style: "margin-bottom:1rem;" }
-          %label{ style: "display:block; font-size:0.875rem; font-weight:600; color:var(--td-text); margin-bottom:0.375rem;" } Pickup Date
+          %label{ style: "display:block; font-size:0.875rem; font-weight:600; color:var(--td-text); margin-bottom:0.375rem;" }= t("car.pickup_date")
           = date_field_tag "booking[start_date]", params[:start_date], required: true, min: Date.today, id: "booking_start_date", style: "width:100%; padding:0.5rem 0.75rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; outline:none; box-sizing:border-box;", onfocus: "this.style.borderColor='#F97316'", onblur: "this.style.borderColor=''"
 
         / Return Date
         %div{ style: "margin-bottom:1rem;" }
-          %label{ style: "display:block; font-size:0.875rem; font-weight:600; color:var(--td-text); margin-bottom:0.375rem;" } Return Date
+          %label{ style: "display:block; font-size:0.875rem; font-weight:600; color:var(--td-text); margin-bottom:0.375rem;" }= t("car.return_date")
           = date_field_tag "booking[end_date]", params[:end_date], required: true, min: Date.today, id: "booking_end_date", style: "width:100%; padding:0.5rem 0.75rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; outline:none; box-sizing:border-box;", onfocus: "this.style.borderColor='#F97316'", onblur: "this.style.borderColor=''"
 
         / Service Option
         %div{ style: "margin-bottom:0.5rem;" }
-          %label{ style: "display:block; font-size:0.875rem; font-weight:600; color:var(--td-text); margin-bottom:0.25rem;" } Service Option (Optional)
-          %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0 0 0.75rem;" } Leave unselected if you don't need pickup or delivery service
+          %label{ style: "display:block; font-size:0.875rem; font-weight:600; color:var(--td-text); margin-bottom:0.25rem;" }= t("car.service_option")
+          %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0 0 0.75rem;" }= t("car.service_hint")
           %div{ style: "display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;" }
             %label#pickup_label{ style: "display:flex; align-items:flex-start; gap:0.625rem; padding:0.75rem; border:1px solid var(--td-border); border-radius:0.5rem; cursor:pointer; transition:border-color 0.15s;" }
               = radio_button_tag "booking[delivery_option]", "pickup", false, id: "delivery_pickup", style: "margin-top:0.2rem; accent-color:#F97316; flex-shrink:0;", onchange: "highlightServiceOption()"
               %div
                 %div{ style: "display:flex; align-items:center; gap:0.25rem; margin-bottom:0.25rem;" }
                   %i.fas.fa-car{ style: "color:#F97316; font-size:0.875rem;" }
-                  %span{ style: "font-weight:600; font-size:0.875rem; color:var(--td-text);" } Pickup
-                %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0;" } Pickup from your location
+                  %span{ style: "font-weight:600; font-size:0.875rem; color:var(--td-text);" }= t("car.pickup")
+                %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0;" }= t("car.pickup_desc")
                 %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0;" } +AED 50
             %label#delivery_label{ style: "display:flex; align-items:flex-start; gap:0.625rem; padding:0.75rem; border:1px solid var(--td-border); border-radius:0.5rem; cursor:pointer; transition:border-color 0.15s;" }
               = radio_button_tag "booking[delivery_option]", "delivery", false, id: "delivery_delivery", style: "margin-top:0.2rem; accent-color:#F97316; flex-shrink:0;", onchange: "highlightServiceOption()"
               %div
                 %div{ style: "display:flex; align-items:center; gap:0.25rem; margin-bottom:0.25rem;" }
                   %i.fas.fa-truck{ style: "color:#F97316; font-size:0.875rem;" }
-                  %span{ style: "font-weight:600; font-size:0.875rem; color:var(--td-text);" } Delivery
-                %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0;" } Car delivered to you
+                  %span{ style: "font-weight:600; font-size:0.875rem; color:var(--td-text);" }= t("car.delivery")
+                %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0;" }= t("car.delivery_desc")
                 %p{ style: "font-size:0.75rem; color:var(--td-muted); margin:0;" } +AED 50
 
     / Footer
     %div{ style: "display:flex; justify-content:flex-end; gap:0.75rem; padding:1rem 1.25rem; border-top:1px solid var(--td-border);" }
-      %button{ type: "button", onclick: "closeBookingModal()", style: "padding:0.5rem 1.25rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; font-weight:600; cursor:pointer;" } Close
+      %button{ type: "button", onclick: "closeBookingModal()", style: "padding:0.5rem 1.25rem; border:1px solid var(--td-border); border-radius:0.5rem; background:var(--td-surface2); color:var(--td-text); font-size:0.875rem; font-weight:600; cursor:pointer;" }= t("car.close")
       - if user_signed_in?
-        %button#bookingSubmitBtn{ type: "submit", form: "bookingForm", disabled: true, style: "padding:0.5rem 1.25rem; border-radius:0.5rem; background:linear-gradient(135deg,#F97316,#EA580C); color:white; font-size:0.875rem; font-weight:600; border:none; box-shadow:0 4px 14px rgba(249,115,22,0.35); opacity:0.45; cursor:not-allowed; transition:opacity 0.2s;" } Confirm Booking
+        %button#bookingSubmitBtn{ type: "submit", form: "bookingForm", disabled: true, style: "padding:0.5rem 1.25rem; border-radius:0.5rem; background:linear-gradient(135deg,#F97316,#EA580C); color:white; font-size:0.875rem; font-weight:600; border:none; box-shadow:0 4px 14px rgba(249,115,22,0.35); opacity:0.45; cursor:not-allowed; transition:opacity 0.2s;" }= t("car.confirm_booking")
       - else
-        %a#bookingSubmitBtn{ href: "#{new_user_session_path(car_id: @car.id)}", style: "padding:0.5rem 1.25rem; border-radius:0.5rem; background:#64748B; color:white; font-size:0.875rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; opacity:0.45; cursor:not-allowed; pointer-events:none; transition:opacity 0.2s;" } Continue to Sign In
+        %a#bookingSubmitBtn{ href: "#{new_user_session_path(car_id: @car.id)}", style: "padding:0.5rem 1.25rem; border-radius:0.5rem; background:#64748B; color:white; font-size:0.875rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; opacity:0.45; cursor:not-allowed; pointer-events:none; transition:opacity 0.2s;" }= t("car.sign_in_to_book")
 
 :javascript
   function checkDates() {

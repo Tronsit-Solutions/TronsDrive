@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
+  before_action :set_locale
+
   def after_sign_out_path_for(resource_or_scope)
     if resource_or_scope == :admin || (resource_or_scope.respond_to?(:mapping) && resource_or_scope.mapping == :admin)
       new_admin_session_path
@@ -29,6 +31,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def set_locale
+    I18n.locale = session[:locale] || I18n.default_locale
+  end
 
   def normalize_filter_values(values)
     values.compact

@@ -29,27 +29,27 @@
         .order-2.lg:order-1
           .inline-flex.items-center.space-x-2.mb-5.px-3.py-1.rounded-full.text-xs.font-bold.uppercase.tracking-widest{ style: "background: rgba(249,115,22,0.15); color: #F97316; border: 1px solid rgba(249,115,22,0.3)" }
             %i.fas.fa-globe.text-xs
-            %span Global Car Rentals
+            %span= t("home.hero_badge")
           %h1.text-4xl.md:text-5xl.xl:text-6xl.font-extrabold.leading-tight.mb-4
-            = (@headline || 'Drive Anywhere.')
+            = (@headline || t("home.headline"))
             %br
-            %span{ style: "color: #F97316" } Your Car, Your Route.
+            %span{ style: "color: #F97316" }= t("home.subheadline")
           %p.text-base.md:text-lg.mb-8.max-w-xl{ style: "color: rgba(255,255,255,0.80)" }
-            TronsDrive connects you with premium vehicles worldwide — economy, luxury, SUV, electric and everything in between. Zero hassle, instant booking.
+            = t("home.description")
           .flex.flex-wrap.gap-4.mt-2
             = link_to (@cars_path || cars_path), style: 'display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 9999px; font-weight: 700; font-size: 0.95rem; color: #fff; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); box-shadow: 0 8px 28px rgba(249,115,22,0.45), inset 0 1px 0 rgba(255,255,255,0.2); letter-spacing: 0.01em; transition: transform 0.2s ease, box-shadow 0.2s ease; text-decoration: none;', onmouseover: "this.style.transform='translateY(-2px)'; this.style.boxShadow='0 14px 36px rgba(249,115,22,0.55), inset 0 1px 0 rgba(255,255,255,0.2)'", onmouseout: "this.style.transform=''; this.style.boxShadow='0 8px 28px rgba(249,115,22,0.45), inset 0 1px 0 rgba(255,255,255,0.2)'" do
               .w-7.h-7.rounded-full.flex.items-center.justify-center{ style: 'background: rgba(255,255,255,0.2); flex-shrink: 0;' }
                 %i.fas.fa-car-side.text-xs
-              %span= (@cta_label || 'Browse Cars')
+              %span= (@cta_label || t("home.browse_cars"))
             = link_to cars_path(with_driver: true), style: 'display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 9999px; font-weight: 600; font-size: 0.95rem; color: #fff; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.3); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); letter-spacing: 0.01em; transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease; text-decoration: none;', onmouseover: "this.style.transform='translateY(-2px)'; this.style.background='rgba(255,255,255,0.15)'; this.style.borderColor='rgba(255,255,255,0.5)'", onmouseout: "this.style.transform=''; this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(255,255,255,0.3)'" do
               .w-7.h-7.rounded-full.flex.items-center.justify-center{ style: 'background: rgba(255,255,255,0.15); flex-shrink: 0;' }
                 %i.fas.fa-user-tie.text-xs
-              %span With Driver
+              %span= t("home.with_driver")
 
         / Right — trust badges
         .order-1.lg:order-2
           .grid.grid-cols-2.gap-3
-            - [['fas fa-shield-alt','Zero Deposit','Options available'],['fas fa-clock','24/7 Support','Always here'],['fas fa-globe','Worldwide','Any city, any country'],['fas fa-star','Top Rated','5-star experience']].each do |icon, title, sub|
+            - [['fas fa-shield-alt', t("home.zero_deposit"), t("home.zero_deposit_sub")],['fas fa-clock', t("home.support_24_7"), t("home.support_sub")],['fas fa-globe', t("home.worldwide"), t("home.worldwide_sub")],['fas fa-star', t("home.top_rated"), t("home.top_rated_sub")]].each do |icon, title, sub|
               .rounded-2xl.p-4{ style: "background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(12px)" }
                 %i{ class: "#{icon} text-xl mb-2 block", style: "color: #F97316" }
                 %p.text-sm.font-bold.text-white= title
@@ -66,7 +66,7 @@
   %section.py-10{ style: "background: var(--td-surface)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8.text-center
       %p.text-base.md:text-lg.leading-relaxed.max-w-4xl.mx-auto{ style: "color: var(--td-muted)" }
-        TronsDrive offers a comprehensive range of vehicles for every occasion — from daily commuters to luxury escapes. Whether you are travelling for tourism, business, or adventure, book instantly with flexible options including zero deposit, self-drive, or chauffeured service.
+        = t("home.tagline")
 
   / ═══════════════════════════════════════════════════════
   / PROMO BANNER
@@ -84,8 +84,8 @@
   %section.py-16{ style: "background: var(--td-surface2)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-10
-        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" } Categories
-        %h2.text-3xl.md:text-4xl.font-extrabold{ style: "color: var(--td-text)" } Choose Your Drive
+        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" }= t("home.categories_badge")
+        %h2.text-3xl.md:text-4xl.font-extrabold{ style: "color: var(--td-text)" }= t("home.categories_heading")
       .grid.grid-cols-2.md:grid-cols-3.gap-6.md:gap-8
         - (@car_classes || []).each do |car_class|
           = link_to cars_path(category: (car_class[:slug] || car_class[:name])), class: 'group relative rounded-2xl overflow-hidden h-48 transition-all duration-300 category-tile' do
@@ -115,7 +115,7 @@
           - unless category[:slug] == 'featured'
             - link_path = category[:with_driver] ? cars_path(with_driver: true) : cars_path(category: category[:slug])
             = link_to link_path, class: 'inline-flex items-center rounded-xl font-semibold px-5 py-2.5 text-sm shadow transition hover:scale-105', style: 'background: linear-gradient(135deg, #F97316, #EA580C); color: white; box-shadow: 0 4px 14px rgba(249,115,22,0.3)' do
-              View More
+              = t("home.view_more")
               %i.fas.fa-arrow-right.ml-2
 
         .car-carousel.mt-4
@@ -146,15 +146,15 @@
                               - if car.featured?
                                 %span.inline-flex.items-center.px-2.py-0.5.rounded-full.text-xs.font-bold{ style: "background: #FBBF24; color: #0F172A" }
                                   %i.fas.fa-star.mr-1.text-xs
-                                  Featured
+                                  = t("home.featured")
                               - if car.has_discount?
                                 %span.inline-flex.items-center.px-2.py-0.5.rounded-full.text-xs.font-bold.text-white{ style: "background: linear-gradient(135deg,#EF4444,#DC2626)" }
                                   %i.fas.fa-tag.mr-1.text-xs
-                                  = "#{car.discount_percentage}% OFF"
+                                  = "#{car.discount_percentage}% #{t('home.off')}"
                               - if car.with_driver?
                                 %span.inline-flex.items-center.px-2.py-0.5.rounded-full.text-xs.font-bold.text-white{ style: "background: #3B82F6" }
                                   %i.fas.fa-user-tie.mr-1.text-xs
-                                  With Driver
+                                  = t("home.with_driver")
                             .absolute.top-2.right-2
                               - status_style = car.status == 'Available' ? 'background: #22C55E; color: white' : 'background: #EF4444; color: white'
                               %span.inline-block.rounded-full.text-xs.font-semibold.px-2.py-1{ style: status_style }= car.status
@@ -170,11 +170,11 @@
                                   %span.text-xs{ style: "color: var(--td-muted)" }= car.year
                               %p.text-xs.mb-3{ style: "color: var(--td-muted)" }
                                 - if car.category == 'Limousine'
-                                  Limousine Service
+                                  = t("home.limousine_service")
                                 - else
                                   = car.color
                                   - if car.with_driver?
-                                    = " · #{car.seats || 5} Seats · #{car.luggage_capacity || 0} Bags"
+                                    = " · #{car.seats || 5} #{t('home.seats')} · #{car.luggage_capacity || 0} #{t('home.bags')}"
                                   - elsif car.category.present?
                                     = " · #{car.category}"
                             .flex.items-baseline.justify-between{ style: "min-height: 3rem;" }
@@ -198,15 +198,15 @@
                                   %span.text-xl.font-extrabold{ style: "color: #F97316" }= car.daily_price ? number_to_currency(car.daily_price) : 'N/A'
                               %span.text-xs{ style: "color: var(--td-muted)" }
                                 - if car.category == 'Limousine'
-                                  \/hr
+                                  = t("car.per_hr")
                                 - elsif car.with_driver?
-                                  \/5h
+                                  = t("car.per_5h")
                                 - else
-                                  \/day
+                                  = t("car.per_day")
           - else
             .text-center.py-12
               %i.fas.fa-car-side.text-4xl.mb-3.block{ style: "color: var(--td-border)" }
-              %p.text-lg{ style: "color: var(--td-muted)" } No cars available in this category right now.
+              %p.text-lg{ style: "color: var(--td-muted)" }= t("home.no_cars")
 
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       %hr{ style: "border-color: var(--td-border)" }
@@ -217,10 +217,10 @@
   %section.py-20{ style: "background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-12
-        %h2.text-3xl.md:text-4xl.font-extrabold.text-white.mb-2 Trusted by Thousands
-        %p{ style: "color: rgba(255,255,255,0.55)" } Across multiple cities and growing every day
+        %h2.text-3xl.md:text-4xl.font-extrabold.text-white.mb-2= t("home.stats_heading")
+        %p{ style: "color: rgba(255,255,255,0.55)" }= t("home.stats_sub")
       .grid.grid-cols-1.md:grid-cols-3.gap-6.text-center
-        - default_stats = [{value: '990+', label: 'Bookings Completed', icon: 'fa-calendar-check'}, {value: '230+', label: 'Cars in Fleet', icon: 'fa-car'}, {value: '660+', label: 'Happy Customers', icon: 'fa-thumbs-up'}]
+        - default_stats = [{value: '990+', label: t("home.bookings_stat"), icon: 'fa-calendar-check'}, {value: '230+', label: t("home.cars_stat"), icon: 'fa-car'}, {value: '660+', label: t("home.customers_stat"), icon: 'fa-thumbs-up'}]
         - (@stats || default_stats).each do |s|
           .rounded-2xl.p-8{ style: "background: rgba(255,255,255,0.05); border: 1px solid rgba(249,115,22,0.2)" }
             .w-16.h-16.rounded-2xl.flex.items-center.justify-center.mx-auto.mb-4{ style: "background: linear-gradient(135deg, #F97316, #EA580C)" }
@@ -234,20 +234,20 @@
   %section.py-16{ style: "background: var(--td-bg)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-10
-        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" } Requirements
-        %h2.text-3xl.font-extrabold.mb-2{ style: "color: var(--td-text)" } What You Need to Rent
+        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" }= t("home.requirements_badge")
+        %h2.text-3xl.font-extrabold.mb-2{ style: "color: var(--td-text)" }= t("home.requirements_heading")
       .grid.grid-cols-1.lg:grid-cols-2.gap-6
         / Residents
         .rounded-2xl.overflow-hidden.border{ style: "background: var(--td-surface); border-color: var(--td-border)" }
           .px-6.py-4.border-b{ style: "background: linear-gradient(135deg, #F97316, #EA580C); border-color: transparent" }
             %h3.text-base.font-bold.text-white
               %i.fas.fa-id-card.mr-2
-              For Residents
+              = t("home.for_residents")
           .p-6.grid.grid-cols-1.md:grid-cols-2.gap-6.items-center
             .flex.items-end.justify-center
               %img{ class: 'w-48 h-32 object-contain', src: asset_path('hero_cars/car3.png'), alt: 'Resident' }
             %ul.space-y-3
-              - ["National / Local Driving License", "National ID / Emirates ID", "Residential Visa (may be accepted)"].each do |doc|
+              - [t("home.resident_doc_1"), t("home.resident_doc_2"), t("home.resident_doc_3")].each do |doc|
                 %li.flex.items-start.gap-3
                   .w-6.h-6.rounded-full.flex.items-center.justify-center.flex-shrink-0{ style: "background: rgba(249,115,22,0.12); color: #F97316" }
                     %i.fas.fa-check.text-xs
@@ -257,12 +257,12 @@
           .px-6.py-4.border-b{ style: "background: linear-gradient(135deg, #1E293B, #0F172A); border-color: transparent" }
             %h3.text-base.font-bold.text-white
               %i.fas.fa-plane-arrival.mr-2
-              For Tourists
+              = t("home.for_tourists")
           .p-6.grid.grid-cols-1.md:grid-cols-2.gap-6.items-center
             .flex.items-end.justify-center
               %img{ class: 'w-48 h-32 object-contain', src: asset_path('hero_cars/car4.png'), alt: 'Tourist' }
             %ul.space-y-3
-              - ["Passport", "Visit / Tourist Visa", "Home Country Driving License", "International Driving Permit (IDP)"].each do |doc|
+              - [t("home.tourist_doc_1"), t("home.tourist_doc_2"), t("home.tourist_doc_3"), t("home.tourist_doc_4")].each do |doc|
                 %li.flex.items-start.gap-3
                   .w-6.h-6.rounded-full.flex.items-center.justify-center.flex-shrink-0{ style: "background: rgba(249,115,22,0.12); color: #F97316" }
                     %i.fas.fa-check.text-xs
@@ -274,8 +274,8 @@
   %section.py-16{ style: "background: var(--td-surface2)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-10
-        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" } Reviews
-        %h2.text-3xl.md:text-4xl.font-extrabold{ style: "color: var(--td-text)" } What Our Customers Say
+        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" }= t("home.reviews_badge")
+        %h2.text-3xl.md:text-4xl.font-extrabold{ style: "color: var(--td-text)" }= t("home.reviews_heading")
       .grid.grid-cols-1.md:grid-cols-3.gap-6
         - (@testimonials || []).each do |t|
           %figure.rounded-2xl.p-6.flex.flex-col.justify-between.transition-all.duration-300.hover:-translate-y-1{ style: "background: var(--td-surface); border: 1px solid var(--td-border); box-shadow: var(--td-card-shadow)" }
@@ -304,12 +304,12 @@
   %section.py-16{ style: "background: var(--td-bg)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-10
-        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" } Why Us
-        %h2.text-3xl.md:text-4xl.font-extrabold.mb-3{ style: "color: var(--td-text)" } Why Choose TronsDrive
+        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" }= t("home.why_us_badge")
+        %h2.text-3xl.md:text-4xl.font-extrabold.mb-3{ style: "color: var(--td-text)" }= t("home.why_us_heading")
         %p.max-w-2xl.mx-auto.text-base{ style: "color: var(--td-muted)" }
-          Trusted for transparency, flexibility, and a world-class fleet. Instant booking, flexible plans, professional support.
+          = t("home.why_us_sub")
       .grid.grid-cols-1.md:grid-cols-3.gap-6
-        - [['fa-dollar-sign','Zero Deposit Options','We offer zero deposit rentals for select vehicles — drive without large upfront payments, ideal for tourists and budget travellers worldwide.'],['fa-car','Wide Range of Vehicles','Economy cars, luxury sedans, sports cars, SUVs, and electric vehicles from Toyota, BMW, Mercedes, Tesla, Porsche and more.'],['fa-calendar-check','Flexible Plans','Daily, weekly, or monthly rentals. Book in minutes and modify or cancel easily. We adapt to your schedule.']].each do |icon, title, desc|
+        - [['fa-dollar-sign', t("home.zero_deposit_title"), t("home.zero_deposit_desc")],['fa-car', t("home.wide_range_title"), t("home.wide_range_desc")],['fa-calendar-check', t("home.flexible_title"), t("home.flexible_desc")]].each do |icon, title, desc|
           .rounded-2xl.p-8.text-center.transition-all.duration-300.hover:-translate-y-1{ style: "background: var(--td-surface); border: 1px solid var(--td-border); box-shadow: var(--td-card-shadow)" }
             .w-14.h-14.rounded-2xl.flex.items-center.justify-center.mx-auto.mb-5{ style: "background: linear-gradient(135deg, #F97316, #EA580C)" }
               %i{ class: "fas #{icon} text-white text-xl" }
@@ -322,7 +322,7 @@
   %section.py-16{ style: "background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-10
-        %h2.text-2xl.md:text-3xl.font-extrabold.text-white.mb-2 TronsDrive – Best Car Rental Deals
+        %h2.text-2xl.md:text-3xl.font-extrabold.text-white.mb-2= t("home.best_deals")
         %hr.mt-4{ style: "border-color: rgba(249,115,22,0.3)" }
       .grid.grid-cols-1.md:grid-cols-2.gap-8
         - @company_features.each do |feature|
@@ -342,12 +342,12 @@
           .relative.h-64.lg:h-72
             %img{ class: 'absolute inset-0 w-full h-full object-cover fade-right', src: image_path('join_us_image.png'), alt: 'Partner with TronsDrive' }
           .p-8.lg:p-12
-            %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" } Fleet Owners
-            %h3.text-3xl.font-extrabold.mb-3{ style: "color: var(--td-text)" } Got a Car Rental Business?
+            %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" }= t("home.fleet_owners_badge")
+            %h3.text-3xl.font-extrabold.mb-3{ style: "color: var(--td-text)" }= t("home.fleet_owners_heading")
             %p.text-base.mb-6{ style: "color: var(--td-muted)" }
-              Join TronsDrive — list your fleet, get confirmed bookings, and grow your revenue with zero commission on direct bookings.
+              = t("home.fleet_owners_desc")
             = link_to (new_vendor_request_path || '#'), style: 'display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 2rem; border-radius: 9999px; font-weight: 700; font-size: 0.95rem; color: #fff; background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); box-shadow: 0 8px 28px rgba(249,115,22,0.45), inset 0 1px 0 rgba(255,255,255,0.2); letter-spacing: 0.01em; transition: transform 0.2s ease, box-shadow 0.2s ease; text-decoration: none;', onmouseover: "this.style.transform='translateY(-2px)'; this.style.boxShadow='0 14px 36px rgba(249,115,22,0.55), inset 0 1px 0 rgba(255,255,255,0.2)'", onmouseout: "this.style.transform=''; this.style.boxShadow='0 8px 28px rgba(249,115,22,0.45), inset 0 1px 0 rgba(255,255,255,0.2)'" do
-              %span List Your Cars
+              %span= t("home.list_cars")
               .w-7.h-7.rounded-full.flex.items-center.justify-center{ style: 'background: rgba(255,255,255,0.2); flex-shrink: 0;' }
                 %i.fas.fa-arrow-right.text-xs
 
@@ -357,9 +357,9 @@
   %section.py-16{ style: "background: var(--td-bg)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-12
-        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" } FAQ
-        %h2.text-3xl.md:text-4xl.font-extrabold.mb-3{ style: "color: var(--td-text)" } Frequently Asked Questions
-        %p.text-base{ style: "color: var(--td-muted)" } Find answers to common questions about renting with TronsDrive
+        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" }= t("home.faq_badge")
+        %h2.text-3xl.md:text-4xl.font-extrabold.mb-3{ style: "color: var(--td-text)" }= t("home.faq_heading")
+        %p.text-base{ style: "color: var(--td-muted)" }= t("home.faq_sub")
       .grid.grid-cols-1.md:grid-cols-3.gap-4.items-start
         - @faqs.each_with_index do |faq, index|
           .rounded-xl.overflow-hidden.border.hover:shadow-md.transition-shadow.duration-200{ style: "background: var(--td-surface); border-color: var(--td-border)" }
@@ -380,20 +380,20 @@
   %section.py-16{ style: "background: var(--td-surface2)" }
     .max-w-7xl.mx-auto.px-4.sm:px-6.lg:px-8
       .text-center.mb-12
-        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" } Contact
-        %h2.text-3xl.md:text-4xl.font-extrabold.mb-4{ style: "color: var(--td-text)" } Get in Touch
+        %span.inline-block.text-xs.font-bold.uppercase.tracking-widest.mb-3.px-3.py-1.rounded-full{ style: "background: rgba(249,115,22,0.12); color: #F97316" }= t("home.contact_badge")
+        %h2.text-3xl.md:text-4xl.font-extrabold.mb-4{ style: "color: var(--td-text)" }= t("home.contact_heading")
         %p.max-w-2xl.mx-auto.text-base{ style: "color: var(--td-muted)" }
-          Ready to book? Have a question? Our team is available around the clock.
+          = t("home.contact_sub")
       .grid.grid-cols-1.md:grid-cols-3.gap-6.mb-10
-        - [['fa-phone','Phone','+971502770780','tel:+971502770780'],['fa-envelope','Email','info@tronsitsolutions.com','mailto:info@tronsitsolutions.com'],['fa-globe','Website','TronsDrive','#']].each do |icon, label, val, href|
+        - [[t("home.phone_label"), 'fa-phone', '+971502770780', 'tel:+971502770780'],[t("home.email_label"), 'fa-envelope', 'info@tronsitsolutions.com', 'mailto:info@tronsitsolutions.com'],[t("home.website_label"), 'fa-globe', 'TronsDrive', '#']].each do |label, icon, val, href|
           .rounded-2xl.p-8.text-center.transition-all.duration-300.hover:-translate-y-1{ style: "background: var(--td-surface); border: 1px solid var(--td-border); box-shadow: var(--td-card-shadow)" }
             .w-14.h-14.rounded-2xl.flex.items-center.justify-center.mx-auto.mb-4{ style: "background: linear-gradient(135deg, #F97316, #EA580C)" }
               %i{ class: "fas #{icon} text-white text-xl" }
             %h3.font-semibold.mb-2.text-lg{ style: "color: var(--td-text)" }= label
             = link_to val, href, class: 'text-sm font-medium hover:underline break-all', style: 'color: #F97316'
       .text-center.py-10.rounded-2xl{ style: "background: linear-gradient(135deg, #0F172A, #1E293B)" }
-        %p.text-2xl.md:text-3xl.font-extrabold.text-white.mb-1 Drive smarter with TronsDrive
-        %p.text-base{ style: "color: rgba(255,255,255,0.55)" } Your journey starts here
+        %p.text-2xl.md:text-3xl.font-extrabold.text-white.mb-1= t("home.drive_smarter")
+        %p.text-base{ style: "color: rgba(255,255,255,0.55)" }= t("home.journey_starts")
 
 - content_for :footer do
   = render 'shared/footer'

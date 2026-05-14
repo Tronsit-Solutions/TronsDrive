@@ -6,7 +6,7 @@
     .mb-6
       = link_to user_home_path, class: 'inline-flex items-center font-semibold transition-colors', style: 'color: #F97316;' do
         %i.fas.fa-arrow-left.mr-2
-        Back to Dashboard
+        = t("user.back_to_dashboard")
 
     .rounded-3xl.shadow-xl.p-8.mt-0{ style: "background: var(--td-surface);" }
     / Flash messages
@@ -21,18 +21,18 @@
         %h2.text-2xl.sm:text-3xl.font-bold.flex.items-center{ style: "color: var(--td-text);" }
           %i.fas.fa-calendar-alt.mr-2.sm:mr-4.text-xl.sm:text-2xl{ style: "color: #F97316;" }
           - if params[:filter] == 'active'
-            Active Bookings
+            = t("user.active_bookings")
           - elsif params[:filter] == 'cancelled'
-            Cancelled Bookings
+            = t("user.cancelled_bookings")
           - else
-            My Bookings
+            = t("user.my_bookings")
         .flex.items-center.space-x-4.w-full.sm:w-auto
           / Filter Dropdown
           .relative.flex-1.sm:flex-initial
             = form_with url: users_bookings_path, method: :get, local: true, class: 'flex items-center', id: 'filter-form' do |f|
               .relative.w-full
                 = f.select :filter,
-                    options_for_select([['All Bookings', 'all'],['Active Bookings', 'active'],['Cancelled Bookings', 'cancelled']], params[:filter] || 'all'),{},
+                    options_for_select([[t("user.all_bookings"), 'all'],[t("user.active_bookings"), 'active'],[t("user.cancelled_bookings"), 'cancelled']], params[:filter] || 'all'),{},
                     { class: 'appearance-none border rounded-lg px-4 py-2 pr-8 text-sm font-medium focus:outline-none focus:ring-2 transition-colors shadow-sm w-full', style: 'background: var(--td-surface2); color: var(--td-text); border-color: var(--td-border);', id: 'booking-filter', onchange: 'this.form.submit()' }
                 .absolute.inset-y-0.right-0.flex.items-center.pr-2.pointer-events-none
                   %i.fas.fa-chevron-down.text-xs{ style: "color: var(--td-muted);" }
@@ -46,9 +46,9 @@
               .flex.items-start.gap-2.md:gap-3
                 %i.fas.fa-credit-card.text-orange-500.text-lg.md:text-xl.mt-1
                 .flex-1
-                  %h3.text-sm.md:text-base.font-semibold.mb-1{ style: "color: #F97316;" } Payment Required
+                  %h3.text-sm.md:text-base.font-semibold.mb-1{ style: "color: #F97316;" }= t("user.payment_required")
                   %p.text-xs.md:text-sm.mb-2{ style: "color: var(--td-text);" }
-                    #{current_user.unpaid_bookings.count} booking#{current_user.unpaid_bookings.count == 1 ? '' : 's'} awaiting payment
+                    = t("user.awaiting_payment", count: current_user.unpaid_bookings.count)
                   %ul.text-xs.space-y-1.mb-2.md:mb-3{ style: "color: var(--td-muted);" }
                     - current_user.unpaid_bookings.limit(3).each do |booking|
                       %li.flex.items-center.gap-1
@@ -56,7 +56,7 @@
                         - if booking.car
                           %span.truncate #{booking.car.brand} #{booking.car.model} - #{booking.start_date.strftime('%b %d')}
                         - else
-                          %span.truncate Deleted Car - #{booking.start_date.strftime('%b %d')}
+                          %span.truncate= "#{t('user.deleted_car')} - #{booking.start_date.strftime('%b %d')}"
                     - if current_user.unpaid_bookings.count > 3
                       %li.font-semibold{ style: "color: #F97316;" } +#{current_user.unpaid_bookings.count - 3} more...
 
@@ -66,12 +66,12 @@
               .flex.items-start.gap-2.md:gap-3
                 %i.fas.fa-exclamation-circle.text-red-500.text-lg.md:text-xl.mt-1
                 .flex-1
-                  %h3.text-sm.md:text-base.font-semibold.text-red-500.mb-1 Payment Failed
+                  %h3.text-sm.md:text-base.font-semibold.text-red-500.mb-1= t("user.payment_failed")
                   %p.text-xs.md:text-sm.mb-2{ style: "color: var(--td-text);" }
-                    #{current_user.failed_payments.count} payment#{current_user.failed_payments.count == 1 ? '' : 's'} failed
-                  %p.text-xs.mb-2.md:mb-3{ style: "color: var(--td-muted);" } Please retry payment or contact support
+                    = t("user.payments_failed", count: current_user.failed_payments.count)
+                  %p.text-xs.mb-2.md:mb-3{ style: "color: var(--td-muted);" }= t("user.please_retry")
                   = link_to users_bookings_path, class: 'inline-flex items-center font-semibold text-xs md:text-sm', style: 'color: #ef4444;' do
-                    Retry Payment
+                    = t("user.retry_payment")
                     %i.fas.fa-arrow-right.ml-1
 
       / Filter Summary
@@ -83,13 +83,13 @@
               %span.text-sm.font-medium{ style: "color: var(--td-text);" }
                 - case params[:filter]
                 - when 'active'
-                  Showing #{@bookings.count} active booking#{@bookings.count == 1 ? '' : 's'} (pending and confirmed)
+                  = t("user.filter_active", count: @bookings.count)
                 - when 'cancelled'
-                  Showing #{@bookings.count} cancelled booking#{@bookings.count == 1 ? '' : 's'}
+                  = t("user.filter_cancelled", count: @bookings.count)
                 - else
-                  Showing #{@bookings.count} booking#{@bookings.count == 1 ? '' : 's'} (all statuses)
+                  = t("user.filter_all", count: @bookings.count)
             - if params[:filter].present? && params[:filter] != 'all'
-              = link_to 'Clear Filter', users_bookings_path, class: 'text-sm underline', style: 'color: #F97316;'
+              = link_to t("user.clear_filter"), users_bookings_path, class: 'text-sm underline', style: 'color: #F97316;'
 
       / Bookings List
       - if @bookings.any?
@@ -107,7 +107,7 @@
                       onmouseout: "this.style.backgroundColor='#ef4444'",
                       data: { confirm: 'Are you sure you want to cancel this booking? This action cannot be undone.', turbo_confirm: 'Are you sure you want to cancel this booking? This action cannot be undone.' } do
                     %i.fas.fa-times.mr-1.text-xs.lg:text-sm
-                    %span.hidden.sm:inline Cancel
+                    %span.hidden.sm:inline= t("user.cancel")
 
               .flex.flex-col.lg:flex-row
                 / Car Image Section
@@ -151,18 +151,18 @@
                             %i.fas.fa-tag.mr-1.lg:mr-2.text-sm{ style: "color: #F97316;" }
                             = booking.car.category
                       - else
-                        %h3.text-xl.lg:text-2xl.font-bold.italic.mb-2{ style: "color: #ef4444;" } Deleted Car
-                        .text-sm.mb-4{ style: "color: var(--td-muted);" } This car is no longer available
+                        %h3.text-xl.lg:text-2xl.font-bold.italic.mb-2{ style: "color: #ef4444;" }= t("user.deleted_car")
+                        .text-sm.mb-4{ style: "color: var(--td-muted);" }= t("user.car_unavailable")
                       .text-lg.lg:text-xl.font-semibold.mb-4{ style: "color: #F97316;" }
                         = number_to_currency(booking.selected_price)
                         - if booking.selected_period == 'daily'
-                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per day
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" }= t("user.per_day")
                         - elsif booking.selected_period == 'weekly'
-                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per week
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" }= t("user.per_week")
                         - elsif booking.selected_period == 'monthly'
-                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per month
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" }= t("user.per_month")
                         - elsif ['5 Hours', '10 Hours'].include?(booking.selected_period)
-                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" } per service
+                          %span.text-xs.lg:text-sm.font-normal.ml-1{ style: "color: var(--td-muted);" }= t("user.per_service")
 
                     / Rental Period
                     .rounded-xl.p-3.mb-4.lg:mb-6{ style: "background: var(--td-surface); border: 1px solid var(--td-border);" }
@@ -199,7 +199,7 @@
                             - remaining_days = duration_days % 7
                             - total_amount = (full_weeks * weekly_price) + (remaining_days * daily_price)
                             %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
-                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
+                              %span.font-medium{ style: "color: var(--td-text);" }= t("user.pricing")
                               %span.ml-1
                                 = "#{full_weeks} week#{full_weeks == 1 ? '' : 's'} × AED #{weekly_price.to_i}"
                                 - if remaining_days > 0
@@ -211,7 +211,7 @@
                             - remaining_days = duration_days % 30
                             - total_amount = (full_months * monthly_price) + (remaining_days * daily_price)
                             %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
-                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
+                              %span.font-medium{ style: "color: var(--td-text);" }= t("user.pricing")
                               %span.ml-1
                                 = "#{full_months} month#{full_months == 1 ? '' : 's'} × AED #{monthly_price.to_i}"
                                 - if remaining_days > 0
@@ -220,13 +220,13 @@
                           - elsif ['5 Hours', '10 Hours'].include?(booking.selected_period)
                             - total_amount = booking.selected_price.to_f
                             %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
-                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
+                              %span.font-medium{ style: "color: var(--td-text);" }= t("user.pricing")
                               %span.ml-1= "1 Service (#{booking.selected_period}) × AED #{total_amount.to_i}"
 
                           - else
                             - total_amount = duration_days * daily_price
                             %p.text-xs.sm:text-sm.mb-2{ style: "color: var(--td-muted);" }
-                              %span.font-medium{ style: "color: var(--td-text);" } Pricing:
+                              %span.font-medium{ style: "color: var(--td-text);" }= t("user.pricing")
                               %span.ml-1= "#{duration_days} days × AED #{daily_price.to_i}"
 
                           / Discount if applicable
@@ -298,15 +298,15 @@
                           - if booking.cancelled_with_refund?
                             = link_to users_booking_path(booking), class: 'text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-200 shadow-md flex items-center justify-center', style: 'background-color: #ef4444;', onmouseover: "this.style.backgroundColor='#dc2626'", onmouseout: "this.style.backgroundColor='#ef4444'" do
                               %i.fas.fa-exclamation-circle.mr-2
-                              View Details
+                              = t("user.view_details")
                           - elsif !current_user.documents_approved?
-                            .payment-disabled.px-4.sm:px-6.py-2.sm:py-3.rounded-lg.text-sm.sm:text-base.font-semibold.cursor-not-allowed.flex.items-center.justify-center.opacity-60{ style: 'background: var(--td-surface2); color: var(--td-muted); border: 1px solid var(--td-border);', title: 'Payment is disabled until your documents are approved' }
+                            .payment-disabled.px-4.sm:px-6.py-2.sm:py-3.rounded-lg.text-sm.sm:text-base.font-semibold.cursor-not-allowed.flex.items-center.justify-center.opacity-60{ style: 'background: var(--td-surface2); color: var(--td-muted); border: 1px solid var(--td-border);', title: t("user.payment_disabled") }
                               %i.fas.fa-lock.mr-2
-                              Payment Disabled
+                              = t("user.payment_disabled")
                           - else
                             = link_to users_payment_path(booking.id), class: 'text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-all duration-200 shadow-md flex items-center justify-center', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
                               %i.fas.fa-eye.mr-2
-                              View/Pay Booking
+                              = t("user.view_pay")
 
 
       - else
@@ -315,11 +315,11 @@
             .rounded-3xl.p-8.flex.flex-col.items-center{ style: "background: var(--td-surface2);" }
               .w-20.h-20.rounded-full.flex.items-center.justify-center.mb-6{ style: "background: rgba(249,115,22,0.1);" }
                 %i.fas.fa-calendar-times.text-3xl{ style: "color: #F97316;" }
-              %h3.text-xl.font-semibold.mb-3{ style: "color: var(--td-text);" } No Bookings Yet
-              %p.mb-6{ style: "color: var(--td-muted);" } It looks like you haven't made any bookings yet. Browse our collection to find your perfect car.
+              %h3.text-xl.font-semibold.mb-3{ style: "color: var(--td-text);" }= t("user.no_bookings")
+              %p.mb-6{ style: "color: var(--td-muted);" }= t("user.no_bookings_desc")
               = link_to cars_path, class: 'text-white font-semibold py-3 px-8 rounded-lg shadow transition-all duration-200 inline-flex items-center space-x-2', style: 'background-color: #F97316;', onmouseover: "this.style.backgroundColor='#EA580C'", onmouseout: "this.style.backgroundColor='#F97316'" do
                 %i.fas.fa-car
-                %span Explore Cars
+                %span= t("user.explore_cars")
 
 :javascript
   document.addEventListener('DOMContentLoaded', function() {

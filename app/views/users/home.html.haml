@@ -12,36 +12,36 @@
         .mb-8
           %h2.text-2xl.font-bold.text-gray-800.mb-6.flex.items-center.gap-3
             %i.fas.fa-bell.text-orange-500
-            - if current_user.documents_notification? && !current_user.bookings_notification? 
-              Action Required In Documents
+            - if current_user.documents_notification? && !current_user.bookings_notification?
+              = t("user.action_documents")
             - elsif current_user.bookings_notification? && !current_user.documents_notification?
-              Action Required In Bookings
+              = t("user.action_bookings")
             - elsif current_user.bookings_notification? && current_user.documents_notification?
-              Action Required In Documents & Bookings
+              = t("user.action_both")
 
       .grid.grid-cols-1.md:grid-cols-3.gap-8
         / Documents Card
         = link_to users_documents_path, class: 'bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 hover:scale-105' do
           .text-center
             %i.fas.fa-file-upload.text-4xl.text-blue-600.mb-4
-            %h3.text-xl.font-bold.text-gray-800.mb-2 Documents
-            %p.text-gray-600.mb-4 Upload and manage your required documents for car rentals
-            .text-blue-600.font-semibold View Documents →
+            %h3.text-xl.font-bold.text-gray-800.mb-2= t("user.documents_card")
+            %p.text-gray-600.mb-4= t("user.documents_desc")
+            .text-blue-600.font-semibold= t("user.view_documents")
         
         / Bookings Card
         = link_to users_bookings_path, class: 'bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 hover:scale-105' do
           .text-center
             %i.fas.fa-calendar-check.text-4xl.text-green-600.mb-4
-            %h3.text-xl.font-bold.text-gray-800.mb-2 Bookings
-            %p.text-gray-600.mb-4 View and manage your car rental bookings
-            .text-green-600.font-semibold View Bookings →
+            %h3.text-xl.font-bold.text-gray-800.mb-2= t("user.bookings_card")
+            %p.text-gray-600.mb-4= t("user.bookings_desc")
+            .text-green-600.font-semibold= t("user.view_bookings")
         
         / Profile Card
         = link_to user_path(current_user), class: 'bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 hover:scale-105' do
           .text-center
             %i.fas.fa-user.text-4xl.text-purple-600.mb-4
-            %h3.text-xl.font-bold.text-gray-800.mb-2 Profile
-            %p.text-gray-600.mb-4 Update your personal information and preferences
-            .text-purple-600.font-semibold View Profile →
+            %h3.text-xl.font-bold.text-gray-800.mb-2= t("user.profile_card")
+            %p.text-gray-600.mb-4= t("user.profile_desc")
+            .text-purple-600.font-semibold= t("user.view_profile")
 
 
