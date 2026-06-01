@@ -67,7 +67,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 
 # Uses slug instead of id in url
-gem "friendly_id", "~> 5.5.0"
+gem "friendly_id", "~> 5.6.0"
 
 # To log/track errors and performance
 gem "sentry-ruby"
